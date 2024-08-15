@@ -25,6 +25,8 @@
 		449AD0702C6DC61800B0ED37 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD06F2C6DC61800B0ED37 /* Reusable.swift */; };
 		449AD0722C6DC67A00B0ED37 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0712C6DC67A00B0ED37 /* BaseViewModel.swift */; };
 		449AD0742C6DCFC700B0ED37 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0732C6DCFC700B0ED37 /* TabBarController.swift */; };
+		449AD0762C6DE9D000B0ED37 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0752C6DE9D000B0ED37 /* NetworkManager.swift */; };
+		449AD0792C6DE9ED00B0ED37 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 449AD0782C6DE9ED00B0ED37 /* Alamofire */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +49,7 @@
 		449AD06F2C6DC61800B0ED37 /* Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
 		449AD0712C6DC67A00B0ED37 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
 		449AD0732C6DCFC700B0ED37 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		449AD0752C6DE9D000B0ED37 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +58,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				449AD0532C6CA23300B0ED37 /* SnapKit in Frameworks */,
+				449AD0792C6DE9ED00B0ED37 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -145,6 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				449AD0592C6CD83900B0ED37 /* APIKey.swift */,
+				449AD0752C6DE9D000B0ED37 /* NetworkManager.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -224,6 +229,7 @@
 			name = ClosetReturn;
 			packageProductDependencies = (
 				449AD0522C6CA23300B0ED37 /* SnapKit */,
+				449AD0782C6DE9ED00B0ED37 /* Alamofire */,
 			);
 			productName = ClosetReturn;
 			productReference = 449AD0352C6CA0B200B0ED37 /* ClosetReturn.app */;
@@ -255,6 +261,7 @@
 			mainGroup = 449AD02C2C6CA0B200B0ED37;
 			packageReferences = (
 				449AD0512C6CA23300B0ED37 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				449AD0772C6DE9ED00B0ED37 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = 449AD0362C6CA0B200B0ED37 /* Products */;
 			projectDirPath = "";
@@ -294,6 +301,7 @@
 				449AD06B2C6DC5CE00B0ED37 /* BaseTableViewCell.swift in Sources */,
 				449AD06D2C6DC5EA00B0ED37 /* BaseCollectionViewCell.swift in Sources */,
 				449AD0672C6DC59E00B0ED37 /* BaseView.swift in Sources */,
+				449AD0762C6DE9D000B0ED37 /* NetworkManager.swift in Sources */,
 				449AD0692C6DC5B300B0ED37 /* BaseViewController.swift in Sources */,
 				449AD05A2C6CD83900B0ED37 /* APIKey.swift in Sources */,
 				449AD03B2C6CA0B200B0ED37 /* SceneDelegate.swift in Sources */,
@@ -529,6 +537,14 @@
 				minimumVersion = 5.7.1;
 			};
 		};
+		449AD0772C6DE9ED00B0ED37 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.9.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -536,6 +552,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 449AD0512C6CA23300B0ED37 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		449AD0782C6DE9ED00B0ED37 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 449AD0772C6DE9ED00B0ED37 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
