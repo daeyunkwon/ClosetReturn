@@ -1,0 +1,36 @@
+//
+//  NetworkError.swift
+//  ClosetReturn
+//
+//  Created by 권대윤 on 8/15/24.
+//
+
+import Foundation
+
+enum NetworkError: Error {
+    case notConnectedInternet
+    case invalidURL
+    case unknownRespose
+    case statusError(codeNumber: Int)
+    case noData
+    case decodingError
+}
+
+extension NetworkError {
+    var errorDescription: String {
+        switch self {
+        case .notConnectedInternet:
+            return "Error: 인터넷 연결 안됨"
+        case .invalidURL:
+            return "Error: 유효하지 않은 URL"
+        case .unknownRespose:
+            return "Error: 알 수 없는 응답"
+        case .statusError(let codeNumber):
+            return "Error: 응답 실패 상태코드:\(codeNumber)"
+        case .noData:
+            return "Error: 데이터 없음"
+        case .decodingError:
+            return "Error: 데이터 디코딩 실패"
+        }
+    }
+}

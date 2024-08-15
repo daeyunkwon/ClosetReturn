@@ -27,6 +27,11 @@
 		449AD0742C6DCFC700B0ED37 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0732C6DCFC700B0ED37 /* TabBarController.swift */; };
 		449AD0762C6DE9D000B0ED37 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0752C6DE9D000B0ED37 /* NetworkManager.swift */; };
 		449AD0792C6DE9ED00B0ED37 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 449AD0782C6DE9ED00B0ED37 /* Alamofire */; };
+		449AD07B2C6DFEF700B0ED37 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD07A2C6DFEF700B0ED37 /* Router.swift */; };
+		449AD07D2C6E0B1900B0ED37 /* HeaderKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD07C2C6E0B1900B0ED37 /* HeaderKey.swift */; };
+		449AD07F2C6E0BA800B0ED37 /* BodyKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD07E2C6E0BA800B0ED37 /* BodyKey.swift */; };
+		449AD0812C6E0E3800B0ED37 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0802C6E0E3800B0ED37 /* NetworkError.swift */; };
+		449AD0832C6E0ED600B0ED37 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0822C6E0ED600B0ED37 /* UIViewController+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +55,11 @@
 		449AD0712C6DC67A00B0ED37 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
 		449AD0732C6DCFC700B0ED37 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		449AD0752C6DE9D000B0ED37 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		449AD07A2C6DFEF700B0ED37 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		449AD07C2C6E0B1900B0ED37 /* HeaderKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderKey.swift; sourceTree = "<group>"; };
+		449AD07E2C6E0BA800B0ED37 /* BodyKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyKey.swift; sourceTree = "<group>"; };
+		449AD0802C6E0E3800B0ED37 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
+		449AD0822C6E0ED600B0ED37 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,8 +158,12 @@
 		449AD0562C6CD7A600B0ED37 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				449AD0592C6CD83900B0ED37 /* APIKey.swift */,
 				449AD0752C6DE9D000B0ED37 /* NetworkManager.swift */,
+				449AD07A2C6DFEF700B0ED37 /* Router.swift */,
+				449AD0592C6CD83900B0ED37 /* APIKey.swift */,
+				449AD07C2C6E0B1900B0ED37 /* HeaderKey.swift */,
+				449AD07E2C6E0BA800B0ED37 /* BodyKey.swift */,
+				449AD0802C6E0E3800B0ED37 /* NetworkError.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -187,6 +201,7 @@
 			isa = PBXGroup;
 			children = (
 				449AD0632C6DC4FB00B0ED37 /* UIView+Extension.swift */,
+				449AD0822C6E0ED600B0ED37 /* UIViewController+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -291,6 +306,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				449AD07D2C6E0B1900B0ED37 /* HeaderKey.swift in Sources */,
 				449AD0642C6DC4FB00B0ED37 /* UIView+Extension.swift in Sources */,
 				449AD0742C6DCFC700B0ED37 /* TabBarController.swift in Sources */,
 				449AD0702C6DC61800B0ED37 /* Reusable.swift in Sources */,
@@ -298,11 +314,15 @@
 				449AD0392C6CA0B200B0ED37 /* AppDelegate.swift in Sources */,
 				449AD05E2C6D787400B0ED37 /* Constant.swift in Sources */,
 				449AD0722C6DC67A00B0ED37 /* BaseViewModel.swift in Sources */,
+				449AD0832C6E0ED600B0ED37 /* UIViewController+Extension.swift in Sources */,
+				449AD07B2C6DFEF700B0ED37 /* Router.swift in Sources */,
 				449AD06B2C6DC5CE00B0ED37 /* BaseTableViewCell.swift in Sources */,
 				449AD06D2C6DC5EA00B0ED37 /* BaseCollectionViewCell.swift in Sources */,
+				449AD07F2C6E0BA800B0ED37 /* BodyKey.swift in Sources */,
 				449AD0672C6DC59E00B0ED37 /* BaseView.swift in Sources */,
 				449AD0762C6DE9D000B0ED37 /* NetworkManager.swift in Sources */,
 				449AD0692C6DC5B300B0ED37 /* BaseViewController.swift in Sources */,
+				449AD0812C6E0E3800B0ED37 /* NetworkError.swift in Sources */,
 				449AD05A2C6CD83900B0ED37 /* APIKey.swift in Sources */,
 				449AD03B2C6CA0B200B0ED37 /* SceneDelegate.swift in Sources */,
 			);
