@@ -17,6 +17,14 @@
 		449AD05A2C6CD83900B0ED37 /* APIKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0592C6CD83900B0ED37 /* APIKey.swift */; };
 		449AD05E2C6D787400B0ED37 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD05D2C6D787400B0ED37 /* Constant.swift */; };
 		449AD0602C6D892800B0ED37 /* PartialSansKR-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 449AD05F2C6D892800B0ED37 /* PartialSansKR-Regular.otf */; };
+		449AD0642C6DC4FB00B0ED37 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0632C6DC4FB00B0ED37 /* UIView+Extension.swift */; };
+		449AD0672C6DC59E00B0ED37 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0662C6DC59E00B0ED37 /* BaseView.swift */; };
+		449AD0692C6DC5B300B0ED37 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0682C6DC5B300B0ED37 /* BaseViewController.swift */; };
+		449AD06B2C6DC5CE00B0ED37 /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD06A2C6DC5CE00B0ED37 /* BaseTableViewCell.swift */; };
+		449AD06D2C6DC5EA00B0ED37 /* BaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD06C2C6DC5EA00B0ED37 /* BaseCollectionViewCell.swift */; };
+		449AD0702C6DC61800B0ED37 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD06F2C6DC61800B0ED37 /* Reusable.swift */; };
+		449AD0722C6DC67A00B0ED37 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0712C6DC67A00B0ED37 /* BaseViewModel.swift */; };
+		449AD0742C6DCFC700B0ED37 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0732C6DCFC700B0ED37 /* TabBarController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +39,14 @@
 		449AD0592C6CD83900B0ED37 /* APIKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKey.swift; sourceTree = "<group>"; };
 		449AD05D2C6D787400B0ED37 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		449AD05F2C6D892800B0ED37 /* PartialSansKR-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PartialSansKR-Regular.otf"; sourceTree = "<group>"; };
+		449AD0632C6DC4FB00B0ED37 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		449AD0662C6DC59E00B0ED37 /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
+		449AD0682C6DC5B300B0ED37 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		449AD06A2C6DC5CE00B0ED37 /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
+		449AD06C2C6DC5EA00B0ED37 /* BaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCell.swift; sourceTree = "<group>"; };
+		449AD06F2C6DC61800B0ED37 /* Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
+		449AD0712C6DC67A00B0ED37 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
+		449AD0732C6DCFC700B0ED37 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +114,7 @@
 		449AD04E2C6CA12300B0ED37 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				449AD0732C6DCFC700B0ED37 /* TabBarController.swift */,
 				449AD03C2C6CA0B200B0ED37 /* ViewController.swift */,
 				449AD05B2C6CDCB800B0ED37 /* Onboarding */,
 			);
@@ -108,6 +125,9 @@
 			isa = PBXGroup;
 			children = (
 				449AD05D2C6D787400B0ED37 /* Constant.swift */,
+				449AD0652C6DC59400B0ED37 /* Base */,
+				449AD06E2C6DC60900B0ED37 /* Protocols */,
+				449AD0622C6DC4CF00B0ED37 /* Extensions */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -156,6 +176,34 @@
 				449AD05F2C6D892800B0ED37 /* PartialSansKR-Regular.otf */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		449AD0622C6DC4CF00B0ED37 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				449AD0632C6DC4FB00B0ED37 /* UIView+Extension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		449AD0652C6DC59400B0ED37 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				449AD0662C6DC59E00B0ED37 /* BaseView.swift */,
+				449AD0682C6DC5B300B0ED37 /* BaseViewController.swift */,
+				449AD06A2C6DC5CE00B0ED37 /* BaseTableViewCell.swift */,
+				449AD06C2C6DC5EA00B0ED37 /* BaseCollectionViewCell.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		449AD06E2C6DC60900B0ED37 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				449AD06F2C6DC61800B0ED37 /* Reusable.swift */,
+				449AD0712C6DC67A00B0ED37 /* BaseViewModel.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -236,9 +284,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				449AD0642C6DC4FB00B0ED37 /* UIView+Extension.swift in Sources */,
+				449AD0742C6DCFC700B0ED37 /* TabBarController.swift in Sources */,
+				449AD0702C6DC61800B0ED37 /* Reusable.swift in Sources */,
 				449AD03D2C6CA0B200B0ED37 /* ViewController.swift in Sources */,
 				449AD0392C6CA0B200B0ED37 /* AppDelegate.swift in Sources */,
 				449AD05E2C6D787400B0ED37 /* Constant.swift in Sources */,
+				449AD0722C6DC67A00B0ED37 /* BaseViewModel.swift in Sources */,
+				449AD06B2C6DC5CE00B0ED37 /* BaseTableViewCell.swift in Sources */,
+				449AD06D2C6DC5EA00B0ED37 /* BaseCollectionViewCell.swift in Sources */,
+				449AD0672C6DC59E00B0ED37 /* BaseView.swift in Sources */,
+				449AD0692C6DC5B300B0ED37 /* BaseViewController.swift in Sources */,
 				449AD05A2C6CD83900B0ED37 /* APIKey.swift in Sources */,
 				449AD03B2C6CA0B200B0ED37 /* SceneDelegate.swift in Sources */,
 			);

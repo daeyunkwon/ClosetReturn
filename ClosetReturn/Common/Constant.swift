@@ -19,11 +19,12 @@ enum Constant {
         enum Text {
             static let titleColor: UIColor = .label
             static let bodyColor: UIColor = .label
-            static let secondaryColor: UIColor = .lightGray
+            static let secondaryColor: UIColor = UIColor(red: 0.64, green: 0.67, blue: 0.74, alpha: 1.00)
         }
         
         enum Icon {
-            static let primaryColor: UIColor = .systemBlue
+            static let primaryColor: UIColor = UIColor(red: 0.25, green: 0.28, blue: 0.34, alpha: 1.00)
+            static let heartColor = UIColor(red: 0.91, green: 0.44, blue: 0.57, alpha: 1.00)
         }
         
         enum Button {
