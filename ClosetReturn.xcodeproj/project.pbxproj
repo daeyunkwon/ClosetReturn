@@ -14,6 +14,9 @@
 		449AD0452C6CA0B400B0ED37 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 449AD0442C6CA0B400B0ED37 /* Base */; };
 		449AD0502C6CA19900B0ED37 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 449AD04F2C6CA19900B0ED37 /* .gitignore */; };
 		449AD0532C6CA23300B0ED37 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 449AD0522C6CA23300B0ED37 /* SnapKit */; };
+		449AD05A2C6CD83900B0ED37 /* APIKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0592C6CD83900B0ED37 /* APIKey.swift */; };
+		449AD05E2C6D787400B0ED37 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD05D2C6D787400B0ED37 /* Constant.swift */; };
+		449AD0602C6D892800B0ED37 /* PartialSansKR-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 449AD05F2C6D892800B0ED37 /* PartialSansKR-Regular.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +28,9 @@
 		449AD0442C6CA0B400B0ED37 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		449AD0462C6CA0B400B0ED37 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		449AD04F2C6CA19900B0ED37 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		449AD0592C6CD83900B0ED37 /* APIKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKey.swift; sourceTree = "<group>"; };
+		449AD05D2C6D787400B0ED37 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
+		449AD05F2C6D892800B0ED37 /* PartialSansKR-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PartialSansKR-Regular.otf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +66,9 @@
 			isa = PBXGroup;
 			children = (
 				449AD04D2C6CA11900B0ED37 /* Application */,
+				449AD0542C6CD78800B0ED37 /* Common */,
+				449AD0552C6CD79900B0ED37 /* Service */,
+				449AD0582C6CD7CF00B0ED37 /* Model */,
 				449AD04E2C6CA12300B0ED37 /* Presentation */,
 				449AD04C2C6CA10300B0ED37 /* Resource */,
 			);
@@ -69,6 +78,7 @@
 		449AD04C2C6CA10300B0ED37 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				449AD0612C6D8B6100B0ED37 /* Fonts */,
 				449AD0412C6CA0B400B0ED37 /* Assets.xcassets */,
 				449AD0432C6CA0B400B0ED37 /* LaunchScreen.storyboard */,
 				449AD0462C6CA0B400B0ED37 /* Info.plist */,
@@ -89,8 +99,63 @@
 			isa = PBXGroup;
 			children = (
 				449AD03C2C6CA0B200B0ED37 /* ViewController.swift */,
+				449AD05B2C6CDCB800B0ED37 /* Onboarding */,
 			);
 			path = Presentation;
+			sourceTree = "<group>";
+		};
+		449AD0542C6CD78800B0ED37 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				449AD05D2C6D787400B0ED37 /* Constant.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		449AD0552C6CD79900B0ED37 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				449AD0572C6CD7AC00B0ED37 /* Database */,
+				449AD0562C6CD7A600B0ED37 /* Network */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		449AD0562C6CD7A600B0ED37 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				449AD0592C6CD83900B0ED37 /* APIKey.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		449AD0572C6CD7AC00B0ED37 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Database;
+			sourceTree = "<group>";
+		};
+		449AD0582C6CD7CF00B0ED37 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		449AD05B2C6CDCB800B0ED37 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		449AD0612C6D8B6100B0ED37 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				449AD05F2C6D892800B0ED37 /* PartialSansKR-Regular.otf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -159,6 +224,7 @@
 			files = (
 				449AD0422C6CA0B400B0ED37 /* Assets.xcassets in Resources */,
 				449AD0502C6CA19900B0ED37 /* .gitignore in Resources */,
+				449AD0602C6D892800B0ED37 /* PartialSansKR-Regular.otf in Resources */,
 				449AD0452C6CA0B400B0ED37 /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -172,6 +238,8 @@
 			files = (
 				449AD03D2C6CA0B200B0ED37 /* ViewController.swift in Sources */,
 				449AD0392C6CA0B200B0ED37 /* AppDelegate.swift in Sources */,
+				449AD05E2C6D787400B0ED37 /* Constant.swift in Sources */,
+				449AD05A2C6CD83900B0ED37 /* APIKey.swift in Sources */,
 				449AD03B2C6CA0B200B0ED37 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
