@@ -14,29 +14,37 @@ final class InputTextFieldView: UIView {
     //MARK: - Properties
     
     enum TextFieldType {
-        case loginPassword
-        case logionNotPassword
-        case signUpPassword
-        case signUpNotPassword
+        case password
+        case notPassword
     }
     
     private var type: TextFieldType
     
     //MARK: - Init
     
-    init(viewType: TextFieldType, title: String, placeholder: String) {
+    init(viewType: TextFieldType, title: String, placeholder: String, showAsterisk: Bool = false) {
         
         self.type = viewType
         super.init(frame: .zero)
         
-        titleLabel.text = title
+        if showAsterisk {
+            let attributedText = NSMutableAttributedString(string: title, attributes: [.font: Constant.Font.secondaryTitleFont, .foregroundColor: Constant.Color.Text.secondaryColor])
+            
+            attributedText.append(NSAttributedString(string: " *", attributes: [.font: Constant.Font.secondaryTitleFont, .foregroundColor: UIColor.systemRed]))
+            
+            titleLabel.attributedText = attributedText
+        } else {
+            titleLabel.text = title
+        }
+        
         inputTextField.placeholder = placeholder
         
         switch viewType {
-        case .loginPassword, .signUpPassword:
+        case .password:
             hideButton.isHidden = false
             inputTextField.isSecureTextEntry = true
-        case .logionNotPassword, .signUpNotPassword:
+            inputTextField.textContentType = .oneTimeCode
+        case .notPassword:
             hideButton.isHidden = true
             inputTextField.isSecureTextEntry = false
         }
@@ -120,9 +128,9 @@ final class InputTextFieldView: UIView {
             make.leading.equalTo(self.safeAreaLayoutGuide)
             
             switch type {
-            case .loginPassword, .signUpPassword:
+            case .password:
                 make.trailing.equalTo(hideButton.snp.leading).offset(-2)
-            case .logionNotPassword, .signUpNotPassword:
+            case .notPassword:
                 make.trailing.equalTo(self.safeAreaLayoutGuide)
             }
             

@@ -29,8 +29,8 @@ final class LoginViewController: BaseViewController {
         return label
     }()
     
-    private let emailInputView = InputTextFieldView(viewType: .logionNotPassword, title: "이메일", placeholder: "이메일")
-    private let passwordInputView = InputTextFieldView(viewType: .loginPassword, title: "비밀번호", placeholder: "비밀번호")
+    private let emailInputView = InputTextFieldView(viewType: .notPassword, title: "이메일", placeholder: "")
+    private let passwordInputView = InputTextFieldView(viewType: .password, title: "비밀번호", placeholder: "")
     
     private let loginButton: UIButton = {
         let button = UIButton(type: .system)
@@ -39,6 +39,9 @@ final class LoginViewController: BaseViewController {
         button.backgroundColor = Constant.Color.brandColor
         button.tintColor = Constant.Color.Button.titleColor
         button.layer.cornerRadius = 10
+        button.layer.shadowColor = UIColor.lightGray.cgColor
+        button.layer.shadowOpacity = 1
+        button.layer.shadowOffset = .init(width: 0, height: 1)
         return button
     }()
     
@@ -104,7 +107,7 @@ final class LoginViewController: BaseViewController {
     }
     
     override func setupNavi() {
-        navigationItem.title = "" 
+        navigationController?.navigationBar.isHidden = true
     }
     
     override func configureHierarchy() {
@@ -124,7 +127,7 @@ final class LoginViewController: BaseViewController {
         }
         
         emailInputView.snp.makeConstraints { make in
-            make.top.equalTo(logoLabel.snp.bottom).offset(50)
+            make.top.equalTo(logoLabel.snp.bottom).offset(100)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(20)
         }
         
@@ -140,7 +143,7 @@ final class LoginViewController: BaseViewController {
         }
         
         signUpButton.snp.makeConstraints { make in
-            make.top.equalTo(loginButton.snp.bottom).offset(15)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-15)
             make.centerX.equalToSuperview()
         }
     }

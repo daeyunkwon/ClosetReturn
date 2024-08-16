@@ -20,7 +20,81 @@ final class SignUpViewController: BaseViewController {
     
     //MARK: - UI Components
     
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = Constant.Color.Text.titleColor
+        label.font = .systemFont(ofSize: 30, weight: .heavy)
+        label.text = "회원가입"
+        return label
+    }()
     
+    private let scrollView = UIScrollView()
+    
+    private let containerView = UIView()
+    
+    private let birthdayPicker: UIDatePicker = {
+        let picker = UIDatePicker()
+        picker.datePickerMode = .date
+        picker.preferredDatePickerStyle = .wheels
+        picker.locale = Locale(identifier: "ko-KR")
+        picker.maximumDate = Date()
+        return picker
+    }()
+    
+    private let emailInputView = InputTextFieldView(viewType: .notPassword, title: "이메일", placeholder: "예시) welcome@email.com", showAsterisk: true)
+    private let firstPasswordInputView = InputTextFieldView(viewType: .password, title: "비밀번호", placeholder: "비밀번호를 입력해 주세요", showAsterisk: true)
+    private let secondPasswordInputView = InputTextFieldView(viewType: .password, title: "비밀번호 확인", placeholder: "비밀번호 재입력", showAsterisk: true)
+    private let nicknameInputView = InputTextFieldView(viewType: .notPassword, title: "닉네임", placeholder: "닉네임을 입력해 주세요")
+    private let phoneNumberInputView = {
+        let view = InputTextFieldView(viewType: .notPassword, title: "전화번호", placeholder: "(-)없이 숫자만 입력해 주세요")
+        view.inputTextField.keyboardType = .numberPad
+        return view
+    }()
+    private lazy var birthdayInputView = {
+        let view = InputTextFieldView(viewType: .notPassword, title: "생년월일", placeholder: "생년월일")
+        view.inputTextField.inputView = birthdayPicker
+        return view
+    }()
+    
+    private let signUpButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("가입하기", for: .normal)
+        button.titleLabel?.font = Constant.Font.buttonTitleFont
+        button.backgroundColor = Constant.Color.brandColor
+        button.tintColor = Constant.Color.Button.titleColor
+        button.layer.cornerRadius = 10
+        button.layer.shadowColor = UIColor.lightGray.cgColor
+        button.layer.shadowOpacity = 1
+        button.layer.shadowOffset = .init(width: 0, height: 1)
+        button.isUserInteractionEnabled = false
+        return button
+    }()
+    
+    private let loginButton: UIButton = {
+        let btn = UIButton(type: .system)
+
+        let attributedString = NSMutableAttributedString(string: "이미 계정이 있으신가요? ", attributes: [.foregroundColor: Constant.Color.Text.secondaryColor, .font: Constant.Font.secondaryFont])
+        attributedString.append(NSAttributedString(string: "로그인", attributes: [.foregroundColor: Constant.Color.brandColor, .font: Constant.Font.bodyBoldFont]))
+        btn.setAttributedTitle(attributedString, for: .normal)
+        btn.isUserInteractionEnabled = true
+        return btn
+    }()
+    
+    private let checkEmailButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("중복확인", for: .normal)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 13)
+        button.backgroundColor = Constant.Color.Button.titleColor
+        button.tintColor = Constant.Color.brandColor
+        button.layer.borderColor = Constant.Color.brandColor.cgColor
+        button.layer.borderWidth = 1
+        button.layer.cornerRadius = 10
+        button.layer.shadowColor = UIColor.lightGray.cgColor
+        button.layer.shadowOpacity = 0.3
+        button.layer.shadowOffset = .init(width: 0, height: 1)
+        button.isUserInteractionEnabled = true
+        return button
+    }()
     
     //MARK: - Life Cycle
     
@@ -32,14 +106,95 @@ final class SignUpViewController: BaseViewController {
     
     override func bind() {
         
+        
+        
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        view.endEditing(true)
     }
     
     override func configureHierarchy() {
-        
+        view.addSubview(scrollView)
+        scrollView.addSubview(containerView)
+        containerView.addSubviews(
+            titleLabel,
+            loginButton,
+            emailInputView,
+            firstPasswordInputView,
+            secondPasswordInputView,
+            nicknameInputView,
+            phoneNumberInputView,
+            birthdayInputView,
+            signUpButton,
+            checkEmailButton
+        )
     }
     
     override func configureLayout() {
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
+        containerView.snp.makeConstraints { make in
+            make.width.equalTo(view.frame.size.width)
+            make.verticalEdges.equalToSuperview()
+        }
+        
+        titleLabel.snp.makeConstraints { make in
+            make.top.leading.equalToSuperview().inset(20)
+        }
+        
+        loginButton.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(5)
+            make.leading.equalToSuperview().inset(20)
+            make.height.equalTo(30)
+        }
+        
+        emailInputView.snp.makeConstraints { make in
+            make.top.equalTo(loginButton.snp.bottom).offset(50)
+            make.horizontalEdges.equalToSuperview().inset(20)
+        }
+        
+        checkEmailButton.snp.makeConstraints { make in
+            make.top.equalTo(emailInputView.snp.bottom).offset(5)
+            make.trailing.equalToSuperview().inset(20)
+            make.width.equalTo(60)
+            make.height.equalTo(22)
+        }
+        
+        firstPasswordInputView.snp.makeConstraints { make in
+            make.top.equalTo(emailInputView.snp.bottom).offset(50)
+            make.horizontalEdges.equalToSuperview().inset(20)
+        }
+        
+        secondPasswordInputView.snp.makeConstraints { make in
+            make.top.equalTo(firstPasswordInputView.snp.bottom).offset(50)
+            make.horizontalEdges.equalToSuperview().inset(20)
+        }
+        
+        nicknameInputView.snp.makeConstraints { make in
+            make.top.equalTo(secondPasswordInputView.snp.bottom).offset(50)
+            make.horizontalEdges.equalToSuperview().inset(20)
+        }
+        
+        phoneNumberInputView.snp.makeConstraints { make in
+            make.top.equalTo(nicknameInputView.snp.bottom).offset(50)
+            make.horizontalEdges.equalToSuperview().inset(20)
+        }
+        
+        birthdayInputView.snp.makeConstraints { make in
+            make.top.equalTo(phoneNumberInputView.snp.bottom).offset(50)
+            make.horizontalEdges.equalToSuperview().inset(20)
+        }
+        
+        signUpButton.snp.makeConstraints { make in
+            make.top.equalTo(birthdayInputView.snp.bottom).offset(50)
+            make.horizontalEdges.equalToSuperview().inset(20)
+            make.height.equalTo(45)
+            make.bottom.equalToSuperview().inset(220)
+        }
     }
     
     override func configureUI() {
