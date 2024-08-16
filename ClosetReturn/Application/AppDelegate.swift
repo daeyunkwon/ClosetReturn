@@ -7,6 +7,8 @@
 
 import UIKit
 
+import IQKeyboardManagerSwift
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -16,6 +18,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         sleep(2)
+        
+        IQKeyboardManager.shared.enable = true
+        IQKeyboardManager.shared.toolbarConfiguration.doneBarButtonConfiguration = .init(title: "완료")
+        IQKeyboardManager.shared.toolbarConfiguration.tintColor = Constant.Color.brandColor
+        
+        UINavigationBar.appearance().tintColor = .label
         
         return true
     }

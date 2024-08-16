@@ -92,7 +92,8 @@ final class LoginViewController: BaseViewController {
         
         output.signButtonTapped
             .bind(with: self) { owner, _ in
-                print("가입 버튼 탭")
+                owner.pushViewController(SignUpViewController())
+                owner.view.endEditing(true)
             }
             .disposed(by: disposeBag)
     }
@@ -100,6 +101,10 @@ final class LoginViewController: BaseViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         view.endEditing(true)
+    }
+    
+    override func setupNavi() {
+        navigationItem.title = "" 
     }
     
     override func configureHierarchy() {
