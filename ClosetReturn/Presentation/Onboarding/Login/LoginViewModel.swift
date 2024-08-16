@@ -58,7 +58,7 @@ final class LoginViewModel: BaseViewModel {
         
         input.loginButtonTapped
             .bind(with: self) { owner, _ in
-                NetworkManager.shared.loginUser(email: owner.emailValue, password: owner.passwordValue)
+                NetworkManager.shared.performRequest(api: .loginUser(email: owner.emailValue, password: owner.passwordValue))
                     .subscribe(with: self) { owner, result in
                         switch result {
                         case .success(let value):

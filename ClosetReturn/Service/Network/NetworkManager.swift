@@ -55,11 +55,11 @@ final class NetworkManager {
         }
     }
     
-    func loginUser(email: String, password: String) -> Single<Result<String, NetworkError>> {
+    func performRequest(api: Router) -> Single<Result<String, NetworkError>> {
         
         return Single.create { single -> Disposable in
             do {
-                let request = try Router.loginUser(email: email, password: password).asURLRequest()
+                let request = try api.asURLRequest()
                 
                 AF.request(request)
                     .validate(statusCode: 200...299)
