@@ -32,6 +32,9 @@
 		449AD07F2C6E0BA800B0ED37 /* BodyKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD07E2C6E0BA800B0ED37 /* BodyKey.swift */; };
 		449AD0812C6E0E3800B0ED37 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0802C6E0E3800B0ED37 /* NetworkError.swift */; };
 		449AD0832C6E0ED600B0ED37 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0822C6E0ED600B0ED37 /* UIViewController+Extension.swift */; };
+		449AD0852C6F25A900B0ED37 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0842C6F25A900B0ED37 /* LoginViewController.swift */; };
+		449AD0882C6F260A00B0ED37 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 449AD0872C6F260A00B0ED37 /* RxCocoa */; };
+		449AD08A2C6F260A00B0ED37 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 449AD0892C6F260A00B0ED37 /* RxSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +63,7 @@
 		449AD07E2C6E0BA800B0ED37 /* BodyKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyKey.swift; sourceTree = "<group>"; };
 		449AD0802C6E0E3800B0ED37 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		449AD0822C6E0ED600B0ED37 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		449AD0842C6F25A900B0ED37 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,7 +71,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				449AD0882C6F260A00B0ED37 /* RxCocoa in Frameworks */,
 				449AD0532C6CA23300B0ED37 /* SnapKit in Frameworks */,
+				449AD08A2C6F260A00B0ED37 /* RxSwift in Frameworks */,
 				449AD0792C6DE9ED00B0ED37 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -185,6 +191,7 @@
 		449AD05B2C6CDCB800B0ED37 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
+				449AD0842C6F25A900B0ED37 /* LoginViewController.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -245,6 +252,8 @@
 			packageProductDependencies = (
 				449AD0522C6CA23300B0ED37 /* SnapKit */,
 				449AD0782C6DE9ED00B0ED37 /* Alamofire */,
+				449AD0872C6F260A00B0ED37 /* RxCocoa */,
+				449AD0892C6F260A00B0ED37 /* RxSwift */,
 			);
 			productName = ClosetReturn;
 			productReference = 449AD0352C6CA0B200B0ED37 /* ClosetReturn.app */;
@@ -277,6 +286,7 @@
 			packageReferences = (
 				449AD0512C6CA23300B0ED37 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				449AD0772C6DE9ED00B0ED37 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				449AD0862C6F260A00B0ED37 /* XCRemoteSwiftPackageReference "RxSwift" */,
 			);
 			productRefGroup = 449AD0362C6CA0B200B0ED37 /* Products */;
 			projectDirPath = "";
@@ -314,6 +324,7 @@
 				449AD0392C6CA0B200B0ED37 /* AppDelegate.swift in Sources */,
 				449AD05E2C6D787400B0ED37 /* Constant.swift in Sources */,
 				449AD0722C6DC67A00B0ED37 /* BaseViewModel.swift in Sources */,
+				449AD0852C6F25A900B0ED37 /* LoginViewController.swift in Sources */,
 				449AD0832C6E0ED600B0ED37 /* UIViewController+Extension.swift in Sources */,
 				449AD07B2C6DFEF700B0ED37 /* Router.swift in Sources */,
 				449AD06B2C6DC5CE00B0ED37 /* BaseTableViewCell.swift in Sources */,
@@ -565,6 +576,14 @@
 				minimumVersion = 5.9.1;
 			};
 		};
+		449AD0862C6F260A00B0ED37 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.7.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -577,6 +596,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 449AD0772C6DE9ED00B0ED37 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		449AD0872C6F260A00B0ED37 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 449AD0862C6F260A00B0ED37 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		449AD0892C6F260A00B0ED37 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 449AD0862C6F260A00B0ED37 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
