@@ -35,6 +35,10 @@
 		449AD0852C6F25A900B0ED37 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0842C6F25A900B0ED37 /* LoginViewController.swift */; };
 		449AD0882C6F260A00B0ED37 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 449AD0872C6F260A00B0ED37 /* RxCocoa */; };
 		449AD08A2C6F260A00B0ED37 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 449AD0892C6F260A00B0ED37 /* RxSwift */; };
+		449AD08D2C6F2CD100B0ED37 /* InputTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD08C2C6F2CD100B0ED37 /* InputTextFieldView.swift */; };
+		449AD08F2C6F462B00B0ED37 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD08E2C6F462B00B0ED37 /* LoginViewModel.swift */; };
+		449AD0932C6F693A00B0ED37 /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0922C6F693A00B0ED37 /* SignUpViewModel.swift */; };
+		449AD0952C6F694500B0ED37 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0942C6F694500B0ED37 /* SignUpViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,6 +68,10 @@
 		449AD0802C6E0E3800B0ED37 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		449AD0822C6E0ED600B0ED37 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		449AD0842C6F25A900B0ED37 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		449AD08C2C6F2CD100B0ED37 /* InputTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextFieldView.swift; sourceTree = "<group>"; };
+		449AD08E2C6F462B00B0ED37 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		449AD0922C6F693A00B0ED37 /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
+		449AD0942C6F694500B0ED37 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +156,7 @@
 				449AD0652C6DC59400B0ED37 /* Base */,
 				449AD06E2C6DC60900B0ED37 /* Protocols */,
 				449AD0622C6DC4CF00B0ED37 /* Extensions */,
+				449AD08B2C6F288D00B0ED37 /* CustomView */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -191,7 +200,8 @@
 		449AD05B2C6CDCB800B0ED37 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
-				449AD0842C6F25A900B0ED37 /* LoginViewController.swift */,
+				449AD0902C6F68C900B0ED37 /* Login */,
+				449AD0912C6F68EC00B0ED37 /* SignUp */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -231,6 +241,32 @@
 				449AD0712C6DC67A00B0ED37 /* BaseViewModel.swift */,
 			);
 			path = Protocols;
+			sourceTree = "<group>";
+		};
+		449AD08B2C6F288D00B0ED37 /* CustomView */ = {
+			isa = PBXGroup;
+			children = (
+				449AD08C2C6F2CD100B0ED37 /* InputTextFieldView.swift */,
+			);
+			path = CustomView;
+			sourceTree = "<group>";
+		};
+		449AD0902C6F68C900B0ED37 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				449AD08E2C6F462B00B0ED37 /* LoginViewModel.swift */,
+				449AD0842C6F25A900B0ED37 /* LoginViewController.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		449AD0912C6F68EC00B0ED37 /* SignUp */ = {
+			isa = PBXGroup;
+			children = (
+				449AD0922C6F693A00B0ED37 /* SignUpViewModel.swift */,
+				449AD0942C6F694500B0ED37 /* SignUpViewController.swift */,
+			);
+			path = SignUp;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -318,19 +354,23 @@
 			files = (
 				449AD07D2C6E0B1900B0ED37 /* HeaderKey.swift in Sources */,
 				449AD0642C6DC4FB00B0ED37 /* UIView+Extension.swift in Sources */,
+				449AD08F2C6F462B00B0ED37 /* LoginViewModel.swift in Sources */,
 				449AD0742C6DCFC700B0ED37 /* TabBarController.swift in Sources */,
 				449AD0702C6DC61800B0ED37 /* Reusable.swift in Sources */,
 				449AD03D2C6CA0B200B0ED37 /* ViewController.swift in Sources */,
+				449AD08D2C6F2CD100B0ED37 /* InputTextFieldView.swift in Sources */,
 				449AD0392C6CA0B200B0ED37 /* AppDelegate.swift in Sources */,
 				449AD05E2C6D787400B0ED37 /* Constant.swift in Sources */,
 				449AD0722C6DC67A00B0ED37 /* BaseViewModel.swift in Sources */,
 				449AD0852C6F25A900B0ED37 /* LoginViewController.swift in Sources */,
 				449AD0832C6E0ED600B0ED37 /* UIViewController+Extension.swift in Sources */,
 				449AD07B2C6DFEF700B0ED37 /* Router.swift in Sources */,
+				449AD0932C6F693A00B0ED37 /* SignUpViewModel.swift in Sources */,
 				449AD06B2C6DC5CE00B0ED37 /* BaseTableViewCell.swift in Sources */,
 				449AD06D2C6DC5EA00B0ED37 /* BaseCollectionViewCell.swift in Sources */,
 				449AD07F2C6E0BA800B0ED37 /* BodyKey.swift in Sources */,
 				449AD0672C6DC59E00B0ED37 /* BaseView.swift in Sources */,
+				449AD0952C6F694500B0ED37 /* SignUpViewController.swift in Sources */,
 				449AD0762C6DE9D000B0ED37 /* NetworkManager.swift in Sources */,
 				449AD0692C6DC5B300B0ED37 /* BaseViewController.swift in Sources */,
 				449AD0812C6E0E3800B0ED37 /* NetworkError.swift in Sources */,

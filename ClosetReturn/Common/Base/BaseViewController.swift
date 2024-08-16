@@ -35,4 +35,14 @@ class BaseViewController: UIViewController {
     func popViewController(animated: Bool = true) {
         navigationController?.popViewController(animated: animated)
     }
+    
+    func setRootViewController(_ viewController: UIViewController) {
+        if let scene = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate,
+           let window = scene.window {
+            
+            window.rootViewController = viewController
+            
+            UIView.transition(with: window, duration: 0.2, options: [.transitionCrossDissolve], animations: nil, completion: nil)
+        }
+    }
 }

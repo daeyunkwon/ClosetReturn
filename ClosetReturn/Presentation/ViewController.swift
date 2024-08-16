@@ -24,14 +24,14 @@ class ViewController: UIViewController {
             make.center.equalToSuperview()
         }
         
-        NetworkManager.shared.loginUser(email: "c", password: "") { result in
-            switch result {
-            case .success(let success):
-                print(success)
-            case .failure(let failure):
-                self.showNetworkRequestFailAlert(errorType: failure)
-            }
-        }
+//        NetworkManager.shared.loginUser(email: "c", password: "") { result in
+//            switch result {
+//            case .success(let success):
+//                print(success)
+//            case .failure(let failure):
+//                self.showNetworkRequestFailAlert(errorType: failure)
+//            }
+//        }
         
     }
 

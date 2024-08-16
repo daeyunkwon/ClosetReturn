@@ -10,6 +10,7 @@ import Foundation
 enum NetworkError: Error {
     case notConnectedInternet
     case invalidURL
+    case failedToCreateRequest
     case unknownRespose
     case statusError(codeNumber: Int)
     case noData
@@ -23,6 +24,8 @@ extension NetworkError {
             return "Error: 인터넷 연결 안됨"
         case .invalidURL:
             return "Error: 유효하지 않은 URL"
+        case .failedToCreateRequest:
+            return "Error: request 생성 실패"
         case .unknownRespose:
             return "Error: 알 수 없는 응답"
         case .statusError(let codeNumber):

@@ -8,6 +8,7 @@
 import Foundation
 
 import Alamofire
+import RxSwift
 
 final class NetworkManager {
     
@@ -54,23 +55,52 @@ final class NetworkManager {
         }
     }
     
-    func loginUser(email: String, password: String, completionHandler: @escaping (Result<String, NetworkError>) -> Void) {
-        do {
-            let request = try Router.loginUser(email: email, password: password).asURLRequest()
-            AF.request(request)
-                .validate(statusCode: 200...299)
-                .responseString { response in
-                    switch response.result {
-                    case .success(let value):
-                        print(value)
-                    case .failure(let error):
-                        print(error)
-                        print("실패됨")
-                        completionHandler(.failure(.statusError(codeNumber: error.responseCode ?? 0)))
+    func loginUser(email: String, password: String) -> Single<Result<String, NetworkError>> {
+        
+        return Single.create { single -> Disposable in
+            do {
+                let request = try Router.loginUser(email: email, password: password).asURLRequest()
+                
+                AF.request(request)
+                    .validate(statusCode: 200...299)
+                    .responseString { response in
+                        switch response.result {
+                        case .success(let value):
+                            single(.success(.success(value)))
+                        
+                        case .failure(let error):
+                            switch error {
+                            case .createURLRequestFailed(let error):
+                                print(error)
+                                single(.success(.failure(NetworkError.failedToCreateRequest)))
+                                
+                            case .invalidURL(let url):
+                                print("Error URL: \(url)")
+                                single(.success(.failure(NetworkError.invalidURL)))
+                                
+                            case .responseValidationFailed(let reason):
+                                switch reason {
+                                case .unacceptableStatusCode(let code):
+                                    single(.success(.failure(NetworkError.statusError(codeNumber: code))))
+                                default:
+                                    break
+                                }
+                                
+                            case .sessionTaskFailed(let error as URLError):
+                                if error.code == .notConnectedToInternet {
+                                    single(.success(.failure(NetworkError.notConnectedInternet)))
+                                }
+                            default:
+                                break
+                            }
+                        }
                     }
+            } catch {
+                print("Error: request 생성 실패 \(error)")
+                single(.success(.failure(NetworkError.failedToCreateRequest)))
             }
-        } catch {
-            print("Error: request 생성 실패 \(error)")
+
+            return Disposables.create()
         }
     }
     
