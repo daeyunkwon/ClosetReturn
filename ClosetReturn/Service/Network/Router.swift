@@ -22,10 +22,7 @@ extension Router: URLRequestConvertible {
     
     var method: HTTPMethod {
         switch self {
-        case .emailValidation:
-            return .get
-            
-        case .joinUser, .loginUser:
+        case .emailValidation, .joinUser, .loginUser:
             return .post
         }
     }

@@ -69,6 +69,7 @@ final class NetworkManager {
                             single(.success(.success(value)))
                         
                         case .failure(let error):
+                            print("Error: \(error)")
                             switch error {
                             case .createURLRequestFailed(let error):
                                 print(error)

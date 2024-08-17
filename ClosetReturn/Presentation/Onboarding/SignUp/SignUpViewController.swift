@@ -44,9 +44,9 @@ final class SignUpViewController: BaseViewController {
     private let emailInputView = InputTextFieldView(viewType: .notPassword, title: "이메일", placeholder: "예시) welcome@email.com", showAsterisk: true)
     private let firstPasswordInputView = InputTextFieldView(viewType: .password, title: "비밀번호", placeholder: "비밀번호를 입력해 주세요", showAsterisk: true)
     private let secondPasswordInputView = InputTextFieldView(viewType: .password, title: "비밀번호 확인", placeholder: "비밀번호 재입력", showAsterisk: true)
-    private let nicknameInputView = InputTextFieldView(viewType: .notPassword, title: "닉네임", placeholder: "닉네임을 입력해 주세요")
+    private let nicknameInputView = InputTextFieldView(viewType: .notPassword, title: "닉네임", placeholder: "다른 유저들에게 보여질 닉네임을 입력해주세요")
     private let phoneNumberInputView = {
-        let view = InputTextFieldView(viewType: .notPassword, title: "전화번호", placeholder: "(-)없이 숫자만 입력해 주세요")
+        let view = InputTextFieldView(viewType: .notPassword, title: "휴대전화", placeholder: "(-)없이 숫자만 입력해 주세요")
         view.inputTextField.keyboardType = .numberPad
         return view
     }()
@@ -93,6 +93,7 @@ final class SignUpViewController: BaseViewController {
         button.layer.shadowOpacity = 0.3
         button.layer.shadowOffset = .init(width: 0, height: 1)
         button.isUserInteractionEnabled = true
+        button.isEnabled = false
         return button
     }()
     
@@ -105,9 +106,36 @@ final class SignUpViewController: BaseViewController {
     //MARK: - Configurations
     
     override func bind() {
+        let input = SignUpViewModel.Input(loginButtonTap: loginButton.rx.tap, email: emailInputView.inputTextField.rx.text.orEmpty, checkEmailButtonTap: checkEmailButton.rx.tap)
+        let output = viewModel.transform(input: input)
         
         
+        Observable.zip(output.emailValid, output.emailValidInfo)
+            .bind(onNext: { [weak self] value in
+                guard let self else { return }
+                self.emailInputView.descriptionLabel.text = value.1
+                
+                if value.0 {
+                    self.emailInputView.descriptionLabel.textColor = .systemGreen
+                    self.checkEmailButton.isEnabled = true
+                } else {
+                    self.emailInputView.descriptionLabel.textColor = .systemRed
+                    self.checkEmailButton.isEnabled = false
+                }
+            })
+            .disposed(by: disposeBag)
         
+        output.failedToEmailValidationRequest
+            .bind(with: self) { owner, error in
+                owner.showNetworkRequestFailAlert(errorType: error)
+            }
+            .disposed(by: disposeBag)
+        
+        output.loginButtonTap
+            .bind(with: self) { owner, _ in
+                owner.popViewController()
+            }
+            .disposed(by: disposeBag)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

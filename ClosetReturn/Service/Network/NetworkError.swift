@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum NetworkError: Error {
+enum NetworkError: Error, Equatable {
     case notConnectedInternet
     case invalidURL
     case failedToCreateRequest
