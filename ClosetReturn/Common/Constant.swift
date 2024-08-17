@@ -29,6 +29,7 @@ enum Constant {
         
         enum Button {
             static let titleColor: UIColor = .white
+            static let buttonDisabled: UIColor = .darkGray.withAlphaComponent(0.5)
         }
     }
     

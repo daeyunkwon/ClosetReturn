@@ -16,6 +16,12 @@ final class SignUpViewModel: BaseViewModel {
     
     private let disposeBag = DisposeBag()
     
+    private var emailValue: String = ""
+    private var passwordValue: String = ""
+    private var nicknameValue: String = ""
+    private var phoneNumberValue: String = ""
+    private var birthdayValue: String = ""
+    
     //MARK: - Inputs
     
     struct Input {
@@ -24,6 +30,8 @@ final class SignUpViewModel: BaseViewModel {
         let checkEmailButtonTap: ControlEvent<Void>
         let password: ControlProperty<String>
         let passwordHideButtonTap: ControlEvent<Void>
+        let recheckPassword: ControlProperty<String>
+        let recheckPasswordHideButtonTap: ControlEvent<Void>
     }
     
     //MARK: - Outputs
@@ -32,10 +40,14 @@ final class SignUpViewModel: BaseViewModel {
         let loginButtonTap: ControlEvent<Void>
         let emailValidInfo: PublishRelay<String>
         let emailValid: PublishRelay<Bool>
+        let emailCheckValid: PublishRelay<Bool>
         let failedToEmailValidationRequest: PublishSubject<NetworkError>
         let passwordValidInfo: PublishRelay<String>
         let passwordValid: PublishRelay<Bool>
         let passwordHideButtonTap: ControlEvent<Void>
+        let recheckPasswordValidInfo: PublishRelay<String>
+        let recheckPasswordValid: PublishRelay<Bool>
+        let recheckPasswordHideButtonTap: ControlEvent<Void>
     }
     
     //MARK: - Methods
@@ -44,16 +56,22 @@ final class SignUpViewModel: BaseViewModel {
         
         let emailValidInfo = PublishRelay<String>()
         let emailValid = PublishRelay<Bool>()
+        let emailCheckValid = PublishRelay<Bool>()
         let failedToEmailValidationRequest = PublishSubject<NetworkError>()
         let passwordValidInfo = PublishRelay<String>()
         let passwordValid = PublishRelay<Bool>()
+        let recheckPasswordValidInfo = PublishRelay<String>()
+        let recheckPasswordValid = PublishRelay<Bool>()
+    
         
         
         input.email
+            .distinctUntilChanged()
             .bind(with: self) { owner, value in
+                emailCheckValid.accept(false)
                 if owner.isValidEmail(email: value) {
                     emailValid.accept(true)
-                    emailValidInfo.accept("")
+                    emailValidInfo.accept("이메일 중복 확인을 해주세요.")
                 } else {
                     emailValid.accept(false)
                     emailValidInfo.accept("이메일 형식이 올바르지 않습니다.")
@@ -71,14 +89,16 @@ final class SignUpViewModel: BaseViewModel {
                         case .success(_):
                             emailValid.accept(true)
                             emailValidInfo.accept("사용 가능한 이메일입니다.")
+                            emailCheckValid.accept(true)
                         
                         case .failure(let error):
                             if error == NetworkError.statusError(codeNumber: 409) {
-                                emailValid.accept(false)
                                 emailValidInfo.accept("사용이 불가한 이메일입니다.")
                             } else {
                                 failedToEmailValidationRequest.onNext(error)
                             }
+                            emailValid.accept(false)
+                            emailCheckValid.accept(false)
                         }
                     }
                     .disposed(by: owner.disposeBag)
@@ -87,6 +107,8 @@ final class SignUpViewModel: BaseViewModel {
         
         input.password
             .bind(with: self) { owner, value in
+                owner.passwordValue = value
+                
                 if owner.isValidPassword(password: value) {
                     passwordValid.accept(true)
                     passwordValidInfo.accept("사용이 가능한 비밀번호입니다.")
@@ -94,8 +116,27 @@ final class SignUpViewModel: BaseViewModel {
                     passwordValid.accept(false)
                     passwordValidInfo.accept("영문, 숫자, 특수문자를 최소 1개씩 조합해서 8자 이상 20자 이하로 입력해주세요.")
                 }
+                
+                input.recheckPassword
+                    .bind(with: self) { owner, value in
+                        if value == owner.passwordValue {
+                            if !value.isEmpty {
+                                recheckPasswordValid.accept(true)
+                                recheckPasswordValidInfo.accept("비밀번호가 일치합니다.")
+                            }
+                        } else {
+                                recheckPasswordValid.accept(false)
+                            if !value.isEmpty {
+                                recheckPasswordValidInfo.accept("비밀번호가 일치하지 않습니다.")
+                            } else {
+                                recheckPasswordValidInfo.accept("")
+                            }
+                        }
+                    }
+                    .disposed(by: owner.disposeBag)
             }
             .disposed(by: disposeBag)
+        
         
         
         
@@ -104,10 +145,14 @@ final class SignUpViewModel: BaseViewModel {
             loginButtonTap: input.loginButtonTap,
             emailValidInfo: emailValidInfo,
             emailValid: emailValid,
+            emailCheckValid: emailCheckValid,
             failedToEmailValidationRequest: failedToEmailValidationRequest,
             passwordValidInfo: passwordValidInfo,
             passwordValid: passwordValid,
-            passwordHideButtonTap: input.passwordHideButtonTap
+            passwordHideButtonTap: input.passwordHideButtonTap,
+            recheckPasswordValidInfo: recheckPasswordValidInfo,
+            recheckPasswordValid: recheckPasswordValid,
+            recheckPasswordHideButtonTap: input.recheckPasswordHideButtonTap
         )
     }
     

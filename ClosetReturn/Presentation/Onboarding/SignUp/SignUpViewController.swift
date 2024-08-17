@@ -60,13 +60,13 @@ final class SignUpViewController: BaseViewController {
         let button = UIButton(type: .system)
         button.setTitle("가입하기", for: .normal)
         button.titleLabel?.font = Constant.Font.buttonTitleFont
-        button.backgroundColor = Constant.Color.brandColor
         button.tintColor = Constant.Color.Button.titleColor
         button.layer.cornerRadius = 10
         button.layer.shadowColor = UIColor.lightGray.cgColor
         button.layer.shadowOpacity = 1
         button.layer.shadowOffset = .init(width: 0, height: 1)
         button.isUserInteractionEnabled = false
+        button.backgroundColor = Constant.Color.Button.buttonDisabled
         return button
     }()
     
@@ -111,18 +111,24 @@ final class SignUpViewController: BaseViewController {
             email: emailInputView.inputTextField.rx.text.orEmpty,
             checkEmailButtonTap: checkEmailButton.rx.tap,
             password: passwordInputView.inputTextField.rx.text.orEmpty,
-            passwordHideButtonTap: passwordInputView.hideButton.rx.tap
+            passwordHideButtonTap: passwordInputView.hideButton.rx.tap,
+            recheckPassword: recheckPasswordInputView.inputTextField.rx.text.orEmpty,
+            recheckPasswordHideButtonTap: recheckPasswordInputView.hideButton.rx.tap
         )
         let output = viewModel.transform(input: input)
         
         
-        Observable.zip(output.emailValid, output.emailValidInfo)
+        Observable.zip(output.emailValid, output.emailValidInfo, output.emailCheckValid)
             .bind(onNext: { [weak self] value in
                 guard let self else { return }
                 self.emailInputView.descriptionLabel.text = value.1
                 
                 if value.0 {
-                    self.emailInputView.descriptionLabel.textColor = .systemGreen
+                    if value.2 {
+                        self.emailInputView.descriptionLabel.textColor = .systemGreen
+                    } else {
+                        self.emailInputView.descriptionLabel.textColor = Constant.Color.Text.secondaryColor
+                    }
                     self.checkEmailButton.isEnabled = true
                 } else {
                     self.emailInputView.descriptionLabel.textColor = .systemRed
@@ -140,6 +146,19 @@ final class SignUpViewController: BaseViewController {
                     self.passwordInputView.descriptionLabel.textColor = .systemGreen
                 } else {
                     self.passwordInputView.descriptionLabel.textColor = .systemRed
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        Observable.zip(output.recheckPasswordValid, output.recheckPasswordValidInfo)
+            .bind(onNext: { [weak self] value in
+                guard let self else { return }
+                self.recheckPasswordInputView.descriptionLabel.text = value.1
+                
+                if value.0 {
+                    self.recheckPasswordInputView.descriptionLabel.textColor = .systemGreen
+                } else {
+                    self.recheckPasswordInputView.descriptionLabel.textColor = .systemRed
                 }
             })
             .disposed(by: disposeBag)
@@ -164,6 +183,31 @@ final class SignUpViewController: BaseViewController {
                     owner.passwordInputView.hideButton.setImage(UIImage(systemName: "eye"), for: .normal)
                 } else {
                     owner.passwordInputView.hideButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        output.recheckPasswordHideButtonTap
+            .bind(with: self) { owner, _ in
+                owner.recheckPasswordInputView.inputTextField.isSecureTextEntry.toggle()
+                
+                if owner.recheckPasswordInputView.inputTextField.isSecureTextEntry {
+                    owner.recheckPasswordInputView.hideButton.setImage(UIImage(systemName: "eye"), for: .normal)
+                } else {
+                    owner.recheckPasswordInputView.hideButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        Observable.combineLatest(output.emailCheckValid, output.passwordValid, output.recheckPasswordValid)
+            .map { $0.0 == $0.1 && $0.1 == $0.2 && $0.0 == true && $0.1 == true && $0.2 == true }
+            .bind(with: self) { owner, value in
+                owner.signUpButton.isUserInteractionEnabled = value
+                
+                if value {
+                    owner.signUpButton.backgroundColor = Constant.Color.brandColor
+                } else {
+                    owner.signUpButton.backgroundColor = Constant.Color.Button.buttonDisabled
                 }
             }
             .disposed(by: disposeBag)
