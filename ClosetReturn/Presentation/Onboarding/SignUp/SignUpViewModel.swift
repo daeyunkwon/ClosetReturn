@@ -22,6 +22,8 @@ final class SignUpViewModel: BaseViewModel {
         let loginButtonTap: ControlEvent<Void>
         let email: ControlProperty<String>
         let checkEmailButtonTap: ControlEvent<Void>
+        let password: ControlProperty<String>
+        let passwordHideButtonTap: ControlEvent<Void>
     }
     
     //MARK: - Outputs
@@ -31,6 +33,9 @@ final class SignUpViewModel: BaseViewModel {
         let emailValidInfo: PublishRelay<String>
         let emailValid: PublishRelay<Bool>
         let failedToEmailValidationRequest: PublishSubject<NetworkError>
+        let passwordValidInfo: PublishRelay<String>
+        let passwordValid: PublishRelay<Bool>
+        let passwordHideButtonTap: ControlEvent<Void>
     }
     
     //MARK: - Methods
@@ -40,10 +45,11 @@ final class SignUpViewModel: BaseViewModel {
         let emailValidInfo = PublishRelay<String>()
         let emailValid = PublishRelay<Bool>()
         let failedToEmailValidationRequest = PublishSubject<NetworkError>()
+        let passwordValidInfo = PublishRelay<String>()
+        let passwordValid = PublishRelay<Bool>()
         
         
         input.email
-            .filter { !$0.isEmpty }
             .bind(with: self) { owner, value in
                 if owner.isValidEmail(email: value) {
                     emailValid.accept(true)
@@ -79,15 +85,41 @@ final class SignUpViewModel: BaseViewModel {
             })
             .disposed(by: disposeBag)
         
+        input.password
+            .bind(with: self) { owner, value in
+                if owner.isValidPassword(password: value) {
+                    passwordValid.accept(true)
+                    passwordValidInfo.accept("사용이 가능한 비밀번호입니다.")
+                } else {
+                    passwordValid.accept(false)
+                    passwordValidInfo.accept("영문, 숫자, 특수문자를 최소 1개씩 조합해서 8자 이상 20자 이하로 입력해주세요.")
+                }
+            }
+            .disposed(by: disposeBag)
         
         
         
-        return Output(loginButtonTap: input.loginButtonTap, emailValidInfo: emailValidInfo, emailValid: emailValid, failedToEmailValidationRequest: failedToEmailValidationRequest)
+        
+        return Output(
+            loginButtonTap: input.loginButtonTap,
+            emailValidInfo: emailValidInfo,
+            emailValid: emailValid,
+            failedToEmailValidationRequest: failedToEmailValidationRequest,
+            passwordValidInfo: passwordValidInfo,
+            passwordValid: passwordValid,
+            passwordHideButtonTap: input.passwordHideButtonTap
+        )
     }
     
     private func isValidEmail(email: String) -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{3,}"
         let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
         return emailTest.evaluate(with: email)
+    }
+    
+    private func isValidPassword(password: String) -> Bool {
+        let passwordRegEx = "^(?=.*[a-z])(?=.*[0-9])(?=.*[!_@$%^&+=-])[A-Z0-9a-z.!_@$%^&+=-]{8,20}"
+        let passwordTest = NSPredicate(format: "SELF MATCHES %@", passwordRegEx)
+        return passwordTest.evaluate(with: password)
     }
 }

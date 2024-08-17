@@ -83,6 +83,7 @@ final class InputTextFieldView: UIView {
         label.font = Constant.Font.infoFont
         label.alpha = 0.7
         label.textColor = .systemGreen
+        label.numberOfLines = 2
         return label
     }()
     

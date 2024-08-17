@@ -42,8 +42,8 @@ final class SignUpViewController: BaseViewController {
     }()
     
     private let emailInputView = InputTextFieldView(viewType: .notPassword, title: "이메일", placeholder: "예시) welcome@email.com", showAsterisk: true)
-    private let firstPasswordInputView = InputTextFieldView(viewType: .password, title: "비밀번호", placeholder: "비밀번호를 입력해 주세요", showAsterisk: true)
-    private let secondPasswordInputView = InputTextFieldView(viewType: .password, title: "비밀번호 확인", placeholder: "비밀번호 재입력", showAsterisk: true)
+    private let passwordInputView = InputTextFieldView(viewType: .password, title: "비밀번호", placeholder: "비밀번호를 입력해 주세요", showAsterisk: true)
+    private let recheckPasswordInputView = InputTextFieldView(viewType: .password, title: "비밀번호 확인", placeholder: "비밀번호 재입력", showAsterisk: true)
     private let nicknameInputView = InputTextFieldView(viewType: .notPassword, title: "닉네임", placeholder: "다른 유저들에게 보여질 닉네임을 입력해주세요")
     private let phoneNumberInputView = {
         let view = InputTextFieldView(viewType: .notPassword, title: "휴대전화", placeholder: "(-)없이 숫자만 입력해 주세요")
@@ -106,7 +106,13 @@ final class SignUpViewController: BaseViewController {
     //MARK: - Configurations
     
     override func bind() {
-        let input = SignUpViewModel.Input(loginButtonTap: loginButton.rx.tap, email: emailInputView.inputTextField.rx.text.orEmpty, checkEmailButtonTap: checkEmailButton.rx.tap)
+        let input = SignUpViewModel.Input(
+            loginButtonTap: loginButton.rx.tap,
+            email: emailInputView.inputTextField.rx.text.orEmpty,
+            checkEmailButtonTap: checkEmailButton.rx.tap,
+            password: passwordInputView.inputTextField.rx.text.orEmpty,
+            passwordHideButtonTap: passwordInputView.hideButton.rx.tap
+        )
         let output = viewModel.transform(input: input)
         
         
@@ -125,6 +131,19 @@ final class SignUpViewController: BaseViewController {
             })
             .disposed(by: disposeBag)
         
+        Observable.zip(output.passwordValid, output.passwordValidInfo)
+            .bind(onNext: { [weak self] value in
+                guard let self else { return }
+                self.passwordInputView.descriptionLabel.text = value.1
+                
+                if value.0 {
+                    self.passwordInputView.descriptionLabel.textColor = .systemGreen
+                } else {
+                    self.passwordInputView.descriptionLabel.textColor = .systemRed
+                }
+            })
+            .disposed(by: disposeBag)
+        
         output.failedToEmailValidationRequest
             .bind(with: self) { owner, error in
                 owner.showNetworkRequestFailAlert(errorType: error)
@@ -136,6 +155,23 @@ final class SignUpViewController: BaseViewController {
                 owner.popViewController()
             }
             .disposed(by: disposeBag)
+        
+        output.passwordHideButtonTap
+            .bind(with: self) { owner, _ in
+                owner.passwordInputView.inputTextField.isSecureTextEntry.toggle()
+                
+                if owner.passwordInputView.inputTextField.isSecureTextEntry {
+                    owner.passwordInputView.hideButton.setImage(UIImage(systemName: "eye"), for: .normal)
+                } else {
+                    owner.passwordInputView.hideButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        
+        
+        
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -150,8 +186,8 @@ final class SignUpViewController: BaseViewController {
             titleLabel,
             loginButton,
             emailInputView,
-            firstPasswordInputView,
-            secondPasswordInputView,
+            passwordInputView,
+            recheckPasswordInputView,
             nicknameInputView,
             phoneNumberInputView,
             birthdayInputView,
@@ -192,18 +228,18 @@ final class SignUpViewController: BaseViewController {
             make.height.equalTo(22)
         }
         
-        firstPasswordInputView.snp.makeConstraints { make in
+        passwordInputView.snp.makeConstraints { make in
             make.top.equalTo(emailInputView.snp.bottom).offset(50)
             make.horizontalEdges.equalToSuperview().inset(20)
         }
         
-        secondPasswordInputView.snp.makeConstraints { make in
-            make.top.equalTo(firstPasswordInputView.snp.bottom).offset(50)
+        recheckPasswordInputView.snp.makeConstraints { make in
+            make.top.equalTo(passwordInputView.snp.bottom).offset(50)
             make.horizontalEdges.equalToSuperview().inset(20)
         }
         
         nicknameInputView.snp.makeConstraints { make in
-            make.top.equalTo(secondPasswordInputView.snp.bottom).offset(50)
+            make.top.equalTo(recheckPasswordInputView.snp.bottom).offset(50)
             make.horizontalEdges.equalToSuperview().inset(20)
         }
         
