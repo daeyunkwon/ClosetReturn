@@ -40,6 +40,7 @@
 		449AD0932C6F693A00B0ED37 /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0922C6F693A00B0ED37 /* SignUpViewModel.swift */; };
 		449AD0952C6F694500B0ED37 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0942C6F694500B0ED37 /* SignUpViewController.swift */; };
 		449AD0982C6F6BC000B0ED37 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 449AD0972C6F6BC000B0ED37 /* IQKeyboardManagerSwift */; };
+		44A39D4B2C723843009BCC44 /* SignUpCompleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A39D4A2C723843009BCC44 /* SignUpCompleteViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -73,6 +74,7 @@
 		449AD08E2C6F462B00B0ED37 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		449AD0922C6F693A00B0ED37 /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
 		449AD0942C6F694500B0ED37 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		44A39D4A2C723843009BCC44 /* SignUpCompleteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpCompleteViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -267,6 +269,7 @@
 			children = (
 				449AD0922C6F693A00B0ED37 /* SignUpViewModel.swift */,
 				449AD0942C6F694500B0ED37 /* SignUpViewController.swift */,
+				44A39D4A2C723843009BCC44 /* SignUpCompleteViewController.swift */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
@@ -358,6 +361,7 @@
 			files = (
 				449AD07D2C6E0B1900B0ED37 /* HeaderKey.swift in Sources */,
 				449AD0642C6DC4FB00B0ED37 /* UIView+Extension.swift in Sources */,
+				44A39D4B2C723843009BCC44 /* SignUpCompleteViewController.swift in Sources */,
 				449AD08F2C6F462B00B0ED37 /* LoginViewModel.swift in Sources */,
 				449AD0742C6DCFC700B0ED37 /* TabBarController.swift in Sources */,
 				449AD0702C6DC61800B0ED37 /* Reusable.swift in Sources */,

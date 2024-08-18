@@ -57,6 +57,7 @@ final class SignUpViewModel: BaseViewModel {
         let phoneNumberValidInfo: PublishRelay<String>
         let phoneNumberValid: BehaviorRelay<Bool>
         let birthdayString: PublishRelay<String>
+        let signUpDone: PublishRelay<Result<Bool, NetworkError>>
     }
     
     //MARK: - Methods
@@ -76,6 +77,7 @@ final class SignUpViewModel: BaseViewModel {
         let phoneNumberValidInfo = PublishRelay<String>()
         let phoneNumberValid = BehaviorRelay<Bool>(value: true)
         let birthdayString = PublishRelay<String>()
+        let signUpDone = PublishRelay<Result<Bool, NetworkError>>()
         
         
         input.email
@@ -171,7 +173,7 @@ final class SignUpViewModel: BaseViewModel {
                     phoneNumberValid.accept(true)
                     phoneNumberValidInfo.accept("")
                 } else {
-                    if value.isEmpty {
+                    if value.isEmpty && value.count == 0 {
                         phoneNumberValid.accept(true)
                         phoneNumberValidInfo.accept("")
                     } else {
@@ -195,16 +197,18 @@ final class SignUpViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
-        
-        
-        
         input.signUpButtonTap
-            .bind(with: self) { owner, _ in
-                print(owner.emailValue)
-                print(owner.passwordValue)
-                print(owner.nicknameValue)
-                print(owner.phoneNumberValue)
-                print(owner.birthdayValue)
+            .withUnretained(self)
+            .flatMap { _ in
+                NetworkManager.shared.performRequest(api: .joinUser(email: self.emailValue, password: self.passwordValue, nick: self.nicknameValue, phoneNum: self.phoneNumberValue, birthDay: self.birthdayValue))
+            }
+            .bind(with: self) { owner, result in
+                switch result {
+                case .success(_):
+                    signUpDone.accept(.success(true))
+                case .failure(let error):
+                    signUpDone.accept(.failure(error))
+                }
             }
             .disposed(by: disposeBag)
         
@@ -225,7 +229,8 @@ final class SignUpViewModel: BaseViewModel {
             nicknameValid: nicknameValid,
             phoneNumberValidInfo: phoneNumberValidInfo,
             phoneNumberValid: phoneNumberValid,
-            birthdayString: birthdayString
+            birthdayString: birthdayString,
+            signUpDone: signUpDone
         )
     }
     

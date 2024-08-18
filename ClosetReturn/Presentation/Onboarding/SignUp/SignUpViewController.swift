@@ -180,7 +180,7 @@ final class SignUpViewController: BaseViewController {
             })
             .disposed(by: disposeBag)
         
-        Observable.zip(output.phoneNumberValid, output.phoneNumberValidInfo)
+        Observable.combineLatest(output.phoneNumberValid, output.phoneNumberValidInfo)
             .bind(onNext: { [weak self] value in
                 guard let self else { return }
                 self.phoneNumberInputView.descriptionLabel.text = value.1
@@ -241,6 +241,21 @@ final class SignUpViewController: BaseViewController {
                     owner.signUpButton.backgroundColor = Constant.Color.brandColor
                 } else {
                     owner.signUpButton.backgroundColor = Constant.Color.Button.buttonDisabled
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        output.signUpDone
+            .bind(with: self) { owner, result in
+                switch result {
+                case .success(_):
+                    let vc = SignUpCompleteViewController()
+                    vc.modalPresentationStyle = .overFullScreen
+                    vc.modalTransitionStyle = .crossDissolve
+                    owner.present(vc, animated: true)
+                
+                case .failure(let networkError):
+                    owner.showNetworkRequestFailAlert(errorType: networkError)
                 }
             }
             .disposed(by: disposeBag)
