@@ -34,6 +34,7 @@ final class SignUpViewModel: BaseViewModel {
         let recheckPasswordHideButtonTap: ControlEvent<Void>
         let nickname: ControlProperty<String>
         let phoneNumber: ControlProperty<String>
+        let birthday: ControlProperty<Date>
         let signUpButtonTap: ControlEvent<Void>
     }
     
@@ -55,6 +56,7 @@ final class SignUpViewModel: BaseViewModel {
         let nicknameValid: PublishRelay<Bool>
         let phoneNumberValidInfo: PublishRelay<String>
         let phoneNumberValid: BehaviorRelay<Bool>
+        let birthdayString: PublishRelay<String>
     }
     
     //MARK: - Methods
@@ -73,6 +75,7 @@ final class SignUpViewModel: BaseViewModel {
         let nicknameValid = PublishRelay<Bool>()
         let phoneNumberValidInfo = PublishRelay<String>()
         let phoneNumberValid = BehaviorRelay<Bool>(value: true)
+        let birthdayString = PublishRelay<String>()
         
         
         input.email
@@ -179,6 +182,18 @@ final class SignUpViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
+        input.birthday
+            .skip(1)
+            .bind(with: self) { owner, value in
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyyMMdd"
+                owner.birthdayValue = dateFormatter.string(from: value)
+                
+                dateFormatter.dateFormat = "yyyy년 M월 d일"
+                let string = dateFormatter.string(from: value)
+                birthdayString.accept(string)
+            }
+            .disposed(by: disposeBag)
         
         
         
@@ -209,7 +224,8 @@ final class SignUpViewModel: BaseViewModel {
             nicknameValidInfo: nicknameValidInfo,
             nicknameValid: nicknameValid,
             phoneNumberValidInfo: phoneNumberValidInfo,
-            phoneNumberValid: phoneNumberValid
+            phoneNumberValid: phoneNumberValid,
+            birthdayString: birthdayString
         )
     }
     

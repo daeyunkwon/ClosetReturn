@@ -29,8 +29,8 @@ final class LoginViewController: BaseViewController {
         return label
     }()
     
-    private let emailInputView = InputTextFieldView(viewType: .notPassword, title: "이메일", placeholder: "")
-    private let passwordInputView = InputTextFieldView(viewType: .password, title: "비밀번호", placeholder: "")
+    private let emailInputView = InputTextFieldView(viewType: .notPassword, title: "이메일", placeholder: "이메일")
+    private let passwordInputView = InputTextFieldView(viewType: .password, title: "비밀번호", placeholder: "비밀번호")
     
     private let loginButton: UIButton = {
         let button = UIButton(type: .system)

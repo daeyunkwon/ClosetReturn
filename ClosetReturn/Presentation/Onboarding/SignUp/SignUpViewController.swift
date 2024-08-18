@@ -116,6 +116,7 @@ final class SignUpViewController: BaseViewController {
             recheckPasswordHideButtonTap: recheckPasswordInputView.hideButton.rx.tap,
             nickname: nicknameInputView.inputTextField.rx.text.orEmpty,
             phoneNumber: phoneNumberInputView.inputTextField.rx.text.orEmpty,
+            birthday: birthdayPicker.rx.date,
             signUpButtonTap: signUpButton.rx.tap
         )
         let output = viewModel.transform(input: input)
@@ -192,6 +193,10 @@ final class SignUpViewController: BaseViewController {
             })
             .disposed(by: disposeBag)
         
+        output.birthdayString
+            .bind(to: birthdayInputView.inputTextField.rx.text)
+            .disposed(by: disposeBag)
+        
         output.failedToEmailValidationRequest
             .bind(with: self) { owner, error in
                 owner.showNetworkRequestFailAlert(errorType: error)
@@ -239,11 +244,6 @@ final class SignUpViewController: BaseViewController {
                 }
             }
             .disposed(by: disposeBag)
-        
-        
-        
-        
-        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
