@@ -33,6 +33,7 @@ final class SignUpViewModel: BaseViewModel {
         let recheckPassword: ControlProperty<String>
         let recheckPasswordHideButtonTap: ControlEvent<Void>
         let nickname: ControlProperty<String>
+        let phoneNumber: ControlProperty<String>
         let signUpButtonTap: ControlEvent<Void>
     }
     
@@ -52,6 +53,8 @@ final class SignUpViewModel: BaseViewModel {
         let recheckPasswordHideButtonTap: ControlEvent<Void>
         let nicknameValidInfo: PublishRelay<String>
         let nicknameValid: PublishRelay<Bool>
+        let phoneNumberValidInfo: PublishRelay<String>
+        let phoneNumberValid: BehaviorRelay<Bool>
     }
     
     //MARK: - Methods
@@ -68,6 +71,8 @@ final class SignUpViewModel: BaseViewModel {
         let recheckPasswordValid = PublishRelay<Bool>()
         let nicknameValidInfo = PublishRelay<String>()
         let nicknameValid = PublishRelay<Bool>()
+        let phoneNumberValidInfo = PublishRelay<String>()
+        let phoneNumberValid = BehaviorRelay<Bool>(value: true)
         
         
         input.email
@@ -148,10 +153,28 @@ final class SignUpViewModel: BaseViewModel {
                 owner.nicknameValue = value
                 if owner.isValidNickname(nickname: value) {
                     nicknameValid.accept(true)
-                    nicknameValidInfo.accept("사용 가능합니다.")
+                    nicknameValidInfo.accept("사용 가능한 닉네임입니다.")
                 } else {
                     nicknameValid.accept(false)
-                    nicknameValidInfo.accept("특수 기호를 제외한 15자 이내로만 입력해 주세요.")
+                    nicknameValidInfo.accept("특수 기호와 공백을 제외한 15자 이내로만 입력해 주세요.")
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        input.phoneNumber
+            .bind(with: self) { owner, value in
+                owner.phoneNumberValue = value
+                if owner.isValidPhoneNumber(phoneNumber: value) {
+                    phoneNumberValid.accept(true)
+                    phoneNumberValidInfo.accept("")
+                } else {
+                    if value.isEmpty {
+                        phoneNumberValid.accept(true)
+                        phoneNumberValidInfo.accept("")
+                    } else {
+                        phoneNumberValid.accept(false)
+                        phoneNumberValidInfo.accept("11자리의 숫자만 입력해 주세요")
+                    }
                 }
             }
             .disposed(by: disposeBag)
@@ -184,7 +207,9 @@ final class SignUpViewModel: BaseViewModel {
             recheckPasswordValid: recheckPasswordValid,
             recheckPasswordHideButtonTap: input.recheckPasswordHideButtonTap,
             nicknameValidInfo: nicknameValidInfo,
-            nicknameValid: nicknameValid
+            nicknameValid: nicknameValid,
+            phoneNumberValidInfo: phoneNumberValidInfo,
+            phoneNumberValid: phoneNumberValid
         )
     }
     
@@ -201,8 +226,14 @@ final class SignUpViewModel: BaseViewModel {
     }
     
     private func isValidNickname(nickname: String) -> Bool {
-        let nicknameRegEx = "^[a-zA-Z0-9가-힣_\\-]{1,15}$"
+        let nicknameRegEx = "^[a-zA-Z0-9가-힣_-]{1,15}$"
         let nicknameTest = NSPredicate(format: "SELF MATCHES %@", nicknameRegEx)
         return nicknameTest.evaluate(with: nickname)
+    }
+    
+    private func isValidPhoneNumber(phoneNumber: String) -> Bool {
+        let phoneNumberRegEx = "^[0-9]{3,3}+[0-9]{4,4}+[0-9]{4,4}$"
+        let phoneNumberTest = NSPredicate(format: "SELF MATCHES %@", phoneNumberRegEx)
+        return phoneNumberTest.evaluate(with: phoneNumber)
     }
 }

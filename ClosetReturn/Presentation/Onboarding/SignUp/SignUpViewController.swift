@@ -115,6 +115,7 @@ final class SignUpViewController: BaseViewController {
             recheckPassword: recheckPasswordInputView.inputTextField.rx.text.orEmpty,
             recheckPasswordHideButtonTap: recheckPasswordInputView.hideButton.rx.tap,
             nickname: nicknameInputView.inputTextField.rx.text.orEmpty,
+            phoneNumber: phoneNumberInputView.inputTextField.rx.text.orEmpty,
             signUpButtonTap: signUpButton.rx.tap
         )
         let output = viewModel.transform(input: input)
@@ -178,6 +179,19 @@ final class SignUpViewController: BaseViewController {
             })
             .disposed(by: disposeBag)
         
+        Observable.zip(output.phoneNumberValid, output.phoneNumberValidInfo)
+            .bind(onNext: { [weak self] value in
+                guard let self else { return }
+                self.phoneNumberInputView.descriptionLabel.text = value.1
+                
+                if value.0 {
+                    self.phoneNumberInputView.descriptionLabel.textColor = .systemGreen
+                } else {
+                    self.phoneNumberInputView.descriptionLabel.textColor = .systemRed
+                }
+            })
+            .disposed(by: disposeBag)
+        
         output.failedToEmailValidationRequest
             .bind(with: self) { owner, error in
                 owner.showNetworkRequestFailAlert(errorType: error)
@@ -214,8 +228,8 @@ final class SignUpViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
-        Observable.combineLatest(output.emailCheckValid, output.passwordValid, output.recheckPasswordValid, output.nicknameValid)
-            .map { $0.0 == $0.1 && $0.1 == $0.2 && $0.2 == $0.3 && $0.0 == true && $0.1 == true && $0.2 == true && $0.3 == true }
+        Observable.combineLatest(output.emailCheckValid, output.passwordValid, output.recheckPasswordValid, output.nicknameValid, output.phoneNumberValid)
+            .map { $0.0 == $0.1 && $0.1 == $0.2 && $0.2 == $0.3 && $0.3 == $0.4 && $0.0 == true && $0.1 == true && $0.2 == true && $0.3 == true && $0.4 == true }
             .bind(with: self) { owner, value in
                 owner.signUpButton.isUserInteractionEnabled = value
                 if value {
