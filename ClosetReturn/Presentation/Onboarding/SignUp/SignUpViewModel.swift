@@ -32,6 +32,8 @@ final class SignUpViewModel: BaseViewModel {
         let passwordHideButtonTap: ControlEvent<Void>
         let recheckPassword: ControlProperty<String>
         let recheckPasswordHideButtonTap: ControlEvent<Void>
+        let nickname: ControlProperty<String>
+        let signUpButtonTap: ControlEvent<Void>
     }
     
     //MARK: - Outputs
@@ -48,6 +50,8 @@ final class SignUpViewModel: BaseViewModel {
         let recheckPasswordValidInfo: PublishRelay<String>
         let recheckPasswordValid: PublishRelay<Bool>
         let recheckPasswordHideButtonTap: ControlEvent<Void>
+        let nicknameValidInfo: PublishRelay<String>
+        let nicknameValid: PublishRelay<Bool>
     }
     
     //MARK: - Methods
@@ -62,7 +66,8 @@ final class SignUpViewModel: BaseViewModel {
         let passwordValid = PublishRelay<Bool>()
         let recheckPasswordValidInfo = PublishRelay<String>()
         let recheckPasswordValid = PublishRelay<Bool>()
-    
+        let nicknameValidInfo = PublishRelay<String>()
+        let nicknameValid = PublishRelay<Bool>()
         
         
         input.email
@@ -90,6 +95,7 @@ final class SignUpViewModel: BaseViewModel {
                             emailValid.accept(true)
                             emailValidInfo.accept("사용 가능한 이메일입니다.")
                             emailCheckValid.accept(true)
+                            owner.emailValue = email
                         
                         case .failure(let error):
                             if error == NetworkError.statusError(codeNumber: 409) {
@@ -137,8 +143,32 @@ final class SignUpViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
+        input.nickname
+            .bind(with: self) { owner, value in
+                owner.nicknameValue = value
+                if owner.isValidNickname(nickname: value) {
+                    nicknameValid.accept(true)
+                    nicknameValidInfo.accept("사용 가능합니다.")
+                } else {
+                    nicknameValid.accept(false)
+                    nicknameValidInfo.accept("특수 기호를 제외한 15자 이내로만 입력해 주세요.")
+                }
+            }
+            .disposed(by: disposeBag)
         
         
+        
+        
+        
+        input.signUpButtonTap
+            .bind(with: self) { owner, _ in
+                print(owner.emailValue)
+                print(owner.passwordValue)
+                print(owner.nicknameValue)
+                print(owner.phoneNumberValue)
+                print(owner.birthdayValue)
+            }
+            .disposed(by: disposeBag)
         
         
         return Output(
@@ -152,19 +182,27 @@ final class SignUpViewModel: BaseViewModel {
             passwordHideButtonTap: input.passwordHideButtonTap,
             recheckPasswordValidInfo: recheckPasswordValidInfo,
             recheckPasswordValid: recheckPasswordValid,
-            recheckPasswordHideButtonTap: input.recheckPasswordHideButtonTap
+            recheckPasswordHideButtonTap: input.recheckPasswordHideButtonTap,
+            nicknameValidInfo: nicknameValidInfo,
+            nicknameValid: nicknameValid
         )
     }
     
     private func isValidEmail(email: String) -> Bool {
-        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{3,}"
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
         let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
         return emailTest.evaluate(with: email)
     }
     
     private func isValidPassword(password: String) -> Bool {
-        let passwordRegEx = "^(?=.*[a-z])(?=.*[0-9])(?=.*[!_@$%^&+=-])[A-Z0-9a-z.!_@$%^&+=-]{8,20}"
+        let passwordRegEx = "^(?=.*[a-z])(?=.*[0-9])(?=.*[!_@$%^&+=-])[A-Z0-9a-z.!_@$%^&+=-]{8,20}$"
         let passwordTest = NSPredicate(format: "SELF MATCHES %@", passwordRegEx)
         return passwordTest.evaluate(with: password)
+    }
+    
+    private func isValidNickname(nickname: String) -> Bool {
+        let nicknameRegEx = "^[a-zA-Z0-9가-힣_\\-]{1,15}$"
+        let nicknameTest = NSPredicate(format: "SELF MATCHES %@", nicknameRegEx)
+        return nicknameTest.evaluate(with: nickname)
     }
 }

@@ -44,14 +44,14 @@ final class SignUpViewController: BaseViewController {
     private let emailInputView = InputTextFieldView(viewType: .notPassword, title: "이메일", placeholder: "예시) welcome@email.com", showAsterisk: true)
     private let passwordInputView = InputTextFieldView(viewType: .password, title: "비밀번호", placeholder: "비밀번호를 입력해 주세요", showAsterisk: true)
     private let recheckPasswordInputView = InputTextFieldView(viewType: .password, title: "비밀번호 확인", placeholder: "비밀번호 재입력", showAsterisk: true)
-    private let nicknameInputView = InputTextFieldView(viewType: .notPassword, title: "닉네임", placeholder: "다른 유저들에게 보여질 닉네임을 입력해주세요")
+    private let nicknameInputView = InputTextFieldView(viewType: .notPassword, title: "닉네임", placeholder: "다른 유저들에게 보여질 닉네임을 입력해 주세요", showAsterisk: true)
     private let phoneNumberInputView = {
-        let view = InputTextFieldView(viewType: .notPassword, title: "휴대전화", placeholder: "(-)없이 숫자만 입력해 주세요")
+        let view = InputTextFieldView(viewType: .notPassword, title: "휴대전화 (선택)", placeholder: "(-)없이 숫자만 입력해 주세요")
         view.inputTextField.keyboardType = .numberPad
         return view
     }()
     private lazy var birthdayInputView = {
-        let view = InputTextFieldView(viewType: .notPassword, title: "생년월일", placeholder: "생년월일")
+        let view = InputTextFieldView(viewType: .notPassword, title: "생년월일 (선택)", placeholder: "생년월일")
         view.inputTextField.inputView = birthdayPicker
         return view
     }()
@@ -113,7 +113,9 @@ final class SignUpViewController: BaseViewController {
             password: passwordInputView.inputTextField.rx.text.orEmpty,
             passwordHideButtonTap: passwordInputView.hideButton.rx.tap,
             recheckPassword: recheckPasswordInputView.inputTextField.rx.text.orEmpty,
-            recheckPasswordHideButtonTap: recheckPasswordInputView.hideButton.rx.tap
+            recheckPasswordHideButtonTap: recheckPasswordInputView.hideButton.rx.tap,
+            nickname: nicknameInputView.inputTextField.rx.text.orEmpty,
+            signUpButtonTap: signUpButton.rx.tap
         )
         let output = viewModel.transform(input: input)
         
@@ -163,6 +165,19 @@ final class SignUpViewController: BaseViewController {
             })
             .disposed(by: disposeBag)
         
+        Observable.zip(output.nicknameValid, output.nicknameValidInfo)
+            .bind(onNext: { [weak self] value in
+                guard let self else { return }
+                self.nicknameInputView.descriptionLabel.text = value.1
+                
+                if value.0 {
+                    self.nicknameInputView.descriptionLabel.textColor = .systemGreen
+                } else {
+                    self.nicknameInputView.descriptionLabel.textColor = .systemRed
+                }
+            })
+            .disposed(by: disposeBag)
+        
         output.failedToEmailValidationRequest
             .bind(with: self) { owner, error in
                 owner.showNetworkRequestFailAlert(errorType: error)
@@ -199,11 +214,10 @@ final class SignUpViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
-        Observable.combineLatest(output.emailCheckValid, output.passwordValid, output.recheckPasswordValid)
-            .map { $0.0 == $0.1 && $0.1 == $0.2 && $0.0 == true && $0.1 == true && $0.2 == true }
+        Observable.combineLatest(output.emailCheckValid, output.passwordValid, output.recheckPasswordValid, output.nicknameValid)
+            .map { $0.0 == $0.1 && $0.1 == $0.2 && $0.2 == $0.3 && $0.0 == true && $0.1 == true && $0.2 == true && $0.3 == true }
             .bind(with: self) { owner, value in
                 owner.signUpButton.isUserInteractionEnabled = value
-                
                 if value {
                     owner.signUpButton.backgroundColor = Constant.Color.brandColor
                 } else {
