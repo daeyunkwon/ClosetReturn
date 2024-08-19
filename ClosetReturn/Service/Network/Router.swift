@@ -13,6 +13,7 @@ enum Router {
     case emailValidation(email: String)
     case joinUser(email: String, password: String, nick: String, phoneNum: String?, birthDay: String?)
     case loginUser(email: String, password: String)
+    case posts(next: String, limit: String, product_id: String)
 }
 
 extension Router: URLRequestConvertible {
@@ -24,6 +25,9 @@ extension Router: URLRequestConvertible {
         switch self {
         case .emailValidation, .joinUser, .loginUser:
             return .post
+            
+        case .posts:
+            return .get
         }
     }
     
@@ -32,6 +36,7 @@ extension Router: URLRequestConvertible {
         case .emailValidation: return APIURL.validationEmailPath
         case .joinUser: return APIURL.usersJoin
         case .loginUser: return APIURL.usersLogin
+        case .posts: return APIURL.posts
         }
     }
     
@@ -40,6 +45,12 @@ extension Router: URLRequestConvertible {
         case .emailValidation, .joinUser, .loginUser:
             return [
                 HeaderKey.contentType.rawValue: HeaderKey.json.rawValue,
+                HeaderKey.sesacKey.rawValue: APIKey.sesacKey
+            ]
+        
+        case .posts:
+            return [
+                HeaderKey.authorization.rawValue: UserDefaultsManager.shared.accessToken,
                 HeaderKey.sesacKey.rawValue: APIKey.sesacKey
             ]
         }
@@ -66,13 +77,22 @@ extension Router: URLRequestConvertible {
                 BodyKey.email.rawValue: email,
                 BodyKey.password.rawValue: password
             ])
+            
+        default:
+            return nil
         }
     }
     
     var query: [URLQueryItem]? {
         switch self {
         
-        
+        case .posts(let next, let limit, let product_id):
+            return [
+                URLQueryItem(name: "next", value: next),
+                URLQueryItem(name: "limit", value: limit),
+                URLQueryItem(name: "product_id", value: product_id),
+            ]
+            
         default:
             return nil
         }
