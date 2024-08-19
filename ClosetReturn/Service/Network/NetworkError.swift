@@ -15,6 +15,8 @@ enum NetworkError: Error, Equatable {
     case statusError(codeNumber: Int)
     case noData
     case decodingError
+    case refreshTokenExpired
+    case invalidToken
 }
 
 extension NetworkError {
@@ -34,6 +36,10 @@ extension NetworkError {
             return "Error: 데이터 없음"
         case .decodingError:
             return "Error: 데이터 디코딩 실패"
+        case .refreshTokenExpired:
+            return "Error: 리프레시 토큰 만료됨"
+        case .invalidToken:
+            return "Error: 유효하지 않은 액세스 및 리프레시 토큰"
         }
     }
 }

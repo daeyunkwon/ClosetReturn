@@ -14,7 +14,7 @@ final class UserDefaultsManager {
     
     private enum UserDefaultsKey: String {
         case accessToken
-        case refresh
+        case refreshToken
     }
     
     var accessToken: String {
@@ -28,10 +28,15 @@ final class UserDefaultsManager {
     
     var refreshToken: String {
         get {
-            return UserDefaults.standard.string(forKey: UserDefaultsKey.refresh.rawValue) ?? ""
+            return UserDefaults.standard.string(forKey: UserDefaultsKey.refreshToken.rawValue) ?? ""
         }
         set {
-            UserDefaults.standard.setValue(newValue, forKey: UserDefaultsKey.refresh.rawValue)
+            UserDefaults.standard.setValue(newValue, forKey: UserDefaultsKey.refreshToken.rawValue)
         }
+    }
+    
+    func removeAll() {
+        UserDefaults.standard.removeObject(forKey: UserDefaultsKey.accessToken.rawValue)
+        UserDefaults.standard.removeObject(forKey: UserDefaultsKey.refreshToken.rawValue)
     }
 }

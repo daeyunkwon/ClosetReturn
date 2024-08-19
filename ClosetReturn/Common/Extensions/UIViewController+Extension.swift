@@ -8,10 +8,24 @@
 import UIKit
 
 extension UIViewController {
+    
+    func setRootViewController(_ viewController: UIViewController) {
+        if let scene = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate,
+           let window = scene.window {
+            
+            window.rootViewController = viewController
+            
+            UIView.transition(with: window, duration: 0.2, options: [.transitionCrossDissolve], animations: nil, completion: nil)
+        }
+    }
+    
     func showNetworkRequestFailAlert(errorType: NetworkError) {
         var message: String = "데이터를 불러오는데 실패하였습니다. 네트워크 연결 상태를 확인 후 다시 시도해 주세요."
         
         switch errorType {
+            
+        case .refreshTokenExpired:
+            message = "로그인 기간이 만료되었어요. 재로그인 해주세요."
             
         case .statusError(let codeNumber):
             switch codeNumber {
@@ -37,7 +51,17 @@ extension UIViewController {
         }
         
         let alert = UIAlertController(title: "시스템 알림", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "확인", style: .default))
+        
+        if errorType == .refreshTokenExpired || errorType == .invalidToken {
+            //재로그인 필요 O
+            alert.addAction(UIAlertAction(title: "로그인", style: .default, handler: { [weak self] okAction in
+                self?.setRootViewController(UINavigationController(rootViewController: LoginViewController()))
+            }))
+        } else {
+            //재로그인 필요 X
+            alert.addAction(UIAlertAction(title: "확인", style: .default))
+        }
+        
         present(alert, animated: true)
     }
 }

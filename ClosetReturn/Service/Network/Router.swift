@@ -14,6 +14,8 @@ enum Router {
     case joinUser(email: String, password: String, nick: String, phoneNum: String?, birthDay: String?)
     case loginUser(email: String, password: String)
     case posts(next: String, limit: String, product_id: String)
+    case image(imagePath: String)
+    case refresh
 }
 
 extension Router: URLRequestConvertible {
@@ -26,7 +28,7 @@ extension Router: URLRequestConvertible {
         case .emailValidation, .joinUser, .loginUser:
             return .post
             
-        case .posts:
+        case .posts, .image, .refresh:
             return .get
         }
     }
@@ -37,6 +39,8 @@ extension Router: URLRequestConvertible {
         case .joinUser: return APIURL.usersJoin
         case .loginUser: return APIURL.usersLogin
         case .posts: return APIURL.posts
+        case .image(let imagePath): return "v1/\(imagePath)"
+        case .refresh: return APIURL.refresh
         }
     }
     
@@ -48,10 +52,17 @@ extension Router: URLRequestConvertible {
                 HeaderKey.sesacKey.rawValue: APIKey.sesacKey
             ]
         
-        case .posts:
+        case .posts, .image:
             return [
                 HeaderKey.authorization.rawValue: UserDefaultsManager.shared.accessToken,
                 HeaderKey.sesacKey.rawValue: APIKey.sesacKey
+            ]
+            
+        case .refresh:
+            return [
+                HeaderKey.authorization.rawValue: UserDefaultsManager.shared.accessToken,
+                HeaderKey.sesacKey.rawValue: APIKey.sesacKey,
+                HeaderKey.refresh.rawValue: UserDefaultsManager.shared.refreshToken
             ]
         }
     }
@@ -85,7 +96,6 @@ extension Router: URLRequestConvertible {
     
     var query: [URLQueryItem]? {
         switch self {
-        
         case .posts(let next, let limit, let product_id):
             return [
                 URLQueryItem(name: "next", value: next),
