@@ -41,6 +41,9 @@
 		449AD0952C6F694500B0ED37 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0942C6F694500B0ED37 /* SignUpViewController.swift */; };
 		449AD0982C6F6BC000B0ED37 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 449AD0972C6F6BC000B0ED37 /* IQKeyboardManagerSwift */; };
 		44A39D4B2C723843009BCC44 /* SignUpCompleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A39D4A2C723843009BCC44 /* SignUpCompleteViewController.swift */; };
+		44A39D4D2C725F86009BCC44 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A39D4C2C725F86009BCC44 /* UserDefaultsManager.swift */; };
+		44A39D572C7334D7009BCC44 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A39D562C7334D7009BCC44 /* Login.swift */; };
+		44A39D5A2C73377B009BCC44 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A39D592C73377B009BCC44 /* HomeViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,6 +78,9 @@
 		449AD0922C6F693A00B0ED37 /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
 		449AD0942C6F694500B0ED37 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		44A39D4A2C723843009BCC44 /* SignUpCompleteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpCompleteViewController.swift; sourceTree = "<group>"; };
+		44A39D4C2C725F86009BCC44 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
+		44A39D562C7334D7009BCC44 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
+		44A39D592C73377B009BCC44 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +155,7 @@
 				449AD0732C6DCFC700B0ED37 /* TabBarController.swift */,
 				449AD03C2C6CA0B200B0ED37 /* ViewController.swift */,
 				449AD05B2C6CDCB800B0ED37 /* Onboarding */,
+				44A39D582C73375E009BCC44 /* Home */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -157,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				449AD05D2C6D787400B0ED37 /* Constant.swift */,
+				44A39D4C2C725F86009BCC44 /* UserDefaultsManager.swift */,
 				449AD0652C6DC59400B0ED37 /* Base */,
 				449AD06E2C6DC60900B0ED37 /* Protocols */,
 				449AD0622C6DC4CF00B0ED37 /* Extensions */,
@@ -197,6 +205,7 @@
 		449AD0582C6CD7CF00B0ED37 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				44A39D562C7334D7009BCC44 /* Login.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -272,6 +281,14 @@
 				44A39D4A2C723843009BCC44 /* SignUpCompleteViewController.swift */,
 			);
 			path = SignUp;
+			sourceTree = "<group>";
+		};
+		44A39D582C73375E009BCC44 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				44A39D592C73377B009BCC44 /* HomeViewController.swift */,
+			);
+			path = Home;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -374,8 +391,11 @@
 				449AD0832C6E0ED600B0ED37 /* UIViewController+Extension.swift in Sources */,
 				449AD07B2C6DFEF700B0ED37 /* Router.swift in Sources */,
 				449AD0932C6F693A00B0ED37 /* SignUpViewModel.swift in Sources */,
+				44A39D572C7334D7009BCC44 /* Login.swift in Sources */,
 				449AD06B2C6DC5CE00B0ED37 /* BaseTableViewCell.swift in Sources */,
+				44A39D4D2C725F86009BCC44 /* UserDefaultsManager.swift in Sources */,
 				449AD06D2C6DC5EA00B0ED37 /* BaseCollectionViewCell.swift in Sources */,
+				44A39D5A2C73377B009BCC44 /* HomeViewController.swift in Sources */,
 				449AD07F2C6E0BA800B0ED37 /* BodyKey.swift in Sources */,
 				449AD0672C6DC59E00B0ED37 /* BaseView.swift in Sources */,
 				449AD0952C6F694500B0ED37 /* SignUpViewController.swift in Sources */,

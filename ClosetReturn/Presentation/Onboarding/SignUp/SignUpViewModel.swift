@@ -98,7 +98,7 @@ final class SignUpViewModel: BaseViewModel {
             .withLatestFrom(input.email)
             .filter { !$0.isEmpty }
             .bind(with: self, onNext: { owner, email in
-                NetworkManager.shared.performRequest(api: .emailValidation(email: email))
+                NetworkManager.shared.performRequest(api: .emailValidation(email: email), model: String.self)
                     .subscribe(with: self) { owner, result in
                         switch result {
                         case .success(_):
@@ -200,7 +200,7 @@ final class SignUpViewModel: BaseViewModel {
         input.signUpButtonTap
             .withUnretained(self)
             .flatMap { _ in
-                NetworkManager.shared.performRequest(api: .joinUser(email: self.emailValue, password: self.passwordValue, nick: self.nicknameValue, phoneNum: self.phoneNumberValue, birthDay: self.birthdayValue))
+                NetworkManager.shared.performRequest(api: .joinUser(email: self.emailValue, password: self.passwordValue, nick: self.nicknameValue, phoneNum: self.phoneNumberValue, birthDay: self.birthdayValue), model: String.self)
             }
             .bind(with: self) { owner, result in
                 switch result {

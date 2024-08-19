@@ -58,13 +58,18 @@ final class LoginViewModel: BaseViewModel {
         
         input.loginButtonTapped
             .bind(with: self) { owner, _ in
-                NetworkManager.shared.performRequest(api: .loginUser(email: owner.emailValue, password: owner.passwordValue))
+                NetworkManager.shared.performRequest(api: .loginUser(email: owner.emailValue, password: owner.passwordValue), model: Login.self)
                     .subscribe(with: self) { owner, result in
                         switch result {
                         case .success(let value):
-                            succeedToLogin.onNext(value)
+                            succeedToLogin.onNext("")
+                            UserDefaultsManager.shared.accessToken = value.accessToken
+                            UserDefaultsManager.shared.refreshToken = value.refreshToken
+                            
                         case .failure(let error):
                             failedToLogin.onNext(error)
+                            UserDefaultsManager.shared.accessToken = ""
+                            UserDefaultsManager.shared.refreshToken = ""
                         }
                     }
                     .disposed(by: owner.disposeBag)

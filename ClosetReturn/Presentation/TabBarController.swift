@@ -26,9 +26,9 @@ final class TabBarController: UITabBarController, UITabBarControllerDelegate {
     
     private func setupTabBar() {
         
-        let dummy1 = UINavigationController(rootViewController: UIViewController())
-        dummy1.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill"))
-        dummy1.tabBarItem.tag = 0
+        let homeVC = UINavigationController(rootViewController: HomeViewController())
+        homeVC.tabBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house"), selectedImage: UIImage(systemName: "house.fill"))
+        homeVC.tabBarItem.tag = 0
         
         
         let dummy2 = UINavigationController(rootViewController: UIViewController())
@@ -43,11 +43,11 @@ final class TabBarController: UITabBarController, UITabBarControllerDelegate {
         dummy4.tabBarItem = UITabBarItem(title: "나", image: UIImage(systemName: "person"), selectedImage: UIImage(systemName: "person.fill"))
         dummy4.tabBarItem.tag = 3
         
-        [dummy1, dummy2, dummy3, dummy4].forEach {
+        [homeVC, dummy2, dummy3, dummy4].forEach {
             $0.view.backgroundColor = .white
         }
         
-        self.setViewControllers([dummy1, dummy2, dummy3, dummy4], animated: false)
+        self.setViewControllers([homeVC, dummy2, dummy3, dummy4], animated: false)
     }
     
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {

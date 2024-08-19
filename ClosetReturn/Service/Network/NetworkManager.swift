@@ -16,46 +16,7 @@ final class NetworkManager {
     private init() { }
     
     
-    func checkEmailDuplicate(email: String) {
-        
-        do {
-            let request = try Router.emailValidation(email: email).asURLRequest()
-            AF.request(request)
-                .validate(statusCode: 200...299)
-                .responseString { response in
-                    switch response.result {
-                    case .success(let value):
-                        print(value)
-                    case .failure(let error):
-                        print(error)
-                        print("실패됨")
-                    }
-            }
-        } catch {
-            print("Error: request 생성 실패 \(error)")
-        }
-    }
-    
-    func joinUser(email: String, password: String, nick: String, phoneNum: String?, birthDay: String?) {
-        do {
-            let request = try Router.joinUser(email: email, password: password, nick: nick, phoneNum: phoneNum, birthDay: birthDay).asURLRequest()
-            AF.request(request)
-                .validate(statusCode: 200...299)
-                .responseString { response in
-                    switch response.result {
-                    case .success(let value):
-                        print(value)
-                    case .failure(let error):
-                        print(error)
-                        print("실패됨")
-                    }
-            }
-        } catch {
-            print("Error: request 생성 실패 \(error)")
-        }
-    }
-    
-    func performRequest(api: Router) -> Single<Result<String, NetworkError>> {
+    func performRequest<T: Decodable>(api: Router, model: T.Type) -> Single<Result<T, NetworkError>> {
         
         return Single.create { single -> Disposable in
             do {
@@ -63,7 +24,7 @@ final class NetworkManager {
                 
                 AF.request(request)
                     .validate(statusCode: 200...299)
-                    .responseString { response in
+                    .responseDecodable(of: T.self) { response in
                         switch response.result {
                         case .success(let value):
                             single(.success(.success(value)))

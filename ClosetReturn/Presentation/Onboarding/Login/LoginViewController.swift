@@ -81,9 +81,9 @@ final class LoginViewController: BaseViewController {
             .disposed(by: disposeBag)
         
         output.succeedToLogin
-            .bind(with: self) { owner, value in
-                print("로그인 성공!: \(value)")
-                owner.setRootViewController(ViewController())
+            .bind(with: self) { owner, _ in
+                print("DEBUG: 로그인 성공!")
+                owner.setRootViewController(TabBarController())
             }
             .disposed(by: disposeBag)
            
@@ -150,5 +150,8 @@ final class LoginViewController: BaseViewController {
     
     override func configureUI() {
         super.configureUI()
+        
+        emailInputView.inputTextField.text = "t1@naver.com"
+        passwordInputView.inputTextField.text = "password123!"
     }
 }
