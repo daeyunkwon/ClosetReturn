@@ -30,12 +30,14 @@ enum Constant {
         enum Button {
             static let titleColor: UIColor = .white
             static let buttonDisabled: UIColor = .darkGray.withAlphaComponent(0.5)
+            static let likeColor: UIColor = UIColor(red: 0.91, green: 0.44, blue: 0.57, alpha: 1.00)
         }
     }
     
     enum Font {
         static let brandFont = UIFont(name: "Partial-Sans-KR", size: 30)
         static let titleFont: UIFont = .systemFont(ofSize: 20, weight: .heavy)
+        static let priceFont: UIFont = .systemFont(ofSize: 18, weight: .heavy)
         static let secondaryTitleFont: UIFont = .systemFont(ofSize: 16, weight: .semibold)
         static let bodyFont: UIFont = .systemFont(ofSize: 15)
         static let bodyBoldFont: UIFont = .boldSystemFont(ofSize: 15)

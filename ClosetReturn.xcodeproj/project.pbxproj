@@ -44,6 +44,12 @@
 		44A39D4D2C725F86009BCC44 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A39D4C2C725F86009BCC44 /* UserDefaultsManager.swift */; };
 		44A39D572C7334D7009BCC44 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A39D562C7334D7009BCC44 /* Login.swift */; };
 		44A39D5A2C73377B009BCC44 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A39D592C73377B009BCC44 /* HomeViewController.swift */; };
+		44A39D5C2C73391D009BCC44 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A39D5B2C73391D009BCC44 /* HomeViewModel.swift */; };
+		44A39D5E2C733F87009BCC44 /* HomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A39D5D2C733F87009BCC44 /* HomeTableViewCell.swift */; };
+		44A39D602C7347AF009BCC44 /* ProductPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A39D5F2C7347AF009BCC44 /* ProductPost.swift */; };
+		44A39D652C735642009BCC44 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 44A39D642C735642009BCC44 /* Kingfisher */; };
+		44C0BAB12C738CA900136643 /* RefreshModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C0BAB02C738CA900136643 /* RefreshModel.swift */; };
+		44C0BAB32C7493DC00136643 /* JoinUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C0BAB22C7493DC00136643 /* JoinUser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -81,6 +87,11 @@
 		44A39D4C2C725F86009BCC44 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		44A39D562C7334D7009BCC44 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		44A39D592C73377B009BCC44 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		44A39D5B2C73391D009BCC44 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		44A39D5D2C733F87009BCC44 /* HomeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTableViewCell.swift; sourceTree = "<group>"; };
+		44A39D5F2C7347AF009BCC44 /* ProductPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPost.swift; sourceTree = "<group>"; };
+		44C0BAB02C738CA900136643 /* RefreshModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshModel.swift; sourceTree = "<group>"; };
+		44C0BAB22C7493DC00136643 /* JoinUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinUser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +99,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				44A39D652C735642009BCC44 /* Kingfisher in Frameworks */,
 				449AD0982C6F6BC000B0ED37 /* IQKeyboardManagerSwift in Frameworks */,
 				449AD0882C6F260A00B0ED37 /* RxCocoa in Frameworks */,
 				449AD0532C6CA23300B0ED37 /* SnapKit in Frameworks */,
@@ -191,6 +203,7 @@
 				449AD07C2C6E0B1900B0ED37 /* HeaderKey.swift */,
 				449AD07E2C6E0BA800B0ED37 /* BodyKey.swift */,
 				449AD0802C6E0E3800B0ED37 /* NetworkError.swift */,
+				44C0BAB02C738CA900136643 /* RefreshModel.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -205,7 +218,9 @@
 		449AD0582C6CD7CF00B0ED37 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				44C0BAB22C7493DC00136643 /* JoinUser.swift */,
 				44A39D562C7334D7009BCC44 /* Login.swift */,
+				44A39D5F2C7347AF009BCC44 /* ProductPost.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -286,7 +301,9 @@
 		44A39D582C73375E009BCC44 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				44A39D5B2C73391D009BCC44 /* HomeViewModel.swift */,
 				44A39D592C73377B009BCC44 /* HomeViewController.swift */,
+				44A39D5D2C733F87009BCC44 /* HomeTableViewCell.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -313,6 +330,7 @@
 				449AD0872C6F260A00B0ED37 /* RxCocoa */,
 				449AD0892C6F260A00B0ED37 /* RxSwift */,
 				449AD0972C6F6BC000B0ED37 /* IQKeyboardManagerSwift */,
+				44A39D642C735642009BCC44 /* Kingfisher */,
 			);
 			productName = ClosetReturn;
 			productReference = 449AD0352C6CA0B200B0ED37 /* ClosetReturn.app */;
@@ -347,6 +365,7 @@
 				449AD0772C6DE9ED00B0ED37 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				449AD0862C6F260A00B0ED37 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				449AD0962C6F6BC000B0ED37 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+				44A39D632C735642009BCC44 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 449AD0362C6CA0B200B0ED37 /* Products */;
 			projectDirPath = "";
@@ -382,16 +401,21 @@
 				449AD08F2C6F462B00B0ED37 /* LoginViewModel.swift in Sources */,
 				449AD0742C6DCFC700B0ED37 /* TabBarController.swift in Sources */,
 				449AD0702C6DC61800B0ED37 /* Reusable.swift in Sources */,
+				44A39D5E2C733F87009BCC44 /* HomeTableViewCell.swift in Sources */,
 				449AD03D2C6CA0B200B0ED37 /* ViewController.swift in Sources */,
 				449AD08D2C6F2CD100B0ED37 /* InputTextFieldView.swift in Sources */,
 				449AD0392C6CA0B200B0ED37 /* AppDelegate.swift in Sources */,
 				449AD05E2C6D787400B0ED37 /* Constant.swift in Sources */,
 				449AD0722C6DC67A00B0ED37 /* BaseViewModel.swift in Sources */,
 				449AD0852C6F25A900B0ED37 /* LoginViewController.swift in Sources */,
+				44C0BAB12C738CA900136643 /* RefreshModel.swift in Sources */,
 				449AD0832C6E0ED600B0ED37 /* UIViewController+Extension.swift in Sources */,
 				449AD07B2C6DFEF700B0ED37 /* Router.swift in Sources */,
 				449AD0932C6F693A00B0ED37 /* SignUpViewModel.swift in Sources */,
+				44A39D5C2C73391D009BCC44 /* HomeViewModel.swift in Sources */,
+				44C0BAB32C7493DC00136643 /* JoinUser.swift in Sources */,
 				44A39D572C7334D7009BCC44 /* Login.swift in Sources */,
+				44A39D602C7347AF009BCC44 /* ProductPost.swift in Sources */,
 				449AD06B2C6DC5CE00B0ED37 /* BaseTableViewCell.swift in Sources */,
 				44A39D4D2C725F86009BCC44 /* UserDefaultsManager.swift in Sources */,
 				449AD06D2C6DC5EA00B0ED37 /* BaseCollectionViewCell.swift in Sources */,
@@ -660,6 +684,14 @@
 				minimumVersion = 7.1.1;
 			};
 		};
+		44A39D632C735642009BCC44 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.12.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -687,6 +719,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 449AD0962C6F6BC000B0ED37 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
 			productName = IQKeyboardManagerSwift;
+		};
+		44A39D642C735642009BCC44 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 44A39D632C735642009BCC44 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
