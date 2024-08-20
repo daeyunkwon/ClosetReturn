@@ -46,6 +46,9 @@ extension UIViewController {
             default:
                 break
             }
+            
+        case .invalidNickname:
+            message = "이미 사용중인 닉네임으로, 입력하신 닉네임을 사용할 수 없습니다."
         default:
             break
         }

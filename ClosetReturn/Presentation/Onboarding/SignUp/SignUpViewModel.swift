@@ -98,7 +98,7 @@ final class SignUpViewModel: BaseViewModel {
             .withLatestFrom(input.email)
             .filter { !$0.isEmpty }
             .bind(with: self, onNext: { owner, email in
-                NetworkManager.shared.performRequest(api: .emailValidation(email: email), model: String.self)
+                NetworkManager.shared.performRequest(api: .emailValidation(email: email), model: [String: String].self)
                     .subscribe(with: self) { owner, result in
                         switch result {
                         case .success(_):
@@ -154,6 +154,7 @@ final class SignUpViewModel: BaseViewModel {
             .disposed(by: disposeBag)
         
         input.nickname
+            .distinctUntilChanged()
             .bind(with: self) { owner, value in
                 owner.nicknameValue = value
                 if owner.isValidNickname(nickname: value) {
@@ -200,7 +201,7 @@ final class SignUpViewModel: BaseViewModel {
         input.signUpButtonTap
             .withUnretained(self)
             .flatMap { _ in
-                NetworkManager.shared.performRequest(api: .joinUser(email: self.emailValue, password: self.passwordValue, nick: self.nicknameValue, phoneNum: self.phoneNumberValue, birthDay: self.birthdayValue), model: String.self)
+                NetworkManager.shared.performRequest(api: .joinUser(email: self.emailValue, password: self.passwordValue, nick: self.nicknameValue, phoneNum: self.phoneNumberValue, birthDay: self.birthdayValue), model: JoinUser.self)
             }
             .bind(with: self) { owner, result in
                 switch result {
@@ -208,6 +209,10 @@ final class SignUpViewModel: BaseViewModel {
                     signUpDone.accept(.success(true))
                 case .failure(let error):
                     signUpDone.accept(.failure(error))
+                    if error == .invalidNickname {
+                        nicknameValid.accept(false)
+                        nicknameValidInfo.accept("이미 사용중인 닉네임입니다.")
+                    }
                 }
             }
             .disposed(by: disposeBag)

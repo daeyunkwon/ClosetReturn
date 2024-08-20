@@ -57,7 +57,11 @@ final class NetworkManager {
                             case .responseValidationFailed(let reason):
                                 switch reason {
                                 case .unacceptableStatusCode(let code):
-                                    single(.success(.failure(NetworkError.statusError(codeNumber: code))))
+                                    if code == 409 && model == JoinUser.self {
+                                        single(.success(.failure(NetworkError.invalidNickname)))
+                                    } else {
+                                        single(.success(.failure(NetworkError.statusError(codeNumber: code))))
+                                    }
                                 default:
                                     break
                                 }
