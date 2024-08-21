@@ -17,7 +17,6 @@ enum NetworkError: Error, Equatable {
     case decodingError
     case refreshTokenExpired
     case invalidToken
-    case invalidNickname
 }
 
 extension NetworkError {
@@ -41,8 +40,6 @@ extension NetworkError {
             return "Error: 리프레시 토큰 만료됨"
         case .invalidToken:
             return "Error: 유효하지 않은 액세스 및 리프레시 토큰"
-        case .invalidNickname:
-            return "Error: 유효하지 않은 닉네임"
         }
     }
 }

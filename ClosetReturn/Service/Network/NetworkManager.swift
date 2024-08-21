@@ -45,6 +45,7 @@ final class NetworkManager {
                         
                         case .failure(let error):
                             print("Error: \(error)")
+                            print("Error: \(error.localizedDescription)")
                             switch error {
                             case .createURLRequestFailed(let error):
                                 print(error)
@@ -57,11 +58,7 @@ final class NetworkManager {
                             case .responseValidationFailed(let reason):
                                 switch reason {
                                 case .unacceptableStatusCode(let code):
-                                    if code == 409 && model == JoinUser.self {
-                                        single(.success(.failure(NetworkError.invalidNickname)))
-                                    } else {
-                                        single(.success(.failure(NetworkError.statusError(codeNumber: code))))
-                                    }
+                                    single(.success(.failure(NetworkError.statusError(codeNumber: code))))
                                 default:
                                     break
                                 }

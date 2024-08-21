@@ -19,22 +19,39 @@ extension UIViewController {
         }
     }
     
-    func showNetworkRequestFailAlert(errorType: NetworkError) {
-        var message: String = "데이터를 불러오는데 실패하였습니다. 네트워크 연결 상태를 확인 후 다시 시도해 주세요."
+    func showNetworkRequestFailAlert(errorType: NetworkError, routerType: RouterType) {
+        var message: String = "오류가 발생하였습니다. 잠시 후 다시 시도해 주세요."
+        var errorType = errorType
         
         switch errorType {
             
-        case .refreshTokenExpired:
+        case .refreshTokenExpired, .invalidToken:
             message = "로그인 기간이 만료되었어요. 재로그인 해주세요."
             
         case .statusError(let codeNumber):
             switch codeNumber {
             case 400:
                 message = "이메일 또는 비밀번호를 입력해주세요."
+                
             case 401:
-                message = "미가입 계정 정보 혹은 비밀번호가 일치하지 않습니다. 계정을 확인해주세요."
+                switch routerType {
+                case .loginUser:
+                    message = "미가입 계정 정보 혹은 비밀번호가 일치하지 않습니다. 계정을 확인해주세요."
+                default:
+                    message = "액세스 토큰이 유효하지 않습니다. 다시 로그인 해주세요."
+                    errorType = .invalidToken
+                }
+                
             case 409:
                 message = "사용이 불가한 이메일입니다."
+                switch routerType {
+                case .emailValidation:
+                    message = "사용이 불가한 이메일입니다."
+                case .joinUser:
+                    message = "입력하신 닉네임이 이미 사용중인 닉네임으로 사용할 수 없습니다."
+                default: break
+                }
+                
             case 420:
                 message = "인증키가 유효하지 않아 서버에 접근이 실패되었습니다. 잠시 후 다시 시도해 주세요."
             case 429:
@@ -43,14 +60,12 @@ extension UIViewController {
                 message = "비정상 URL 접근으로 인해 데이터를 불러오는데 실패하였습니다. 잠시 후 다시 시도해 주세요."
             case 500:
                 message = "서버에 문제가 발생하여 데이터를 불러오는데 실패하였습니다. 잠시 후 다시 시도해 주세요."
-            default:
-                break
+            default: break
             }
             
-        case .invalidNickname:
-            message = "이미 사용중인 닉네임으로, 입력하신 닉네임을 사용할 수 없습니다."
-        default:
-            break
+        case .notConnectedInternet:
+            message = "네트워크 연결 상태를 확인 후 다시 시도해 주세요."
+        default: break
         }
         
         let alert = UIAlertController(title: "시스템 알림", message: message, preferredStyle: .alert)

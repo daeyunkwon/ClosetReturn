@@ -16,6 +16,17 @@ enum Router {
     case posts(next: String, limit: String, product_id: String)
     case image(imagePath: String)
     case refresh
+    case like(postID: String, isLike: Bool)
+}
+
+enum RouterType {
+    case emailValidation
+    case joinUser
+    case loginUser
+    case posts
+    case image
+    case refresh
+    case like
 }
 
 extension Router: URLRequestConvertible {
@@ -25,7 +36,7 @@ extension Router: URLRequestConvertible {
     
     var method: HTTPMethod {
         switch self {
-        case .emailValidation, .joinUser, .loginUser:
+        case .emailValidation, .joinUser, .loginUser, .like:
             return .post
             
         case .posts, .image, .refresh:
@@ -41,6 +52,7 @@ extension Router: URLRequestConvertible {
         case .posts: return APIURL.posts
         case .image(let imagePath): return "v1/\(imagePath)"
         case .refresh: return APIURL.refresh
+        case .like(let postID, _): return "v1/posts/\(postID)/like"//APIURL.likeURL(postID: postID)
         }
     }
     
@@ -55,7 +67,7 @@ extension Router: URLRequestConvertible {
         case .posts, .image:
             return [
                 HeaderKey.authorization.rawValue: UserDefaultsManager.shared.accessToken,
-                HeaderKey.sesacKey.rawValue: APIKey.sesacKey
+                HeaderKey.sesacKey.rawValue: APIKey.sesacKey,
             ]
             
         case .refresh:
@@ -63,6 +75,13 @@ extension Router: URLRequestConvertible {
                 HeaderKey.authorization.rawValue: UserDefaultsManager.shared.accessToken,
                 HeaderKey.sesacKey.rawValue: APIKey.sesacKey,
                 HeaderKey.refresh.rawValue: UserDefaultsManager.shared.refreshToken
+            ]
+            
+        case .like:
+            return [
+                HeaderKey.contentType.rawValue: HeaderKey.json.rawValue,
+                HeaderKey.authorization.rawValue: UserDefaultsManager.shared.accessToken,
+                HeaderKey.sesacKey.rawValue: APIKey.sesacKey,
             ]
         }
     }
@@ -87,6 +106,11 @@ extension Router: URLRequestConvertible {
             return try? JSONEncoder().encode([
                 BodyKey.email.rawValue: email,
                 BodyKey.password.rawValue: password
+            ])
+            
+        case .like(_, let isLike):
+            return try? JSONEncoder().encode([
+                BodyKey.like_status.rawValue: isLike
             ])
             
         default:

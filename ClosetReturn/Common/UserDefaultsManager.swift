@@ -15,6 +15,8 @@ final class UserDefaultsManager {
     private enum UserDefaultsKey: String {
         case accessToken
         case refreshToken
+        case userID
+        case likeProducts
     }
     
     var accessToken: String {
@@ -35,8 +37,27 @@ final class UserDefaultsManager {
         }
     }
     
+    var userID: String {
+        get {
+            return UserDefaults.standard.string(forKey: UserDefaultsKey.refreshToken.rawValue) ?? ""
+        }
+        set {
+            UserDefaults.standard.setValue(newValue, forKey: UserDefaultsKey.refreshToken.rawValue)
+        }
+    }
+    
+    var likeProducts: [String: Bool] {
+        get {
+            return UserDefaults.standard.dictionary(forKey: UserDefaultsKey.likeProducts.rawValue) as? [String: Bool] ?? [:]
+        }
+        set {
+            UserDefaults.standard.setValue(newValue, forKey: UserDefaultsKey.likeProducts.rawValue)
+        }
+    }
+    
     func removeAll() {
         UserDefaults.standard.removeObject(forKey: UserDefaultsKey.accessToken.rawValue)
         UserDefaults.standard.removeObject(forKey: UserDefaultsKey.refreshToken.rawValue)
+        UserDefaults.standard.removeObject(forKey: UserDefaultsKey.userID.rawValue)
     }
 }

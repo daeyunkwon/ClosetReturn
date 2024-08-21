@@ -32,8 +32,8 @@ final class LoginViewModel: BaseViewModel {
     //MARK: - Outputs
     
     struct Output {
-        let succeedToLogin: PublishSubject<String>
-        let failedToLogin: PublishSubject<NetworkError>
+        let succeedToLogin: PublishSubject<Login>
+        let failedToLogin: PublishSubject<(NetworkError, RouterType)>
         let signButtonTapped: ControlEvent<Void>
         let hideButtonTapped: ControlEvent<Void>
     }
@@ -41,8 +41,8 @@ final class LoginViewModel: BaseViewModel {
     //MARK: - Methods
     
     func transform(input: Input) -> Output {
-        let succeedToLogin = PublishSubject<String>()
-        let failedToLogin = PublishSubject<NetworkError>()
+        let succeedToLogin = PublishSubject<Login>()
+        let failedToLogin = PublishSubject<(NetworkError, RouterType)>()
         
         input.email
             .bind(with: self) { owner, value in
@@ -62,14 +62,14 @@ final class LoginViewModel: BaseViewModel {
                     .subscribe(with: self) { owner, result in
                         switch result {
                         case .success(let value):
-                            succeedToLogin.onNext("")
+                            succeedToLogin.onNext(value)
                             UserDefaultsManager.shared.accessToken = value.accessToken
                             UserDefaultsManager.shared.refreshToken = value.refreshToken
+                            UserDefaultsManager.shared.userID = value.user_id
                             
                         case .failure(let error):
-                            failedToLogin.onNext(error)
-                            UserDefaultsManager.shared.accessToken = ""
-                            UserDefaultsManager.shared.refreshToken = ""
+                            failedToLogin.onNext((error, RouterType.loginUser))
+                            UserDefaultsManager.shared.removeAll()
                         }
                     }
                     .disposed(by: owner.disposeBag)

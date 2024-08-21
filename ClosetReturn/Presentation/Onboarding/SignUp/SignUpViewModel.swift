@@ -45,7 +45,7 @@ final class SignUpViewModel: BaseViewModel {
         let emailValidInfo: PublishRelay<String>
         let emailValid: PublishRelay<Bool>
         let emailCheckValid: PublishRelay<Bool>
-        let failedToEmailValidationRequest: PublishSubject<NetworkError>
+        let failedToEmailValidationRequest: PublishSubject<(NetworkError, RouterType)>
         let passwordValidInfo: PublishRelay<String>
         let passwordValid: PublishRelay<Bool>
         let passwordHideButtonTap: ControlEvent<Void>
@@ -57,7 +57,8 @@ final class SignUpViewModel: BaseViewModel {
         let phoneNumberValidInfo: PublishRelay<String>
         let phoneNumberValid: BehaviorRelay<Bool>
         let birthdayString: PublishRelay<String>
-        let signUpDone: PublishRelay<Result<Bool, NetworkError>>
+        let signUpSucceed: PublishRelay<Void>
+        let signUpFailed: PublishRelay<(NetworkError, RouterType)>
     }
     
     //MARK: - Methods
@@ -67,7 +68,7 @@ final class SignUpViewModel: BaseViewModel {
         let emailValidInfo = PublishRelay<String>()
         let emailValid = PublishRelay<Bool>()
         let emailCheckValid = PublishRelay<Bool>()
-        let failedToEmailValidationRequest = PublishSubject<NetworkError>()
+        let failedToEmailValidationRequest = PublishSubject<(NetworkError, RouterType)>()
         let passwordValidInfo = PublishRelay<String>()
         let passwordValid = PublishRelay<Bool>()
         let recheckPasswordValidInfo = PublishRelay<String>()
@@ -77,7 +78,9 @@ final class SignUpViewModel: BaseViewModel {
         let phoneNumberValidInfo = PublishRelay<String>()
         let phoneNumberValid = BehaviorRelay<Bool>(value: true)
         let birthdayString = PublishRelay<String>()
-        let signUpDone = PublishRelay<Result<Bool, NetworkError>>()
+        let signUpSucceed = PublishRelay<Void>()
+        let signUpFailed = PublishRelay<(NetworkError, RouterType)>()
+        
         
         
         input.email
@@ -111,7 +114,7 @@ final class SignUpViewModel: BaseViewModel {
                             if error == NetworkError.statusError(codeNumber: 409) {
                                 emailValidInfo.accept("사용이 불가한 이메일입니다.")
                             } else {
-                                failedToEmailValidationRequest.onNext(error)
+                                failedToEmailValidationRequest.onNext((error, RouterType.emailValidation))
                             }
                             emailValid.accept(false)
                             emailCheckValid.accept(false)
@@ -206,10 +209,10 @@ final class SignUpViewModel: BaseViewModel {
             .bind(with: self) { owner, result in
                 switch result {
                 case .success(_):
-                    signUpDone.accept(.success(true))
+                    signUpSucceed.accept(())
                 case .failure(let error):
-                    signUpDone.accept(.failure(error))
-                    if error == .invalidNickname {
+                    signUpFailed.accept((error, RouterType.joinUser))
+                    if error == .statusError(codeNumber: 409) {
                         nicknameValid.accept(false)
                         nicknameValidInfo.accept("이미 사용중인 닉네임입니다.")
                     }
@@ -235,7 +238,8 @@ final class SignUpViewModel: BaseViewModel {
             phoneNumberValidInfo: phoneNumberValidInfo,
             phoneNumberValid: phoneNumberValid,
             birthdayString: birthdayString,
-            signUpDone: signUpDone
+            signUpSucceed: signUpSucceed,
+            signUpFailed: signUpFailed
         )
     }
     

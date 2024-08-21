@@ -13,11 +13,16 @@ import Kingfisher
 
 final class HomeTableViewCell: BaseTableViewCell {
     
+    //MARK: - Properties
+    
+    var disposeBag = DisposeBag()
+    
     //MARK: - Life Cycle
     
     override func prepareForReuse() {
         super.prepareForReuse()
         productImageView.image = nil
+        disposeBag = DisposeBag()
     }
     
     //MARK: - UI Components
@@ -67,7 +72,7 @@ final class HomeTableViewCell: BaseTableViewCell {
         return label
     }()
     
-    private let likeButton: UIButton = {
+    let likeButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.setImage(UIImage(systemName: "suit.heart")?.applyingSymbolConfiguration(.init(weight: .semibold)), for: .normal)
         btn.tintColor = Constant.Color.Button.likeColor
@@ -129,6 +134,8 @@ final class HomeTableViewCell: BaseTableViewCell {
         super.configureUI()
     }
     
+    //MARK: - Methods
+    
     func cellConfig(data: ProductPost) {
         titleLabel.text = data.content
         brandLabel.text = data.content3
@@ -144,6 +151,20 @@ final class HomeTableViewCell: BaseTableViewCell {
                     print(error)
                 }
             }
+        }
+        
+        if UserDefaultsManager.shared.likeProducts[data.post_id] != nil {
+            updateAppearanceLikeButton(isLiked: true)
+        } else {
+            updateAppearanceLikeButton(isLiked: false)
+        }
+    }
+    
+    func updateAppearanceLikeButton(isLiked: Bool) {
+        if isLiked {
+            likeButton.setImage(UIImage(systemName: "suit.heart.fill")?.applyingSymbolConfiguration(.init(weight: .semibold)), for: .normal)
+        } else {
+            likeButton.setImage(UIImage(systemName: "suit.heart")?.applyingSymbolConfiguration(.init(weight: .semibold)), for: .normal)
         }
     }
 }

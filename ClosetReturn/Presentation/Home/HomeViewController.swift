@@ -44,23 +44,52 @@ final class HomeViewController: BaseViewController {
     //MARK: - Configurations
     
     override func bind() {
+        let likeButtonTap = PublishRelay<(String, Bool, Int)>()
+        
         let input = HomeViewModel.Input(
-            cellWillDisplay: tableView.rx.willDisplayCell
+            cellWillDisplay: tableView.rx.willDisplayCell,
+            cellLikeButtonTap: likeButtonTap
         )
         let output = viewModel.transform(input: input)
-        
+            
         
         output.productPosts
             .bind(to: tableView.rx.items(cellIdentifier: HomeTableViewCell.identifier, cellType: HomeTableViewCell.self)) { row, element, cell in
+
                 cell.cellConfig(data: element)
-                
                 cell.selectionStyle = .none
+                
+                cell.likeButton.rx.tap
+                    .bind(with: self) { owner, _ in
+                        cell.likeButton.isUserInteractionEnabled = false
+                        
+                        var newValue: Bool
+                        
+                        if UserDefaultsManager.shared.likeProducts[element.post_id] != nil {
+                            newValue = false
+                        } else {
+                            newValue = true
+                        }
+                        
+                        likeButtonTap.accept((element.post_id, newValue, row))
+                    }
+                    .disposed(by: cell.disposeBag)
+            }
+            .disposed(by: disposeBag)
+        
+        output.likeStatus
+            .bind(with: self) { owner, value in
+                let indexPath = IndexPath(row: value.1, section: 0)
+                if let cell = owner.tableView.cellForRow(at: indexPath) as? HomeTableViewCell {
+                    cell.updateAppearanceLikeButton(isLiked: value.0)
+                    cell.likeButton.isUserInteractionEnabled = true
+                }
             }
             .disposed(by: disposeBag)
         
         output.networkError
-            .bind(with: self) { owner, networkError in
-                owner.showNetworkRequestFailAlert(errorType: networkError)
+            .bind(with: self) { owner, value in
+                owner.showNetworkRequestFailAlert(errorType: value.0, routerType: value.1)
             }
             .disposed(by: disposeBag)
     }

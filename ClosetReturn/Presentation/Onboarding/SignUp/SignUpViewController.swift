@@ -198,8 +198,8 @@ final class SignUpViewController: BaseViewController {
             .disposed(by: disposeBag)
         
         output.failedToEmailValidationRequest
-            .bind(with: self) { owner, error in
-                owner.showNetworkRequestFailAlert(errorType: error)
+            .bind(with: self) { owner, value in
+                owner.showNetworkRequestFailAlert(errorType: value.0, routerType: value.1)
             }
             .disposed(by: disposeBag)
         
@@ -245,18 +245,18 @@ final class SignUpViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
-        output.signUpDone
-            .bind(with: self) { owner, result in
-                switch result {
-                case .success(_):
-                    let vc = SignUpCompleteViewController()
-                    vc.modalPresentationStyle = .overFullScreen
-                    vc.modalTransitionStyle = .crossDissolve
-                    owner.present(vc, animated: true)
-                
-                case .failure(let networkError):
-                    owner.showNetworkRequestFailAlert(errorType: networkError)
-                }
+        output.signUpSucceed
+            .bind(with: self) { owner, _ in
+                let vc = SignUpCompleteViewController()
+                vc.modalPresentationStyle = .overFullScreen
+                vc.modalTransitionStyle = .crossDissolve
+                owner.present(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        output.signUpFailed
+            .bind(with: self) { owner, value in
+                owner.showNetworkRequestFailAlert(errorType: value.0, routerType: value.1)
             }
             .disposed(by: disposeBag)
     }

@@ -81,15 +81,15 @@ final class LoginViewController: BaseViewController {
             .disposed(by: disposeBag)
         
         output.succeedToLogin
-            .bind(with: self) { owner, _ in
-                print("DEBUG: 로그인 성공!")
+            .bind(with: self) { owner, value in
+                print("DEBUG: 로그인 성공 & 유저 정보 => \(value.nick), \(value.user_id), \(value.email)")
                 owner.setRootViewController(TabBarController())
             }
             .disposed(by: disposeBag)
            
         output.failedToLogin
-            .bind(with: self) { owner, error in
-                owner.showNetworkRequestFailAlert(errorType: error)
+            .bind(with: self) { owner, value in
+                owner.showNetworkRequestFailAlert(errorType: value.0, routerType: value.1)
             }
             .disposed(by: disposeBag)
         

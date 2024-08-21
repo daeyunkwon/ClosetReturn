@@ -22,15 +22,15 @@ final class HomeViewModel: BaseViewModel {
     
     struct Input {
         let cellWillDisplay: ControlEvent<WillDisplayCellEvent>
+        let cellLikeButtonTap: PublishRelay<(String, Bool, Int)>
     }
     
     //MARK: - Outputs
     
     struct Output {
         let productPosts: BehaviorSubject<[ProductPost]>
-        
-        
-        let networkError: PublishRelay<NetworkError>
+        let likeStatus: PublishRelay<(Bool, Int)>
+        let networkError: PublishRelay<(NetworkError, RouterType)>
     }
     
     //MARK: - Methods
@@ -38,7 +38,8 @@ final class HomeViewModel: BaseViewModel {
     func transform(input: Input) -> Output {
         
         let productPosts = BehaviorSubject<[ProductPost]>(value: self.productPosts)
-        let networkError = PublishRelay<NetworkError>()
+        let likeStatus = PublishRelay<(Bool, Int)>()
+        let networkError = PublishRelay<(NetworkError, RouterType)>()
         
         func fetchPosts(nextCursor: String) {
             NetworkManager.shared.performRequest(api: .posts(next: nextCursor, limit: "7", product_id: APIKey.productID), model: ProductPostData.self)
@@ -50,7 +51,7 @@ final class HomeViewModel: BaseViewModel {
                         owner.nextCursor = value.next_cursor
                         productPosts.onNext(owner.productPosts)
                     case .failure(let error):
-                        networkError.accept(error)
+                        networkError.accept((error, RouterType.posts))
                     }
                 }
                 .disposed(by: disposeBag)
@@ -70,9 +71,36 @@ final class HomeViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
+        input.cellLikeButtonTap
+            .bind(with: self) { owner, value in
+                NetworkManager.shared.performRequest(api: .like(postID: value.0, isLike: value.1), model: [String: Bool].self)
+                    .asObservable()
+                    .subscribe(with: self) { owner, result in
+                        
+                        switch result {
+                        case .success(_):
+                            if value.1 {
+                                UserDefaultsManager.shared.likeProducts[value.0] = value.1
+                                print(UserDefaultsManager.shared.likeProducts)
+                            } else {
+                                UserDefaultsManager.shared.likeProducts.removeValue(forKey: value.0)
+                                print(UserDefaultsManager.shared.likeProducts)
+                            }
+                            
+                            likeStatus.accept((value.1, value.2))
+                            
+                        case .failure(let error):
+                            networkError.accept((error, RouterType.like))
+                        }
+                    }
+                    .disposed(by: owner.disposeBag)
+            }
+            .disposed(by: disposeBag)
+        
         
         return Output(
             productPosts: productPosts,
+            likeStatus: likeStatus,
             networkError: networkError
         )
     }

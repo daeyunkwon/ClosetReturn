@@ -13,4 +13,5 @@ enum BodyKey: String {
     case nick
     case phoneNum
     case birthDay
+    case like_status
 }
