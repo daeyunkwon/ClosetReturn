@@ -53,6 +53,14 @@ final class HomeViewController: BaseViewController {
         let output = viewModel.transform(input: input)
             
         
+        tableView.rx.modelSelected(ProductPost.self)
+            .bind(with: self) { owner, data in
+                let vm = ProductDetailViewModel()
+                let vc = ProductDetailViewController(viewModel: vm)
+                owner.pushViewController(vc)
+            }
+            .disposed(by: disposeBag)
+        
         output.productPosts
             .bind(to: tableView.rx.items(cellIdentifier: HomeTableViewCell.identifier, cellType: HomeTableViewCell.self)) { row, element, cell in
 

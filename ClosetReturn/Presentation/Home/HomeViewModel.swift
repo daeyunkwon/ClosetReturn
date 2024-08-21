@@ -90,7 +90,10 @@ final class HomeViewModel: BaseViewModel {
                             likeStatus.accept((value.1, value.2))
                             
                         case .failure(let error):
-                            networkError.accept((error, RouterType.like))
+                            if error == .statusError(codeNumber: 401) {
+                                networkError.accept((error, RouterType.like))
+                            }
+                            
                         }
                     }
                     .disposed(by: owner.disposeBag)

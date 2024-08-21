@@ -22,6 +22,7 @@ extension UIViewController {
     func showNetworkRequestFailAlert(errorType: NetworkError, routerType: RouterType) {
         var message: String = "오류가 발생하였습니다. 잠시 후 다시 시도해 주세요."
         var errorType = errorType
+        print("얼럿에서 받은 에러타입: \(errorType)")
         
         switch errorType {
             
@@ -50,7 +51,7 @@ extension UIViewController {
                 case .joinUser:
                     message = "입력하신 닉네임이 이미 사용중인 닉네임으로 사용할 수 없습니다."
                 default: break
-                }
+                }                
                 
             case 420:
                 message = "인증키가 유효하지 않아 서버에 접근이 실패되었습니다. 잠시 후 다시 시도해 주세요."

@@ -22,6 +22,8 @@ final class NetworkManager {
             do {
                 let request = try api.asURLRequest()
                 
+                var moreExecute = true
+                
                 AF.request(request)
                     .validate(statusCode: 200...299)
                     .responseDecodable(of: T.self) { response in
@@ -34,41 +36,43 @@ final class NetworkManager {
                                 case .failure(let error):
                                     print("Error: 액세스 토큰 갱신 실패")
                                     single(.success(.failure(error)))
-                                    return
+                                    moreExecute = false
                                 }
                             }
                         }
                         
-                        switch response.result {
-                        case .success(let value):
-                            single(.success(.success(value)))
-                        
-                        case .failure(let error):
-                            print("Error: \(error)")
-                            print("Error: \(error.localizedDescription)")
-                            switch error {
-                            case .createURLRequestFailed(let error):
-                                print(error)
-                                single(.success(.failure(NetworkError.failedToCreateRequest)))
-                                
-                            case .invalidURL(let url):
-                                print("Error URL: \(url)")
-                                single(.success(.failure(NetworkError.invalidURL)))
-                                
-                            case .responseValidationFailed(let reason):
-                                switch reason {
-                                case .unacceptableStatusCode(let code):
-                                    single(.success(.failure(NetworkError.statusError(codeNumber: code))))
+                        if moreExecute {
+                            switch response.result {
+                            case .success(let value):
+                                single(.success(.success(value)))
+                            
+                            case .failure(let error):
+                                print("Error: \(error)")
+                                print("Error: \(error.localizedDescription)")
+                                switch error {
+                                case .createURLRequestFailed(let error):
+                                    print(error)
+                                    single(.success(.failure(NetworkError.failedToCreateRequest)))
+                                    
+                                case .invalidURL(let url):
+                                    print("Error URL: \(url)")
+                                    single(.success(.failure(NetworkError.invalidURL)))
+                                    
+                                case .responseValidationFailed(let reason):
+                                    switch reason {
+                                    case .unacceptableStatusCode(let code):
+                                        single(.success(.failure(NetworkError.statusError(codeNumber: code))))
+                                    default:
+                                        break
+                                    }
+                                    
+                                case .sessionTaskFailed(let error as URLError):
+                                    if error.code == .notConnectedToInternet {
+                                        single(.success(.failure(NetworkError.notConnectedInternet)))
+                                    }
                                 default:
                                     break
                                 }
-                                
-                            case .sessionTaskFailed(let error as URLError):
-                                if error.code == .notConnectedToInternet {
-                                    single(.success(.failure(NetworkError.notConnectedInternet)))
-                                }
-                            default:
-                                break
                             }
                         }
                     }

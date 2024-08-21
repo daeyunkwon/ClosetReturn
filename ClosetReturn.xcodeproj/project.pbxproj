@@ -50,6 +50,9 @@
 		44A39D652C735642009BCC44 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 44A39D642C735642009BCC44 /* Kingfisher */; };
 		44C0BAB12C738CA900136643 /* RefreshModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C0BAB02C738CA900136643 /* RefreshModel.swift */; };
 		44C0BAB32C7493DC00136643 /* JoinUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C0BAB22C7493DC00136643 /* JoinUser.swift */; };
+		44C0BAD22C75E2EA00136643 /* ProductDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C0BAD12C75E2EA00136643 /* ProductDetailViewController.swift */; };
+		44C0BAD42C75E68E00136643 /* ProductDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C0BAD32C75E68E00136643 /* ProductDetailViewModel.swift */; };
+		44C0BAD62C76064F00136643 /* ProductDetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C0BAD52C76064F00136643 /* ProductDetailCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -92,6 +95,9 @@
 		44A39D5F2C7347AF009BCC44 /* ProductPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPost.swift; sourceTree = "<group>"; };
 		44C0BAB02C738CA900136643 /* RefreshModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshModel.swift; sourceTree = "<group>"; };
 		44C0BAB22C7493DC00136643 /* JoinUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinUser.swift; sourceTree = "<group>"; };
+		44C0BAD12C75E2EA00136643 /* ProductDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailViewController.swift; sourceTree = "<group>"; };
+		44C0BAD32C75E68E00136643 /* ProductDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailViewModel.swift; sourceTree = "<group>"; };
+		44C0BAD52C76064F00136643 /* ProductDetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -304,8 +310,19 @@
 				44A39D5B2C73391D009BCC44 /* HomeViewModel.swift */,
 				44A39D592C73377B009BCC44 /* HomeViewController.swift */,
 				44A39D5D2C733F87009BCC44 /* HomeTableViewCell.swift */,
+				44C0BAD02C75E2D800136643 /* Detail */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		44C0BAD02C75E2D800136643 /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				44C0BAD32C75E68E00136643 /* ProductDetailViewModel.swift */,
+				44C0BAD12C75E2EA00136643 /* ProductDetailViewController.swift */,
+				44C0BAD52C76064F00136643 /* ProductDetailCollectionViewCell.swift */,
+			);
+			path = Detail;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -398,6 +415,7 @@
 				449AD07D2C6E0B1900B0ED37 /* HeaderKey.swift in Sources */,
 				449AD0642C6DC4FB00B0ED37 /* UIView+Extension.swift in Sources */,
 				44A39D4B2C723843009BCC44 /* SignUpCompleteViewController.swift in Sources */,
+				44C0BAD42C75E68E00136643 /* ProductDetailViewModel.swift in Sources */,
 				449AD08F2C6F462B00B0ED37 /* LoginViewModel.swift in Sources */,
 				449AD0742C6DCFC700B0ED37 /* TabBarController.swift in Sources */,
 				449AD0702C6DC61800B0ED37 /* Reusable.swift in Sources */,
@@ -405,6 +423,7 @@
 				449AD03D2C6CA0B200B0ED37 /* ViewController.swift in Sources */,
 				449AD08D2C6F2CD100B0ED37 /* InputTextFieldView.swift in Sources */,
 				449AD0392C6CA0B200B0ED37 /* AppDelegate.swift in Sources */,
+				44C0BAD62C76064F00136643 /* ProductDetailCollectionViewCell.swift in Sources */,
 				449AD05E2C6D787400B0ED37 /* Constant.swift in Sources */,
 				449AD0722C6DC67A00B0ED37 /* BaseViewModel.swift in Sources */,
 				449AD0852C6F25A900B0ED37 /* LoginViewController.swift in Sources */,
@@ -422,6 +441,7 @@
 				44A39D5A2C73377B009BCC44 /* HomeViewController.swift in Sources */,
 				449AD07F2C6E0BA800B0ED37 /* BodyKey.swift in Sources */,
 				449AD0672C6DC59E00B0ED37 /* BaseView.swift in Sources */,
+				44C0BAD22C75E2EA00136643 /* ProductDetailViewController.swift in Sources */,
 				449AD0952C6F694500B0ED37 /* SignUpViewController.swift in Sources */,
 				449AD0762C6DE9D000B0ED37 /* NetworkManager.swift in Sources */,
 				449AD0692C6DC5B300B0ED37 /* BaseViewController.swift in Sources */,
