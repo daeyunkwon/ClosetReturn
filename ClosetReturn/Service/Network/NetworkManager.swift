@@ -22,30 +22,59 @@ final class NetworkManager {
             do {
                 let request = try api.asURLRequest()
                 
-                var moreExecute = true
-                
                 AF.request(request)
                     .validate(statusCode: 200...299)
                     .responseDecodable(of: T.self) { response in
-                        
+                                                
                         if response.response?.statusCode == 419 { //토큰 만료 -> 액세스 토큰 갱신 시도
                             self.refreshToken { result in
                                 switch result {
                                 case .success(_):
                                     print("DEBUG: 액세스 토큰 갱신 완료")
+                                    switch response.result {
+                                    case .success(let value):
+                                        single(.success(.success(value)))
+                                        
+                                    case .failure(let error):
+                                        print("Error: \(error)")
+                                        print("Error: \(error.localizedDescription)")
+                                        switch error {
+                                        case .createURLRequestFailed(let error):
+                                            print(error)
+                                            single(.success(.failure(NetworkError.failedToCreateRequest)))
+                                            
+                                        case .invalidURL(let url):
+                                            print("Error URL: \(url)")
+                                            single(.success(.failure(NetworkError.invalidURL)))
+                                            
+                                        case .responseValidationFailed(let reason):
+                                            switch reason {
+                                            case .unacceptableStatusCode(let code):
+                                                single(.success(.failure(NetworkError.statusError(codeNumber: code))))
+                                            default:
+                                                break
+                                            }
+                                            
+                                        case .sessionTaskFailed(let error as URLError):
+                                            if error.code == .notConnectedToInternet {
+                                                single(.success(.failure(NetworkError.notConnectedInternet)))
+                                            }
+                                        default:
+                                            break
+                                        }
+                                    }
+                                    
                                 case .failure(let error):
                                     print("Error: 액세스 토큰 갱신 실패")
                                     single(.success(.failure(error)))
-                                    moreExecute = false
+                                    return
                                 }
                             }
-                        }
-                        
-                        if moreExecute {
+                        } else {
                             switch response.result {
                             case .success(let value):
                                 single(.success(.success(value)))
-                            
+                                
                             case .failure(let error):
                                 print("Error: \(error)")
                                 print("Error: \(error.localizedDescription)")
@@ -151,7 +180,7 @@ final class NetworkManager {
             AF.request(request).validate(statusCode: 200...299).responseDecodable(of: RefreshModel.self) { response in
                 
                 if response.response?.statusCode == 418 { //리프레시 토큰 만료
-                    UserDefaultsManager.shared.removeAll()
+                    //UserDefaultsManager.shared.removeAll()
                     completionHandler(.failure(NetworkError.refreshTokenExpired))
                     return
                 }

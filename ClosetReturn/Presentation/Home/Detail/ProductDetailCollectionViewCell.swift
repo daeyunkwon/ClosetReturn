@@ -13,12 +13,12 @@ final class ProductDetailCollectionViewCell: BaseCollectionViewCell {
     
     //MARK: - UI Components
     
-    private let productImageView: UIImageView = {
+    let productImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
-        iv.layer.cornerRadius = 20
         iv.clipsToBounds = true
-        iv.backgroundColor = .yellow
+        iv.image = UIImage(systemName: "star.fill")
+        iv.backgroundColor = .lightGray
         return iv
     }()
     

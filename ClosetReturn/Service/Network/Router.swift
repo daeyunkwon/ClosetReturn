@@ -17,6 +17,7 @@ enum Router {
     case image(imagePath: String)
     case refresh
     case like(postID: String, isLike: Bool)
+    case postDetail(postID: String)
 }
 
 enum RouterType {
@@ -27,6 +28,7 @@ enum RouterType {
     case image
     case refresh
     case like
+    case postDetail
 }
 
 extension Router: URLRequestConvertible {
@@ -39,7 +41,7 @@ extension Router: URLRequestConvertible {
         case .emailValidation, .joinUser, .loginUser, .like:
             return .post
             
-        case .posts, .image, .refresh:
+        case .posts, .image, .refresh, .postDetail:
             return .get
         }
     }
@@ -52,7 +54,8 @@ extension Router: URLRequestConvertible {
         case .posts: return APIURL.posts
         case .image(let imagePath): return "v1/\(imagePath)"
         case .refresh: return APIURL.refresh
-        case .like(let postID, _): return "v1/posts/\(postID)/like"//APIURL.likeURL(postID: postID)
+        case .like(let postID, _): return APIURL.likeURL(postID: postID)
+        case .postDetail(let postID): return APIURL.postDetailURL(postID: postID)
         }
     }
     
@@ -77,7 +80,7 @@ extension Router: URLRequestConvertible {
                 HeaderKey.refresh.rawValue: UserDefaultsManager.shared.refreshToken
             ]
             
-        case .like:
+        case .like, .postDetail:
             return [
                 HeaderKey.contentType.rawValue: HeaderKey.json.rawValue,
                 HeaderKey.authorization.rawValue: UserDefaultsManager.shared.accessToken,

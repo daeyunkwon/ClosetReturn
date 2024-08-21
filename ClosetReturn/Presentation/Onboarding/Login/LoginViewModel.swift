@@ -63,9 +63,26 @@ final class LoginViewModel: BaseViewModel {
                         switch result {
                         case .success(let value):
                             succeedToLogin.onNext(value)
-                            UserDefaultsManager.shared.accessToken = value.accessToken
+                            
                             UserDefaultsManager.shared.refreshToken = value.refreshToken
-                            UserDefaultsManager.shared.userID = value.user_id
+                            
+                            let access = value.accessToken
+                            let userID = value.user_id
+                            UserDefaultsManager.shared.accessToken = access
+                            UserDefaultsManager.shared.userID = userID
+                            
+                            print(value.accessToken)
+                            print(UserDefaultsManager.shared.accessToken)
+                            print("======================================")
+                            
+                            //버그때문에 한 번 더 저장
+                            let refresh = value.refreshToken
+                            UserDefaultsManager.shared.refreshToken = refresh
+                            
+                            print(value.refreshToken)
+                            print(UserDefaultsManager.shared.refreshToken)
+                            
+                            
                             
                         case .failure(let error):
                             failedToLogin.onNext((error, RouterType.loginUser))

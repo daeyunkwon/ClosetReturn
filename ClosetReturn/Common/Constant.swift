@@ -20,6 +20,7 @@ enum Constant {
             static let titleColor: UIColor = .label
             static let bodyColor: UIColor = .label
             static let secondaryColor: UIColor = UIColor(red: 0.64, green: 0.67, blue: 0.74, alpha: 1.00)
+            static let brandTitleColor: UIColor = .darkGray
         }
         
         enum Icon {

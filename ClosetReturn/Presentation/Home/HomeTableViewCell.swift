@@ -148,6 +148,7 @@ final class HomeTableViewCell: BaseTableViewCell {
                     self?.productImageView.image = UIImage(data: value)
                     
                 case .failure(let error):
+                    print("Error: 이미지 조회 API 실패")
                     print(error)
                 }
             }

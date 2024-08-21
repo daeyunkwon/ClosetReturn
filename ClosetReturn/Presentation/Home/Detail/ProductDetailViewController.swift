@@ -36,16 +36,26 @@ final class ProductDetailViewController: BaseViewController {
     
     private let scrollContainerView = UIView()
     
+    private let pageControl: UIPageControl = {
+        let pc = UIPageControl()
+        pc.numberOfPages = 5
+        return pc
+    }()
+    
     private lazy var collectionView: UICollectionView =  {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: view.frame.size.width, height: 480)
-        layout.sectionInset = .init(top: 0, left: 0, bottom: 10, right: 0)
+        layout.itemSize = CGSize(width: view.frame.size.width, height: 550)
+        layout.sectionInset = .init(top: 0, left: 0, bottom: 0, right: 0)
+        layout.minimumLineSpacing = 0
         
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.isPagingEnabled = true
         cv.register(ProductDetailCollectionViewCell.self, forCellWithReuseIdentifier: ProductDetailCollectionViewCell.identifier)
         cv.backgroundColor = .lightGray
+        cv.layer.cornerRadius = 20
+        cv.contentInsetAdjustmentBehavior = .never
+        cv.showsHorizontalScrollIndicator = false
         return cv
     }()
     
@@ -54,6 +64,7 @@ final class ProductDetailViewController: BaseViewController {
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.layer.cornerRadius = 22
+        iv.backgroundColor = .lightGray
         return iv
     }()
     
@@ -75,7 +86,7 @@ final class ProductDetailViewController: BaseViewController {
     private let brandLabel: UILabel = {
         let label = UILabel()
         label.font = Constant.Font.secondaryTitleFont
-        label.textColor = Constant.Color.Text.titleColor
+        label.textColor = Constant.Color.Text.brandTitleColor
         return label
     }()
     
@@ -98,6 +109,7 @@ final class ProductDetailViewController: BaseViewController {
         let label = UILabel()
         label.textColor = Constant.Color.Text.titleColor
         label.font = Constant.Font.secondaryTitleFont
+        label.text = "컨디션"
         return label
     }()
     
@@ -111,7 +123,8 @@ final class ProductDetailViewController: BaseViewController {
     private let sizeTitleLabel: UILabel = {
         let label = UILabel()
         label.textColor = Constant.Color.Text.titleColor
-        label.font = Constant.Font.secondaryBoldFont
+        label.font = Constant.Font.secondaryTitleFont
+        label.text = "사이즈"
         return label
     }()
     
@@ -125,7 +138,8 @@ final class ProductDetailViewController: BaseViewController {
     private let categoryTitleLabel: UILabel = {
         let label = UILabel()
         label.textColor = Constant.Color.Text.titleColor
-        label.font = Constant.Font.secondaryBoldFont
+        label.font = Constant.Font.secondaryTitleFont
+        label.text = "카테고리"
         return label
     }()
     
@@ -140,6 +154,8 @@ final class ProductDetailViewController: BaseViewController {
         let tv = UITextView()
         tv.isEditable = false
         tv.isScrollEnabled = false
+        tv.font = Constant.Font.bodyFont
+        tv.textColor = Constant.Color.Text.bodyColor
         return tv
     }()
     
@@ -195,11 +211,13 @@ final class ProductDetailViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = true
+        navigationController?.navigationBar.isHidden = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.tabBarController?.tabBar.isHidden = false
+        navigationController?.navigationBar.isHidden = false
     }
     
     override func viewDidLoad() {
@@ -211,9 +229,84 @@ final class ProductDetailViewController: BaseViewController {
     override func bind() {
         if let viewModel = viewModel as? ProductDetailViewModel {
             
+            let fetch = PublishRelay<Void>()
             
+            let input = ProductDetailViewModel.Input(fetchData: fetch)
+            let output = viewModel.transform(input: input)
             
+            fetch.accept(())
             
+            output.profileImageData
+                .map { UIImage(data: $0) }
+                .bind(to: profileImageView.rx.image)
+                .disposed(by: disposeBag)
+            
+            output.nickname
+                .bind(to: nicknameLabel.rx.text)
+                .disposed(by: disposeBag)
+            
+            output.title
+                .bind(to: titleLabel.rx.text)
+                .disposed(by: disposeBag)
+            
+            output.brand
+                .bind(to: brandLabel.rx.text)
+                .disposed(by: disposeBag)
+            
+            output.price
+                .bind(to: priceLabel.rx.text)
+                .disposed(by: disposeBag)
+            
+            output.createDate
+                .bind(to: createdDateLabel.rx.text)
+                .disposed(by: disposeBag)
+            
+            output.category
+                .bind(to: categoryLabel.rx.text)
+                .disposed(by: disposeBag)
+            
+            output.condition
+                .bind(to: conditionLabel.rx.text)
+                .disposed(by: disposeBag)
+            
+            output.size
+                .bind(to: sizeLabel.rx.text)
+                .disposed(by: disposeBag)
+            
+            output.content
+                .bind(to: contentTextView.rx.text)
+                .disposed(by: disposeBag)
+            
+            output.productImageDatas
+                .share()
+                .bind(to: collectionView.rx.items(cellIdentifier: ProductDetailCollectionViewCell.identifier, cellType: ProductDetailCollectionViewCell.self)) { row, element, cell in
+                    print(element)
+                    cell.productImageView.image = UIImage(data: element)
+                    
+                }
+                .disposed(by: disposeBag)
+            
+            output.productImageDatas
+                .map { $0.count }
+                .bind(to: pageControl.rx.numberOfPages)
+                .disposed(by: disposeBag)
+            
+            collectionView.rx.contentOffset
+                .map { [weak self] contentOffset -> CGFloat in
+                    guard let self = self else { return 0.0 }
+                    return contentOffset.x / self.view.frame.size.width
+                }
+                .map { CGFloat((round($0))) }
+                .map { Int($0) }
+                .bind(to: pageControl.rx.currentPage)
+                .disposed(by: disposeBag)
+                
+            
+            output.networkError
+                .bind(with: self) { owner, value in
+                    owner.showNetworkRequestFailAlert(errorType: value.0, routerType: value.1)
+                }
+                .disposed(by: disposeBag)
         }
     }
     
@@ -222,6 +315,7 @@ final class ProductDetailViewController: BaseViewController {
         scrollView.addSubview(scrollContainerView)
         scrollContainerView.addSubviews(
             collectionView,
+            pageControl,
             profileImageView,
             nicknameLabel,
             titleLabel,
@@ -246,7 +340,8 @@ final class ProductDetailViewController: BaseViewController {
     
     override func configureLayout() {
         scrollView.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
+            make.top.equalToSuperview()
+            make.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide)
         }
         
         scrollContainerView.snp.makeConstraints { make in
@@ -255,9 +350,14 @@ final class ProductDetailViewController: BaseViewController {
         }
         
         collectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
+            make.top.equalToSuperview().offset(-80)
             make.horizontalEdges.equalToSuperview()
-            make.height.equalTo(500)
+            make.height.equalTo(550)
+        }
+        
+        pageControl.snp.makeConstraints { make in
+            make.horizontalEdges.equalToSuperview().inset(20)
+            make.bottom.equalTo(collectionView.snp.bottom).offset(-20)
         }
         
         profileImageView.snp.makeConstraints { make in
@@ -323,7 +423,7 @@ final class ProductDetailViewController: BaseViewController {
         }
         
         contentTextView.snp.makeConstraints { make in
-            make.top.equalTo(categoryTitleLabel.snp.bottom).inset(30)
+            make.top.equalTo(categoryTitleLabel.snp.bottom).offset(20)
             make.horizontalEdges.equalToSuperview().inset(20)
             make.bottom.equalToSuperview().inset(100)
         }
@@ -356,5 +456,15 @@ final class ProductDetailViewController: BaseViewController {
     
     override func configureUI() {
         super.configureUI()
+        
+        contentTextView.text = """
+
+        DEBUG: 로그인 성공 & 유저 정보 => 덥덥, 66c287fe8dde810695e5d93c, t1@naver.com
+        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YzI4N2ZlOGRkZTgxMDY5NWU1ZDkzYyIsImlhdCI6MTcyNDI2MDY4OCwiZXhwIjoxNzI0MjYxMjg4LCJpc3MiOiJzZXNhY18zIn0.ej3BbfPqt1fffGWgLy-k6NQJTxVF3CtahjhMleLSth4
+        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YzI4N2ZlOGRkZTgxMDY5NWU1ZDkzYyIsImlhdCI6MTcyNDI2MDY4OCwiZXhwIjoxNzI0MjYxMjg4LCJpc3MiOiJzZXNhY18zIn0.ej3BbfPqt1fffGWgLy-k6NQJTxVF3CtahjhMleLSth4
+        ======================================
+        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YzI4N2ZlOGRkZTgxMDY5NWU1ZDkzYyIsImlhdCI6MTcyNDI2MDY4OCwiZXhwIjoxNzI0MjY0Mjg4LCJpc3MiOiJzZXNhY18zIn0.vj0Qmf13s-rHy52E3ekLlU2RL9XhwMj8DaBPjW-v4xQ
+        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YzI4N2ZlOGRkZTgxMDY5NWU1ZDkzYyIsImlhdCI6MTcyNDI2MDY4OCwiZXhwIjoxNzI0MjY0Mjg4LCJpc3MiOiJzZXNhY18zIn0.vj0Qmf13s-rHy52E3ekLlU2RL9XhwMj8DaBPjW-v4xQ
+"""
     }
 }

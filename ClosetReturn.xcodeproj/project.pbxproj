@@ -203,9 +203,9 @@
 		449AD0562C6CD7A600B0ED37 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				449AD0592C6CD83900B0ED37 /* APIKey.swift */,
 				449AD0752C6DE9D000B0ED37 /* NetworkManager.swift */,
 				449AD07A2C6DFEF700B0ED37 /* Router.swift */,
-				449AD0592C6CD83900B0ED37 /* APIKey.swift */,
 				449AD07C2C6E0B1900B0ED37 /* HeaderKey.swift */,
 				449AD07E2C6E0BA800B0ED37 /* BodyKey.swift */,
 				449AD0802C6E0E3800B0ED37 /* NetworkError.swift */,

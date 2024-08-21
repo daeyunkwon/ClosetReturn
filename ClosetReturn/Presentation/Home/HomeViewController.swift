@@ -37,6 +37,11 @@ final class HomeViewController: BaseViewController {
     
     //MARK: - Life Cycle
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tableView.reloadData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -48,22 +53,24 @@ final class HomeViewController: BaseViewController {
         
         let input = HomeViewModel.Input(
             cellWillDisplay: tableView.rx.willDisplayCell,
-            cellLikeButtonTap: likeButtonTap
+            cellLikeButtonTap: likeButtonTap,
+            cellTapped: tableView.rx.modelSelected(ProductPost.self)
         )
         let output = viewModel.transform(input: input)
             
         
-        tableView.rx.modelSelected(ProductPost.self)
+        output.cellTapped
             .bind(with: self) { owner, data in
                 let vm = ProductDetailViewModel()
+                vm.postID = data.post_id
                 let vc = ProductDetailViewController(viewModel: vm)
                 owner.pushViewController(vc)
             }
             .disposed(by: disposeBag)
-        
+            
         output.productPosts
             .bind(to: tableView.rx.items(cellIdentifier: HomeTableViewCell.identifier, cellType: HomeTableViewCell.self)) { row, element, cell in
-
+                
                 cell.cellConfig(data: element)
                 cell.selectionStyle = .none
                 

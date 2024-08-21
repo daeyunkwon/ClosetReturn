@@ -23,6 +23,7 @@ final class HomeViewModel: BaseViewModel {
     struct Input {
         let cellWillDisplay: ControlEvent<WillDisplayCellEvent>
         let cellLikeButtonTap: PublishRelay<(String, Bool, Int)>
+        let cellTapped: ControlEvent<ProductPost>
     }
     
     //MARK: - Outputs
@@ -31,6 +32,7 @@ final class HomeViewModel: BaseViewModel {
         let productPosts: BehaviorSubject<[ProductPost]>
         let likeStatus: PublishRelay<(Bool, Int)>
         let networkError: PublishRelay<(NetworkError, RouterType)>
+        let cellTapped: ControlEvent<ProductPost>
     }
     
     //MARK: - Methods
@@ -90,21 +92,20 @@ final class HomeViewModel: BaseViewModel {
                             likeStatus.accept((value.1, value.2))
                             
                         case .failure(let error):
-                            if error == .statusError(codeNumber: 401) {
-                                networkError.accept((error, RouterType.like))
-                            }
-                            
+                            print("뷰모델에서 전달받은 에러: \(error)")
+                            networkError.accept((error, RouterType.like))
                         }
                     }
                     .disposed(by: owner.disposeBag)
             }
             .disposed(by: disposeBag)
-        
+            
         
         return Output(
             productPosts: productPosts,
             likeStatus: likeStatus,
-            networkError: networkError
+            networkError: networkError,
+            cellTapped: input.cellTapped
         )
     }
 }
