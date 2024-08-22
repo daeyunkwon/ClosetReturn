@@ -237,7 +237,11 @@ final class ProductDetailViewController: BaseViewController {
             
             let fetch = PublishRelay<Void>()
             
-            let input = ProductDetailViewModel.Input(fetchData: fetch, backButtonTapped: backButton.rx.tap)
+            let input = ProductDetailViewModel.Input(
+                fetchData: fetch,
+                backButtonTapped: backButton.rx.tap,
+                likeButtonTapped: likeButton.rx.tap
+            )
             let output = viewModel.transform(input: input)
             
             fetch.accept(())
@@ -286,9 +290,7 @@ final class ProductDetailViewController: BaseViewController {
             output.productImageDatas
                 .share()
                 .bind(to: collectionView.rx.items(cellIdentifier: ProductDetailCollectionViewCell.identifier, cellType: ProductDetailCollectionViewCell.self)) { row, element, cell in
-                    print(element)
                     cell.productImageView.image = UIImage(data: element)
-                    
                 }
                 .disposed(by: disposeBag)
             
@@ -305,6 +307,12 @@ final class ProductDetailViewController: BaseViewController {
                 .map { CGFloat((round($0))) }
                 .map { Int($0) }
                 .bind(to: pageControl.rx.currentPage)
+                .disposed(by: disposeBag)
+            
+            output.likeStatus
+                .bind(with: self) { owner, value in
+                    owner.updateLikeButtonAppearance(isLiked: value)
+                }
                 .disposed(by: disposeBag)
                 
             
@@ -479,15 +487,17 @@ final class ProductDetailViewController: BaseViewController {
     
     override func configureUI() {
         super.configureUI()
-        
-        contentTextView.text = """
-
-        DEBUG: 로그인 성공 & 유저 정보 => 덥덥, 66c287fe8dde810695e5d93c, t1@naver.com
-        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YzI4N2ZlOGRkZTgxMDY5NWU1ZDkzYyIsImlhdCI6MTcyNDI2MDY4OCwiZXhwIjoxNzI0MjYxMjg4LCJpc3MiOiJzZXNhY18zIn0.ej3BbfPqt1fffGWgLy-k6NQJTxVF3CtahjhMleLSth4
-        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YzI4N2ZlOGRkZTgxMDY5NWU1ZDkzYyIsImlhdCI6MTcyNDI2MDY4OCwiZXhwIjoxNzI0MjYxMjg4LCJpc3MiOiJzZXNhY18zIn0.ej3BbfPqt1fffGWgLy-k6NQJTxVF3CtahjhMleLSth4
-        ======================================
-        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YzI4N2ZlOGRkZTgxMDY5NWU1ZDkzYyIsImlhdCI6MTcyNDI2MDY4OCwiZXhwIjoxNzI0MjY0Mjg4LCJpc3MiOiJzZXNhY18zIn0.vj0Qmf13s-rHy52E3ekLlU2RL9XhwMj8DaBPjW-v4xQ
-        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YzI4N2ZlOGRkZTgxMDY5NWU1ZDkzYyIsImlhdCI6MTcyNDI2MDY4OCwiZXhwIjoxNzI0MjY0Mjg4LCJpc3MiOiJzZXNhY18zIn0.vj0Qmf13s-rHy52E3ekLlU2RL9XhwMj8DaBPjW-v4xQ
-"""
+    }
+    
+    //MARK: - Methods
+    
+    private func updateLikeButtonAppearance(isLiked: Bool) {
+        if isLiked {
+            self.likeButton.setImage(UIImage(systemName: "suit.heart.fill")?.applyingSymbolConfiguration(.init(weight: .semibold)), for: .normal)
+            self.likeButton.tintColor = Constant.Color.Button.likeColor
+        } else {
+            self.likeButton.setImage(UIImage(systemName: "suit.heart")?.applyingSymbolConfiguration(.init(weight: .semibold)), for: .normal)
+            self.likeButton.tintColor = .white
+        }
     }
 }

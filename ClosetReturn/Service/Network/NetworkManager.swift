@@ -180,7 +180,6 @@ final class NetworkManager {
             AF.request(request).validate(statusCode: 200...299).responseDecodable(of: RefreshModel.self) { response in
                 
                 if response.response?.statusCode == 418 { //리프레시 토큰 만료
-                    //UserDefaultsManager.shared.removeAll()
                     completionHandler(.failure(NetworkError.refreshTokenExpired))
                     return
                 }

@@ -78,17 +78,13 @@ final class HomeViewModel: BaseViewModel {
                 NetworkManager.shared.performRequest(api: .like(postID: value.0, isLike: value.1), model: [String: Bool].self)
                     .asObservable()
                     .subscribe(with: self) { owner, result in
-                        
                         switch result {
                         case .success(_):
                             if value.1 {
                                 UserDefaultsManager.shared.likeProducts[value.0] = value.1
-                                print(UserDefaultsManager.shared.likeProducts)
                             } else {
                                 UserDefaultsManager.shared.likeProducts.removeValue(forKey: value.0)
-                                print(UserDefaultsManager.shared.likeProducts)
                             }
-                            
                             likeStatus.accept((value.1, value.2))
                             
                         case .failure(let error):

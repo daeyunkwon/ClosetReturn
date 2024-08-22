@@ -25,6 +25,7 @@ final class ProductDetailViewModel: BaseViewModel {
     struct Input {
         let fetchData: PublishRelay<Void>
         let backButtonTapped: ControlEvent<Void>
+        let likeButtonTapped: ControlEvent<Void>
     }
     
     //MARK: - Outputs
@@ -42,6 +43,7 @@ final class ProductDetailViewModel: BaseViewModel {
         let content: PublishRelay<String>
         let productImageDatas: PublishRelay<[Data]>
         let backButtonTapped: ControlEvent<Void>
+        let likeStatus: PublishRelay<Bool>
 
         let networkError: PublishRelay<(NetworkError, RouterType)>
     }
@@ -63,6 +65,7 @@ final class ProductDetailViewModel: BaseViewModel {
         let category = PublishRelay<String>()
         let content = PublishRelay<String>()
         let productImageDatas = PublishRelay<[Data]>()
+        let likeStatus = PublishRelay<Bool>()
         
         let networkError = PublishRelay<(NetworkError, RouterType)>()
         
@@ -80,6 +83,12 @@ final class ProductDetailViewModel: BaseViewModel {
                     resultData.onNext(data)
                 case .failure(let error):
                     networkError.accept((error, RouterType.postDetail))
+                }
+                
+                if UserDefaultsManager.shared.likeProducts[owner.postID] != nil {
+                    likeStatus.accept(true)
+                } else {
+                    likeStatus.accept(false)
                 }
             }
             .disposed(by: disposeBag)
@@ -188,6 +197,39 @@ final class ProductDetailViewModel: BaseViewModel {
             .bind(to: category)
             .disposed(by: disposeBag)
         
+        input.likeButtonTapped
+            .bind(with: self) {owner, _ in
+                
+                var newValue: Bool
+                
+                if UserDefaultsManager.shared.likeProducts[owner.postID] != nil {
+                    newValue = false
+                } else {
+                    newValue = true
+                }
+                
+                NetworkManager.shared.performRequest(api: .like(postID: owner.postID, isLike: newValue), model: [String: Bool].self)
+                    .asObservable()
+                    .bind(with: self) { owner, result in
+                        switch result {
+                        case .success(let value):
+                            if newValue {
+                                UserDefaultsManager.shared.likeProducts[owner.postID] = true
+                                likeStatus.accept(true)
+                            } else {
+                                UserDefaultsManager.shared.likeProducts.removeValue(forKey: owner.postID)
+                                likeStatus.accept(false)
+                            }
+                            
+                        case .failure(let error):
+                            networkError.accept((error, RouterType.like))
+                        }
+                    }
+                    .disposed(by: owner.disposeBag)
+            }
+            .disposed(by: disposeBag)
+        
+        
         
         return Output(
             profileImageData: profileImageData,
@@ -202,6 +244,7 @@ final class ProductDetailViewModel: BaseViewModel {
             content: content,
             productImageDatas: productImageDatas,
             backButtonTapped: input.backButtonTapped,
+            likeStatus: likeStatus,
             networkError: networkError
         )
     }
