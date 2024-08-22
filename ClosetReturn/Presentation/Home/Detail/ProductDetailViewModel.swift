@@ -24,6 +24,7 @@ final class ProductDetailViewModel: BaseViewModel {
     
     struct Input {
         let fetchData: PublishRelay<Void>
+        let backButtonTapped: ControlEvent<Void>
     }
     
     //MARK: - Outputs
@@ -40,6 +41,7 @@ final class ProductDetailViewModel: BaseViewModel {
         let category: PublishRelay<String>
         let content: PublishRelay<String>
         let productImageDatas: PublishRelay<[Data]>
+        let backButtonTapped: ControlEvent<Void>
 
         let networkError: PublishRelay<(NetworkError, RouterType)>
     }
@@ -89,13 +91,11 @@ final class ProductDetailViewModel: BaseViewModel {
             .map { $0.files }
             .filter { !$0.isEmpty}
             .subscribe(with: self) { owner, path in
-                var list: [Data] = []
+                
                 for path in path {
-                    
                     NetworkManager.shared.fetchImageData(imagePath: path) { result in
                         switch result {
                         case .success(let value):
-                            //list.append(value)
                             owner.productImageList.append(value)
                             productImageDatas.accept(owner.productImageList)
                         case .failure(let error):
@@ -201,6 +201,7 @@ final class ProductDetailViewModel: BaseViewModel {
             category: category,
             content: content,
             productImageDatas: productImageDatas,
+            backButtonTapped: input.backButtonTapped,
             networkError: networkError
         )
     }

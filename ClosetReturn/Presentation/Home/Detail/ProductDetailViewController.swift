@@ -36,11 +36,7 @@ final class ProductDetailViewController: BaseViewController {
     
     private let scrollContainerView = UIView()
     
-    private let pageControl: UIPageControl = {
-        let pc = UIPageControl()
-        pc.numberOfPages = 5
-        return pc
-    }()
+    private let pageControl = UIPageControl()
     
     private lazy var collectionView: UICollectionView =  {
         let layout = UICollectionViewFlowLayout()
@@ -206,6 +202,16 @@ final class ProductDetailViewController: BaseViewController {
         return button
     }()
     
+    private let backButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setImage(UIImage(systemName: "chevron.backward")?.applyingSymbolConfiguration(.init(font: .boldSystemFont(ofSize: 17))), for: .normal)
+        btn.tintColor = .white
+        btn.layer.shadowColor = UIColor.black.cgColor
+        btn.layer.shadowOpacity = 1
+        btn.layer.shadowOffset = .init(width: 0, height: 1)
+        return btn
+    }()
+    
     //MARK: - Life Cycle
     
     override func viewWillAppear(_ animated: Bool) {
@@ -231,7 +237,7 @@ final class ProductDetailViewController: BaseViewController {
             
             let fetch = PublishRelay<Void>()
             
-            let input = ProductDetailViewModel.Input(fetchData: fetch)
+            let input = ProductDetailViewModel.Input(fetchData: fetch, backButtonTapped: backButton.rx.tap)
             let output = viewModel.transform(input: input)
             
             fetch.accept(())
@@ -307,6 +313,12 @@ final class ProductDetailViewController: BaseViewController {
                     owner.showNetworkRequestFailAlert(errorType: value.0, routerType: value.1)
                 }
                 .disposed(by: disposeBag)
+            
+            output.backButtonTapped
+                .bind(with: self) { owner, _ in
+                    owner.popViewController()
+                }
+                .disposed(by: disposeBag)
         }
     }
     
@@ -336,6 +348,11 @@ final class ProductDetailViewController: BaseViewController {
             commentButton,
             buyButton
         )
+        view.addSubview(backButton)
+    }
+    
+    override func setupNavi() {
+        navigationItem.setHidesBackButton(true, animated: false)
     }
     
     override func configureLayout() {
@@ -451,6 +468,12 @@ final class ProductDetailViewController: BaseViewController {
             make.top.equalToSuperview().inset(20)
             make.leading.equalTo(commentButton.snp.trailing).offset(15)
             make.trailing.equalToSuperview().inset(20)
+        }
+        
+        backButton.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.leading.equalTo(view.safeAreaLayoutGuide).inset(10)
+            make.size.equalTo(44)
         }
     }
     
