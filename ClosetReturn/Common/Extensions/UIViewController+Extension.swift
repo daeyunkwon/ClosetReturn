@@ -83,4 +83,13 @@ extension UIViewController {
         
         present(alert, animated: true)
     }
+    
+    func showEditCancelCheckAlert() {
+        let alert = UIAlertController(title: "상품 등록", message: "상품 등록을 그만하시겠습니까?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "그만하기", style: .default, handler: {[weak self] okAction in
+            self?.dismiss(animated: true)
+        }))
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        present(alert, animated: true)
+    }
 }

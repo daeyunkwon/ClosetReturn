@@ -24,6 +24,7 @@ final class HomeViewModel: BaseViewModel {
         let cellWillDisplay: ControlEvent<WillDisplayCellEvent>
         let cellLikeButtonTap: PublishRelay<(String, Bool, Int)>
         let cellTapped: ControlEvent<ProductPost>
+        let createPostButtonTapped: ControlEvent<Void>
     }
     
     //MARK: - Outputs
@@ -33,6 +34,7 @@ final class HomeViewModel: BaseViewModel {
         let likeStatus: PublishRelay<(Bool, Int)>
         let networkError: PublishRelay<(NetworkError, RouterType)>
         let cellTapped: ControlEvent<ProductPost>
+        let createPostButtonTapped: ControlEvent<Void>
     }
     
     //MARK: - Methods
@@ -101,7 +103,8 @@ final class HomeViewModel: BaseViewModel {
             productPosts: productPosts,
             likeStatus: likeStatus,
             networkError: networkError,
-            cellTapped: input.cellTapped
+            cellTapped: input.cellTapped,
+            createPostButtonTapped: input.createPostButtonTapped
         )
     }
 }

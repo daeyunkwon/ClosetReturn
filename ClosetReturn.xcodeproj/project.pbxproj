@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4486AD8D2C7789D900A8BA9C /* ProductPostEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4486AD8C2C7789D900A8BA9C /* ProductPostEditViewController.swift */; };
+		4486AD8F2C778AAC00A8BA9C /* ProductPostEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4486AD8E2C778AAC00A8BA9C /* ProductPostEditViewModel.swift */; };
 		449AD0392C6CA0B200B0ED37 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0382C6CA0B200B0ED37 /* AppDelegate.swift */; };
 		449AD03B2C6CA0B200B0ED37 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD03A2C6CA0B200B0ED37 /* SceneDelegate.swift */; };
 		449AD03D2C6CA0B200B0ED37 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD03C2C6CA0B200B0ED37 /* ViewController.swift */; };
@@ -56,6 +58,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4486AD8C2C7789D900A8BA9C /* ProductPostEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPostEditViewController.swift; sourceTree = "<group>"; };
+		4486AD8E2C778AAC00A8BA9C /* ProductPostEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPostEditViewModel.swift; sourceTree = "<group>"; };
 		449AD0352C6CA0B200B0ED37 /* ClosetReturn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClosetReturn.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		449AD0382C6CA0B200B0ED37 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		449AD03A2C6CA0B200B0ED37 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -117,6 +121,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4486AD8B2C77896C00A8BA9C /* Edit */ = {
+			isa = PBXGroup;
+			children = (
+				4486AD8E2C778AAC00A8BA9C /* ProductPostEditViewModel.swift */,
+				4486AD8C2C7789D900A8BA9C /* ProductPostEditViewController.swift */,
+			);
+			path = Edit;
+			sourceTree = "<group>";
+		};
 		449AD02C2C6CA0B200B0ED37 = {
 			isa = PBXGroup;
 			children = (
@@ -311,6 +324,7 @@
 				44A39D592C73377B009BCC44 /* HomeViewController.swift */,
 				44A39D5D2C733F87009BCC44 /* HomeTableViewCell.swift */,
 				44C0BAD02C75E2D800136643 /* Detail */,
+				4486AD8B2C77896C00A8BA9C /* Edit */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -428,6 +442,7 @@
 				449AD0722C6DC67A00B0ED37 /* BaseViewModel.swift in Sources */,
 				449AD0852C6F25A900B0ED37 /* LoginViewController.swift in Sources */,
 				44C0BAB12C738CA900136643 /* RefreshModel.swift in Sources */,
+				4486AD8F2C778AAC00A8BA9C /* ProductPostEditViewModel.swift in Sources */,
 				449AD0832C6E0ED600B0ED37 /* UIViewController+Extension.swift in Sources */,
 				449AD07B2C6DFEF700B0ED37 /* Router.swift in Sources */,
 				449AD0932C6F693A00B0ED37 /* SignUpViewModel.swift in Sources */,
@@ -440,6 +455,7 @@
 				449AD06D2C6DC5EA00B0ED37 /* BaseCollectionViewCell.swift in Sources */,
 				44A39D5A2C73377B009BCC44 /* HomeViewController.swift in Sources */,
 				449AD07F2C6E0BA800B0ED37 /* BodyKey.swift in Sources */,
+				4486AD8D2C7789D900A8BA9C /* ProductPostEditViewController.swift in Sources */,
 				449AD0672C6DC59E00B0ED37 /* BaseView.swift in Sources */,
 				44C0BAD22C75E2EA00136643 /* ProductDetailViewController.swift in Sources */,
 				449AD0952C6F694500B0ED37 /* SignUpViewController.swift in Sources */,

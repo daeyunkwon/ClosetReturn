@@ -32,6 +32,7 @@ enum Constant {
             static let titleColor: UIColor = .white
             static let buttonDisabled: UIColor = .darkGray.withAlphaComponent(0.5)
             static let likeColor: UIColor = UIColor(red: 0.91, green: 0.44, blue: 0.57, alpha: 1.00)
+            static let cancelColor: UIColor = UIColor(red: 0.25, green: 0.28, blue: 0.34, alpha: 1.00)
         }
     }
     
@@ -45,6 +46,7 @@ enum Constant {
         static let secondaryFont: UIFont = .systemFont(ofSize: 14)
         static let secondaryBoldFont: UIFont = .boldSystemFont(ofSize: 14)
         static let buttonTitleFont: UIFont = .boldSystemFont(ofSize: 15)
+        static let buttonLargeTitleFont: UIFont = .boldSystemFont(ofSize: 18)
         static let infoFont: UIFont = .systemFont(ofSize: 12, weight: .medium)
     }
 }

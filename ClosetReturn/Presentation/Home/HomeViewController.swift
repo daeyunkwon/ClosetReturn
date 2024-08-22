@@ -35,6 +35,19 @@ final class HomeViewController: BaseViewController {
         return tv
     }()
     
+    private let createPostButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "plus"), for: .normal)
+        button.titleLabel?.font = Constant.Font.buttonTitleFont
+        button.backgroundColor = Constant.Color.brandColor
+        button.tintColor = Constant.Color.Button.titleColor
+        button.layer.cornerRadius = 25
+        button.layer.shadowColor = UIColor.lightGray.cgColor
+        button.layer.shadowOpacity = 1
+        button.layer.shadowOffset = .init(width: 0, height: 1)
+        return button
+    }()
+    
     //MARK: - Life Cycle
     
     override func viewWillAppear(_ animated: Bool) {
@@ -54,7 +67,8 @@ final class HomeViewController: BaseViewController {
         let input = HomeViewModel.Input(
             cellWillDisplay: tableView.rx.willDisplayCell,
             cellLikeButtonTap: likeButtonTap,
-            cellTapped: tableView.rx.modelSelected(ProductPost.self)
+            cellTapped: tableView.rx.modelSelected(ProductPost.self),
+            createPostButtonTapped: createPostButton.rx.tap
         )
         let output = viewModel.transform(input: input)
             
@@ -102,6 +116,15 @@ final class HomeViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
+        output.createPostButtonTapped
+            .bind(with: self) { owner, _ in
+                let vm = ProductPostEditViewModel()
+                let vc = ProductPostEditViewController(viewModel: vm)
+                vc.modalPresentationStyle = .fullScreen
+                owner.present(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
         output.networkError
             .bind(with: self) { owner, value in
                 owner.showNetworkRequestFailAlert(errorType: value.0, routerType: value.1)
@@ -116,11 +139,17 @@ final class HomeViewController: BaseViewController {
     
     override func configureHierarchy() {
         view.addSubview(tableView)
+        view.addSubview(createPostButton)
     }
     
     override func configureLayout() {
         tableView.snp.makeConstraints { make in
             make.top.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        createPostButton.snp.makeConstraints { make in
+            make.bottom.trailing.equalTo(view.safeAreaLayoutGuide).inset(30)
+            make.size.equalTo(50)
         }
     }
     
