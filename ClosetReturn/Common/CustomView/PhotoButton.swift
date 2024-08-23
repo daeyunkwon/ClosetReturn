@@ -15,6 +15,12 @@ final class PhotoButton: UIButton {
     
     private let customView = PhotoButtonView()
     
+    override var isHighlighted: Bool {
+        didSet {
+            customView.alpha = isHighlighted ? 0.6 : 1.0
+        }
+    }
+    
     //MARK: - Init
     
     override init(frame: CGRect) {
@@ -32,6 +38,17 @@ final class PhotoButton: UIButton {
             make.edges.equalToSuperview()
         }
         
-        setTitle("", for: .normal)
+        self.setTitle("", for: .normal)
+        
+        self.setTitleColor(.white, for: .highlighted)
+        self.backgroundColor = .clear
+    }
+    
+    //MARK: - Methods
+    
+    func updateLabel(withCount count: Int) {
+        self.customView.titleLabel.text = "\(count)/5"
     }
 }
+
+

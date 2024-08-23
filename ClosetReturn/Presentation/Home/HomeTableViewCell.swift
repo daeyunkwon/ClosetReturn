@@ -9,7 +9,6 @@ import UIKit
 
 import RxSwift
 import RxCocoa
-import Kingfisher
 
 final class HomeTableViewCell: BaseTableViewCell {
     

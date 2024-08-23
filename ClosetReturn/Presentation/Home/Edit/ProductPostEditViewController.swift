@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import PhotosUI
 
 import RxSwift
 import RxCocoa
@@ -18,6 +19,8 @@ final class ProductPostEditViewController: BaseViewController {
     private let disposeBag = DisposeBag()
     
     private let viewModel: any BaseViewModel
+    
+    private let selectedImages = PublishRelay<[Data]>()
     
     //MARK: - Init
     
@@ -60,7 +63,7 @@ final class ProductPostEditViewController: BaseViewController {
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        layout.itemSize = CGSize(width: 140, height: 140)
         layout.sectionInset = .init(top: 0, left: 0, bottom: 0, right: 0)
         layout.minimumLineSpacing = 10
         
@@ -165,12 +168,16 @@ final class ProductPostEditViewController: BaseViewController {
     
     override func bind() {
         if let viewModel = viewModel as? ProductPostEditViewModel {
+            
+            let cellXmarkButtonTapped = PublishRelay<Int>()
+            
             let input = ProductPostEditViewModel.Input(
-                cancelButtonTapped: cancelButton.rx.tap
+                cancelButtonTapped: cancelButton.rx.tap,
+                selectedImages: selectedImages,
+                photoSelectButton: photoSelectButton.rx.tap,
+                cellXmarkButtonTapped: cellXmarkButtonTapped
             )
             let output = viewModel.transform(input: input)
-            
-            
             
             
             output.cancelButtonTapped
@@ -178,6 +185,40 @@ final class ProductPostEditViewController: BaseViewController {
                     owner.showEditCancelCheckAlert()
                 }
                 .disposed(by: disposeBag)
+            
+            output.photoSelectButton
+                .bind(with: self) { owner, _ in
+                    owner.openPHPicker()
+                }
+                .disposed(by: disposeBag)
+            
+            let images = output.selectedImageList
+                .asDriver(onErrorJustReturn: [])
+                .asObservable()
+                
+            images
+                .map { $0.count }
+                .bind(with: self) { owner, value in
+                    owner.photoSelectButton.updateLabel(withCount: value)
+                }
+                .disposed(by: disposeBag)
+                
+            images
+                .bind(to: collectionView.rx.items(cellIdentifier: SelectedPhotoCell.identifier, cellType: SelectedPhotoCell.self)) { row, element, cell in
+                    cell.cellConfig(withImageData: element)
+                    
+                    cell.xmarkButton.rx.tap
+                        .bind { _ in
+                            cellXmarkButtonTapped.accept(row)
+                        }
+                        .disposed(by: cell.disposeBag)
+                }
+                .disposed(by: disposeBag)
+                
+            
+            
+            
+            
             
         }
     }
@@ -228,7 +269,7 @@ final class ProductPostEditViewController: BaseViewController {
         photoBackView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.horizontalEdges.equalToSuperview().inset(10)
-            make.height.equalTo(150)
+            make.height.equalTo(200)
         }
         
         photoSelectButton.snp.makeConstraints { make in
@@ -240,7 +281,8 @@ final class ProductPostEditViewController: BaseViewController {
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(photoBackView.titleLabel.snp.bottom).offset(10)
             make.leading.equalTo(photoSelectButton.snp.trailing).offset(10)
-            make.trailing.bottom.equalToSuperview().inset(10)
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview().inset(10)
             collectionView.backgroundColor = .yellow
         }
         
@@ -372,5 +414,46 @@ final class ProductPostEditViewController: BaseViewController {
                 btn.setImage(UIImage(systemName: "checkmark.circle"), for: .normal)
             }
         }
+    }
+}
+
+// MARK: - PHPickerViewControllerDelegate
+
+extension ProductPostEditViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        dismiss(animated: true)
+        
+        var selectedImageDataList: [Data] = []
+        let dispatchGroup = DispatchGroup()
+        
+        for (index, result) in results.enumerated() {
+            guard index < 5 else { break }
+            
+            dispatchGroup.enter()
+            result.itemProvider.loadObject(ofClass: UIImage.self) { (object, error) in
+                if let image = object as? UIImage {
+                    if let data = image.jpegData(compressionQuality: 0.6) {
+                        selectedImageDataList.append(data)
+                        dispatchGroup.leave()
+                    }
+                }
+            }
+        }
+        
+        dispatchGroup.notify(queue: .main) { [weak self] in
+            if !selectedImageDataList.isEmpty {
+                self?.selectedImages.accept(selectedImageDataList)
+            }
+        }
+    }
+    
+    func openPHPicker() {
+        var configuration = PHPickerConfiguration()
+        configuration.selectionLimit = 5
+        configuration.filter = .images
+        
+        let picker = PHPickerViewController(configuration: configuration)
+        picker.delegate = self
+        present(picker, animated: true)
     }
 }

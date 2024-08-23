@@ -7,14 +7,14 @@
 
 import UIKit
 
+import RxSwift
 import SnapKit
 
 final class SelectedPhotoCell: BaseCollectionViewCell {
     
-    
     //MARK: - Properties
     
-    
+    var disposeBag = DisposeBag()
     
     //MARK: - UI Components
     
@@ -26,36 +26,47 @@ final class SelectedPhotoCell: BaseCollectionViewCell {
         return iv
     }()
     
-    private let xmarkButton: UIButton = {
+    let xmarkButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
         btn.tintColor = Constant.Color.Button.cancelColor
         return btn
     }()
     
+    
+    //MARK: - Life Cycle
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.disposeBag = DisposeBag()
+    }
+    
     //MARK: - Configurations
     
     override func configureHierarchy() {
         contentView.addSubviews(
-            photoImageView,
-            xmarkButton
+            xmarkButton,
+            photoImageView
         )
     }
     
     override func configureLayout() {
-        photoImageView.snp.makeConstraints { make in
-            make.top.leading.bottom.equalToSuperview().inset(5)
-            make.trailing.equalToSuperview().offset(-35)
+        xmarkButton.snp.makeConstraints { make in
+            make.top.trailing.equalToSuperview().inset(5)
+            make.size.equalTo(20)
         }
         
-        xmarkButton.snp.makeConstraints { make in
-            make.leading.equalTo(photoImageView.snp.trailing).offset(3)
-            make.top.trailing.equalToSuperview().inset(5)
-            make.size.equalTo(30)
+        photoImageView.snp.makeConstraints { make in
+            make.top.leading.bottom.equalToSuperview().inset(5)
+            make.trailing.equalTo(xmarkButton.snp.leading).offset(-1)
         }
     }
     
     override func configureUI() {
         super.configureUI()
+    }
+    
+    func cellConfig(withImageData data: Data) {
+        self.photoImageView.image = UIImage(data: data)
     }
 }
