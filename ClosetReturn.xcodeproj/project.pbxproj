@@ -15,6 +15,7 @@
 		4486AD972C7896C000A8BA9C /* PhotoButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4486AD962C7896C000A8BA9C /* PhotoButtonView.swift */; };
 		4486AD992C7898FE00A8BA9C /* PhotoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4486AD982C7898FE00A8BA9C /* PhotoButton.swift */; };
 		4486AD9B2C789DC000A8BA9C /* SelectedPhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4486AD9A2C789DC000A8BA9C /* SelectedPhotoCell.swift */; };
+		4486AD9E2C7905F900A8BA9C /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 4486AD9D2C7905F900A8BA9C /* Toast */; };
 		449AD0392C6CA0B200B0ED37 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0382C6CA0B200B0ED37 /* AppDelegate.swift */; };
 		449AD03B2C6CA0B200B0ED37 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD03A2C6CA0B200B0ED37 /* SceneDelegate.swift */; };
 		449AD03D2C6CA0B200B0ED37 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD03C2C6CA0B200B0ED37 /* ViewController.swift */; };
@@ -126,6 +127,7 @@
 				449AD0882C6F260A00B0ED37 /* RxCocoa in Frameworks */,
 				449AD0532C6CA23300B0ED37 /* SnapKit in Frameworks */,
 				449AD08A2C6F260A00B0ED37 /* RxSwift in Frameworks */,
+				4486AD9E2C7905F900A8BA9C /* Toast in Frameworks */,
 				449AD0792C6DE9ED00B0ED37 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -380,6 +382,7 @@
 				449AD0892C6F260A00B0ED37 /* RxSwift */,
 				449AD0972C6F6BC000B0ED37 /* IQKeyboardManagerSwift */,
 				44A39D642C735642009BCC44 /* Kingfisher */,
+				4486AD9D2C7905F900A8BA9C /* Toast */,
 			);
 			productName = ClosetReturn;
 			productReference = 449AD0352C6CA0B200B0ED37 /* ClosetReturn.app */;
@@ -415,6 +418,7 @@
 				449AD0862C6F260A00B0ED37 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				449AD0962C6F6BC000B0ED37 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 				44A39D632C735642009BCC44 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				4486AD9C2C7905F900A8BA9C /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 			);
 			productRefGroup = 449AD0362C6CA0B200B0ED37 /* Products */;
 			projectDirPath = "";
@@ -712,6 +716,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		4486AD9C2C7905F900A8BA9C /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scalessec/Toast-Swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.1;
+			};
+		};
 		449AD0512C6CA23300B0ED37 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit";
@@ -755,6 +767,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		4486AD9D2C7905F900A8BA9C /* Toast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4486AD9C2C7905F900A8BA9C /* XCRemoteSwiftPackageReference "Toast-Swift" */;
+			productName = Toast;
+		};
 		449AD0522C6CA23300B0ED37 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 449AD0512C6CA23300B0ED37 /* XCRemoteSwiftPackageReference "SnapKit" */;
