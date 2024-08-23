@@ -64,7 +64,7 @@ final class ProductPostEditViewController: BaseViewController {
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 140, height: 140)
+        layout.itemSize = CGSize(width: 150, height: 140)
         layout.sectionInset = .init(top: 0, left: 0, bottom: 0, right: 0)
         layout.minimumLineSpacing = 10
         
@@ -182,7 +182,11 @@ final class ProductPostEditViewController: BaseViewController {
                 price: priceTextField.rx.text.orEmpty,
                 brand: brandTextField.rx.text.orEmpty,
                 size: sizeTextField.rx.text.orEmpty,
-                category: categoryTextField.rx.text.orEmpty
+                category: categoryTextField.rx.text.orEmpty,
+                conditionSButtonTapped: conditionSOptionButton.rx.tap,
+                conditionAButtonTapped: conditionAOptionButton.rx.tap,
+                conditionBButtonTapped: conditionBOptionButton.rx.tap,
+                conditionCButtonTapped: conditionCOptionButton.rx.tap
             )
             let output = viewModel.transform(input: input)
             
@@ -238,9 +242,19 @@ final class ProductPostEditViewController: BaseViewController {
             output.priceString
                 .bind(to: priceTextField.rx.text)
                 .disposed(by: disposeBag)
-            
-            
-            
+
+            output.selectedConditionButton
+                .bind(with: self) { owner, value in
+                    switch value {
+                    case "S": owner.updateConditionOptionButtonAppearance(selected: owner.conditionSOptionButton)
+                    case "A": owner.updateConditionOptionButtonAppearance(selected: owner.conditionAOptionButton)
+                    case "B": owner.updateConditionOptionButtonAppearance(selected: owner.conditionBOptionButton)
+                    case "C": owner.updateConditionOptionButtonAppearance(selected: owner.conditionCOptionButton)
+                    default: owner.updateConditionOptionButtonAppearance(selected: UIButton())
+                    }
+                }
+                .disposed(by: disposeBag)
+                
             
             
         }
