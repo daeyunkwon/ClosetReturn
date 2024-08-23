@@ -11,6 +11,7 @@ import PhotosUI
 import RxSwift
 import RxCocoa
 import SnapKit
+import Toast
 
 final class ProductPostEditViewController: BaseViewController {
     
@@ -175,7 +176,9 @@ final class ProductPostEditViewController: BaseViewController {
                 cancelButtonTapped: cancelButton.rx.tap,
                 selectedImages: selectedImages,
                 photoSelectButton: photoSelectButton.rx.tap,
-                cellXmarkButtonTapped: cellXmarkButtonTapped
+                cellXmarkButtonTapped: cellXmarkButtonTapped,
+                doneButtonTapped: doneButton.rx.tap,
+                title: titleTextField.rx.text.orEmpty
             )
             let output = viewModel.transform(input: input)
             
@@ -186,9 +189,17 @@ final class ProductPostEditViewController: BaseViewController {
                 }
                 .disposed(by: disposeBag)
             
-            output.photoSelectButton
+            output.photoSelectButtonTapped
                 .bind(with: self) { owner, _ in
                     owner.openPHPicker()
+                }
+                .disposed(by: disposeBag)
+            
+            output.invalidInfo
+                .bind(with: self) { owner, type in
+                    var style = ToastStyle()
+                    style.backgroundColor = Constant.Color.brandColor
+                    owner.view.makeToast(type.rawValue, style: style)
                 }
                 .disposed(by: disposeBag)
             
@@ -214,7 +225,8 @@ final class ProductPostEditViewController: BaseViewController {
                         .disposed(by: cell.disposeBag)
                 }
                 .disposed(by: disposeBag)
-                
+            
+            
             
             
             
@@ -256,7 +268,7 @@ final class ProductPostEditViewController: BaseViewController {
     
     override func configureLayout() {
         scrollView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(15)
+            make.top.equalTo(view.safeAreaLayoutGuide)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
             make.bottom.equalToSuperview()
         }
@@ -283,7 +295,6 @@ final class ProductPostEditViewController: BaseViewController {
             make.leading.equalTo(photoSelectButton.snp.trailing).offset(10)
             make.trailing.equalToSuperview()
             make.bottom.equalToSuperview().inset(10)
-            collectionView.backgroundColor = .yellow
         }
         
         titleBackView.snp.makeConstraints { make in
