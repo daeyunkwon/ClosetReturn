@@ -18,13 +18,16 @@ final class ProductPostEditViewModel: BaseViewModel {
     
     private var images: [Data] = []
     private var title: String = ""
+    private var price: Int = 0
     
     private var imageValid = false
     private var titleValid = false
+    private var priceValid = false
     
     enum InvalidType: String, CaseIterable {
         case image = "상품 이미지를 등록해 주세요"
         case title = "제목을 입력해 주세요"
+        case price = "가격을 입력해 주세요"
     }
     
     //MARK: - Inputs
@@ -36,6 +39,7 @@ final class ProductPostEditViewModel: BaseViewModel {
         let cellXmarkButtonTapped: PublishRelay<Int>
         let doneButtonTapped: ControlEvent<Void>
         let title: ControlProperty<String>
+        let price: ControlProperty<String>
     }
     
     //MARK: - Outputs
@@ -45,6 +49,8 @@ final class ProductPostEditViewModel: BaseViewModel {
         let photoSelectButtonTapped: ControlEvent<Void>
         let selectedImageList: BehaviorRelay<[Data]>
         let invalidInfo: PublishRelay<InvalidType>
+        let priceString: PublishRelay<String>
+        let doneButtonTapped: ControlEvent<Void>
     }
     
     //MARK: - Methods
@@ -53,10 +59,11 @@ final class ProductPostEditViewModel: BaseViewModel {
         
         let selectedImageList = BehaviorRelay<[Data]>(value: self.images)
         let invalidInfo = PublishRelay<InvalidType>()
+        let priceString = PublishRelay<String>()
         
         input.doneButtonTapped
             .bind(with: self) { owner, _ in
-                let validList = [owner.imageValid, owner.titleValid]
+                let validList = [owner.imageValid, owner.titleValid, owner.priceValid]
                 for i in 0...validList.count - 1 {
                     if validList[i] == false {
                         invalidInfo.accept(InvalidType.allCases[i])
@@ -100,6 +107,28 @@ final class ProductPostEditViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
+        input.price
+            .map { $0.replacingOccurrences(of: ",", with: "").replacingOccurrences(of: "₩", with: "") }
+            .bind(with: self) { owner, value in
+                
+                if let number = Int(value) {
+                    print(value)
+                    owner.price = number
+                    priceString.accept("₩" + number.formatted())
+                } else {
+                    owner.price = 0
+                    priceString.accept("")
+                }
+                
+                if owner.price == 0 {
+                    owner.priceValid = false
+                } else {
+                    owner.priceValid = true
+                }
+                
+            }
+            .disposed(by: disposeBag)
+        
         
         
         
@@ -107,7 +136,9 @@ final class ProductPostEditViewModel: BaseViewModel {
             cancelButtonTapped: input.cancelButtonTapped,
             photoSelectButtonTapped: input.photoSelectButton,
             selectedImageList: selectedImageList,
-            invalidInfo: invalidInfo
+            invalidInfo: invalidInfo,
+            priceString: priceString,
+            doneButtonTapped: input.doneButtonTapped
         )
     }
 }

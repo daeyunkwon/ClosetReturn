@@ -178,10 +178,16 @@ final class ProductPostEditViewController: BaseViewController {
                 photoSelectButton: photoSelectButton.rx.tap,
                 cellXmarkButtonTapped: cellXmarkButtonTapped,
                 doneButtonTapped: doneButton.rx.tap,
-                title: titleTextField.rx.text.orEmpty
+                title: titleTextField.rx.text.orEmpty,
+                price: priceTextField.rx.text.orEmpty
             )
             let output = viewModel.transform(input: input)
             
+            output.doneButtonTapped
+                .bind(with: self) { owner, _ in
+                    owner.view.endEditing(true)
+                }
+                .disposed(by: disposeBag)
             
             output.cancelButtonTapped
                 .bind(with: self) { owner, _ in
@@ -199,7 +205,7 @@ final class ProductPostEditViewController: BaseViewController {
                 .bind(with: self) { owner, type in
                     var style = ToastStyle()
                     style.backgroundColor = Constant.Color.brandColor
-                    owner.view.makeToast(type.rawValue, style: style)
+                    owner.view.makeToast(type.rawValue,position: .center ,style: style)
                 }
                 .disposed(by: disposeBag)
             
@@ -226,7 +232,9 @@ final class ProductPostEditViewController: BaseViewController {
                 }
                 .disposed(by: disposeBag)
             
-            
+            output.priceString
+                .bind(to: priceTextField.rx.text)
+                .disposed(by: disposeBag)
             
             
             
