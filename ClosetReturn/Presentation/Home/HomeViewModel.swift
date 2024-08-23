@@ -53,6 +53,15 @@ final class HomeViewModel: BaseViewModel {
                     case .success(let value):
                         owner.productPosts.append(contentsOf: value.data)
                         owner.nextCursor = value.next_cursor
+                        
+                        value.data.forEach { post in
+                            if post.likes.contains(UserDefaultsManager.shared.userID) {
+                                UserDefaultsManager.shared.likeProducts[post.post_id] = true
+                            } else {
+                                UserDefaultsManager.shared.likeProducts.removeValue(forKey: post.post_id)
+                            }
+                        }
+                        
                         productPosts.onNext(owner.productPosts)
                     case .failure(let error):
                         networkError.accept((error, RouterType.posts))

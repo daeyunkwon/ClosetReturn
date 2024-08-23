@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		4486AD8D2C7789D900A8BA9C /* ProductPostEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4486AD8C2C7789D900A8BA9C /* ProductPostEditViewController.swift */; };
 		4486AD8F2C778AAC00A8BA9C /* ProductPostEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4486AD8E2C778AAC00A8BA9C /* ProductPostEditViewModel.swift */; };
+		4486AD912C78776000A8BA9C /* RoundedBackTitleContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4486AD902C78776000A8BA9C /* RoundedBackTitleContainerView.swift */; };
+		4486AD932C7880AE00A8BA9C /* RoundedBackTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4486AD922C7880AE00A8BA9C /* RoundedBackTextField.swift */; };
+		4486AD952C78905A00A8BA9C /* PlaceholderTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4486AD942C78905A00A8BA9C /* PlaceholderTextView.swift */; };
+		4486AD972C7896C000A8BA9C /* PhotoButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4486AD962C7896C000A8BA9C /* PhotoButtonView.swift */; };
+		4486AD992C7898FE00A8BA9C /* PhotoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4486AD982C7898FE00A8BA9C /* PhotoButton.swift */; };
+		4486AD9B2C789DC000A8BA9C /* SelectedPhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4486AD9A2C789DC000A8BA9C /* SelectedPhotoCell.swift */; };
 		449AD0392C6CA0B200B0ED37 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD0382C6CA0B200B0ED37 /* AppDelegate.swift */; };
 		449AD03B2C6CA0B200B0ED37 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD03A2C6CA0B200B0ED37 /* SceneDelegate.swift */; };
 		449AD03D2C6CA0B200B0ED37 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449AD03C2C6CA0B200B0ED37 /* ViewController.swift */; };
@@ -60,6 +66,12 @@
 /* Begin PBXFileReference section */
 		4486AD8C2C7789D900A8BA9C /* ProductPostEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPostEditViewController.swift; sourceTree = "<group>"; };
 		4486AD8E2C778AAC00A8BA9C /* ProductPostEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPostEditViewModel.swift; sourceTree = "<group>"; };
+		4486AD902C78776000A8BA9C /* RoundedBackTitleContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedBackTitleContainerView.swift; sourceTree = "<group>"; };
+		4486AD922C7880AE00A8BA9C /* RoundedBackTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedBackTextField.swift; sourceTree = "<group>"; };
+		4486AD942C78905A00A8BA9C /* PlaceholderTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderTextView.swift; sourceTree = "<group>"; };
+		4486AD962C7896C000A8BA9C /* PhotoButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoButtonView.swift; sourceTree = "<group>"; };
+		4486AD982C7898FE00A8BA9C /* PhotoButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoButton.swift; sourceTree = "<group>"; };
+		4486AD9A2C789DC000A8BA9C /* SelectedPhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedPhotoCell.swift; sourceTree = "<group>"; };
 		449AD0352C6CA0B200B0ED37 /* ClosetReturn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClosetReturn.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		449AD0382C6CA0B200B0ED37 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		449AD03A2C6CA0B200B0ED37 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -126,6 +138,7 @@
 			children = (
 				4486AD8E2C778AAC00A8BA9C /* ProductPostEditViewModel.swift */,
 				4486AD8C2C7789D900A8BA9C /* ProductPostEditViewController.swift */,
+				4486AD9A2C789DC000A8BA9C /* SelectedPhotoCell.swift */,
 			);
 			path = Edit;
 			sourceTree = "<group>";
@@ -294,6 +307,11 @@
 			isa = PBXGroup;
 			children = (
 				449AD08C2C6F2CD100B0ED37 /* InputTextFieldView.swift */,
+				4486AD902C78776000A8BA9C /* RoundedBackTitleContainerView.swift */,
+				4486AD922C7880AE00A8BA9C /* RoundedBackTextField.swift */,
+				4486AD942C78905A00A8BA9C /* PlaceholderTextView.swift */,
+				4486AD962C7896C000A8BA9C /* PhotoButtonView.swift */,
+				4486AD982C7898FE00A8BA9C /* PhotoButton.swift */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -428,6 +446,8 @@
 			files = (
 				449AD07D2C6E0B1900B0ED37 /* HeaderKey.swift in Sources */,
 				449AD0642C6DC4FB00B0ED37 /* UIView+Extension.swift in Sources */,
+				4486AD912C78776000A8BA9C /* RoundedBackTitleContainerView.swift in Sources */,
+				4486AD972C7896C000A8BA9C /* PhotoButtonView.swift in Sources */,
 				44A39D4B2C723843009BCC44 /* SignUpCompleteViewController.swift in Sources */,
 				44C0BAD42C75E68E00136643 /* ProductDetailViewModel.swift in Sources */,
 				449AD08F2C6F462B00B0ED37 /* LoginViewModel.swift in Sources */,
@@ -440,15 +460,19 @@
 				44C0BAD62C76064F00136643 /* ProductDetailCollectionViewCell.swift in Sources */,
 				449AD05E2C6D787400B0ED37 /* Constant.swift in Sources */,
 				449AD0722C6DC67A00B0ED37 /* BaseViewModel.swift in Sources */,
+				4486AD952C78905A00A8BA9C /* PlaceholderTextView.swift in Sources */,
+				4486AD9B2C789DC000A8BA9C /* SelectedPhotoCell.swift in Sources */,
 				449AD0852C6F25A900B0ED37 /* LoginViewController.swift in Sources */,
 				44C0BAB12C738CA900136643 /* RefreshModel.swift in Sources */,
 				4486AD8F2C778AAC00A8BA9C /* ProductPostEditViewModel.swift in Sources */,
 				449AD0832C6E0ED600B0ED37 /* UIViewController+Extension.swift in Sources */,
+				4486AD992C7898FE00A8BA9C /* PhotoButton.swift in Sources */,
 				449AD07B2C6DFEF700B0ED37 /* Router.swift in Sources */,
 				449AD0932C6F693A00B0ED37 /* SignUpViewModel.swift in Sources */,
 				44A39D5C2C73391D009BCC44 /* HomeViewModel.swift in Sources */,
 				44C0BAB32C7493DC00136643 /* JoinUser.swift in Sources */,
 				44A39D572C7334D7009BCC44 /* Login.swift in Sources */,
+				4486AD932C7880AE00A8BA9C /* RoundedBackTextField.swift in Sources */,
 				44A39D602C7347AF009BCC44 /* ProductPost.swift in Sources */,
 				449AD06B2C6DC5CE00B0ED37 /* BaseTableViewCell.swift in Sources */,
 				44A39D4D2C725F86009BCC44 /* UserDefaultsManager.swift in Sources */,

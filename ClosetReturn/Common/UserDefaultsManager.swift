@@ -59,5 +59,6 @@ final class UserDefaultsManager {
         UserDefaults.standard.removeObject(forKey: UserDefaultsKey.accessToken.rawValue)
         UserDefaults.standard.removeObject(forKey: UserDefaultsKey.refreshToken.rawValue)
         UserDefaults.standard.removeObject(forKey: UserDefaultsKey.userID.rawValue)
+        UserDefaults.standard.removeObject(forKey: UserDefaultsKey.likeProducts.rawValue)
     }
 }

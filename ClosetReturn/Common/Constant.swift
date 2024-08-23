@@ -14,6 +14,7 @@ enum Constant {
         enum View {
             static let viewBackgroundColor: UIColor = .systemBackground
             static let navigationBarTintColor: UIColor = .systemFill
+            static let warningColor: UIColor = UIColor(red: 0.98, green: 0.41, blue: 0.34, alpha: 1.00)
         }
         
         enum Text {

@@ -120,8 +120,9 @@ final class HomeViewController: BaseViewController {
             .bind(with: self) { owner, _ in
                 let vm = ProductPostEditViewModel()
                 let vc = ProductPostEditViewController(viewModel: vm)
-                vc.modalPresentationStyle = .fullScreen
-                owner.present(vc, animated: true)
+                let navi = UINavigationController(rootViewController: vc)
+                navi.modalPresentationStyle = .fullScreen
+                owner.present(navi, animated: true)
             }
             .disposed(by: disposeBag)
         
