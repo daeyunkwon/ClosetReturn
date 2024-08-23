@@ -19,15 +19,21 @@ final class ProductPostEditViewModel: BaseViewModel {
     private var images: [Data] = []
     private var title: String = ""
     private var price: Int = 0
+    private var brand: String = ""
+    private var size: String = ""
     
     private var imageValid = false
     private var titleValid = false
     private var priceValid = false
+    private var brandValid = false
+    private var sizeValid = false
     
     enum InvalidType: String, CaseIterable {
         case image = "상품 이미지를 등록해 주세요"
         case title = "제목을 입력해 주세요"
         case price = "가격을 입력해 주세요"
+        case brand = "브랜드명을 입력해 주세요"
+        case size = "사이즈 정보를 입력해 주세요"
     }
     
     //MARK: - Inputs
@@ -40,6 +46,8 @@ final class ProductPostEditViewModel: BaseViewModel {
         let doneButtonTapped: ControlEvent<Void>
         let title: ControlProperty<String>
         let price: ControlProperty<String>
+        let brand: ControlProperty<String>
+        let size: ControlProperty<String>
     }
     
     //MARK: - Outputs
@@ -63,7 +71,7 @@ final class ProductPostEditViewModel: BaseViewModel {
         
         input.doneButtonTapped
             .bind(with: self) { owner, _ in
-                let validList = [owner.imageValid, owner.titleValid, owner.priceValid]
+                let validList = [owner.imageValid, owner.titleValid, owner.priceValid, owner.brandValid, owner.sizeValid]
                 for i in 0...validList.count - 1 {
                     if validList[i] == false {
                         invalidInfo.accept(InvalidType.allCases[i])
@@ -112,7 +120,6 @@ final class ProductPostEditViewModel: BaseViewModel {
             .bind(with: self) { owner, value in
                 
                 if let number = Int(value) {
-                    print(value)
                     owner.price = number
                     priceString.accept("₩" + number.formatted())
                 } else {
@@ -125,7 +132,30 @@ final class ProductPostEditViewModel: BaseViewModel {
                 } else {
                     owner.priceValid = true
                 }
+            }
+            .disposed(by: disposeBag)
+        
+        input.brand
+            .bind(with: self) { owner, value in
+                owner.brand = value
                 
+                if owner.brand.trimmingCharacters(in: .whitespaces).isEmpty {
+                    owner.brandValid = false
+                } else {
+                    owner.brandValid = true
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        input.size
+            .bind(with: self) { owner, value in
+                owner.size = value
+                
+                if owner.size.trimmingCharacters(in: .whitespaces).isEmpty {
+                    owner.sizeValid = false
+                } else {
+                    owner.sizeValid = true
+                }
             }
             .disposed(by: disposeBag)
         
