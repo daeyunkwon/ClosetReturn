@@ -21,12 +21,14 @@ final class ProductPostEditViewModel: BaseViewModel {
     private var price: Int = 0
     private var brand: String = ""
     private var size: String = ""
+    private var category: String = ""
     
     private var imageValid = false
     private var titleValid = false
     private var priceValid = false
     private var brandValid = false
     private var sizeValid = false
+    private var categoryValid = false
     
     enum InvalidType: String, CaseIterable {
         case image = "상품 이미지를 등록해 주세요"
@@ -34,6 +36,7 @@ final class ProductPostEditViewModel: BaseViewModel {
         case price = "가격을 입력해 주세요"
         case brand = "브랜드명을 입력해 주세요"
         case size = "사이즈 정보를 입력해 주세요"
+        case category = "카테고리 정보를 입력해 주세요"
     }
     
     //MARK: - Inputs
@@ -48,6 +51,7 @@ final class ProductPostEditViewModel: BaseViewModel {
         let price: ControlProperty<String>
         let brand: ControlProperty<String>
         let size: ControlProperty<String>
+        let category: ControlProperty<String>
     }
     
     //MARK: - Outputs
@@ -71,7 +75,7 @@ final class ProductPostEditViewModel: BaseViewModel {
         
         input.doneButtonTapped
             .bind(with: self) { owner, _ in
-                let validList = [owner.imageValid, owner.titleValid, owner.priceValid, owner.brandValid, owner.sizeValid]
+                let validList = [owner.imageValid, owner.titleValid, owner.priceValid, owner.brandValid, owner.sizeValid, owner.categoryValid]
                 for i in 0...validList.count - 1 {
                     if validList[i] == false {
                         invalidInfo.accept(InvalidType.allCases[i])
@@ -155,6 +159,18 @@ final class ProductPostEditViewModel: BaseViewModel {
                     owner.sizeValid = false
                 } else {
                     owner.sizeValid = true
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        input.category
+            .bind(with: self) { owner, value in
+                owner.category = value
+                
+                if owner.category.trimmingCharacters(in: .whitespaces).isEmpty {
+                    owner.categoryValid = false
+                } else {
+                    owner.categoryValid = true
                 }
             }
             .disposed(by: disposeBag)

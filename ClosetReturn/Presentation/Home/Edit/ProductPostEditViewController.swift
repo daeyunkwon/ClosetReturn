@@ -181,7 +181,8 @@ final class ProductPostEditViewController: BaseViewController {
                 title: titleTextField.rx.text.orEmpty,
                 price: priceTextField.rx.text.orEmpty,
                 brand: brandTextField.rx.text.orEmpty,
-                size: sizeTextField.rx.text.orEmpty
+                size: sizeTextField.rx.text.orEmpty,
+                category: categoryTextField.rx.text.orEmpty
             )
             let output = viewModel.transform(input: input)
             
