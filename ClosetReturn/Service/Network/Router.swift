@@ -22,6 +22,7 @@ enum Router {
     case postUpload(uploadPostRequest: UploadPostRequestModel)
     case postModify(postID: String, uploadPostRequest: UploadPostRequestModel)
     case postDelete(postID: String)
+    case commentUpload(postID: String, comment: String)
 }
 
 enum RouterType {
@@ -37,6 +38,7 @@ enum RouterType {
     case postUpload
     case postModify
     case postDelete
+    case commnetUpload
 }
 
 extension Router: URLRequestConvertible {
@@ -46,7 +48,7 @@ extension Router: URLRequestConvertible {
     
     var method: HTTPMethod {
         switch self {
-        case .emailValidation, .joinUser, .loginUser, .like, .imageUpload, .postUpload:
+        case .emailValidation, .joinUser, .loginUser, .like, .imageUpload, .postUpload, .commentUpload:
             return .post
             
         case .posts, .imageFetch, .refresh, .postDetail:
@@ -74,6 +76,7 @@ extension Router: URLRequestConvertible {
         case .postUpload: return APIURL.posts
         case .postModify(let postID, _): return APIURL.postModifyURL(postID: postID)
         case .postDelete(let postID): return APIURL.postDeleteURL(postID: postID)
+        case .commentUpload(let postID, _): return APIURL.commentUploadURL(postID: postID)
         }
     }
     
@@ -98,7 +101,7 @@ extension Router: URLRequestConvertible {
                 HeaderKey.refresh.rawValue: UserDefaultsManager.shared.refreshToken
             ]
             
-        case .like, .postDetail, .postUpload, .postModify:
+        case .like, .postDetail, .postUpload, .postModify, .commentUpload:
             return [
                 HeaderKey.authorization.rawValue: UserDefaultsManager.shared.accessToken,
                 HeaderKey.contentType.rawValue: HeaderKey.json.rawValue,
@@ -142,6 +145,11 @@ extension Router: URLRequestConvertible {
             
         case .postModify(_, let uploadPostRequest):
             return try? JSONEncoder().encode(uploadPostRequest)
+            
+        case .commentUpload(_, let comment):
+            return try? JSONEncoder().encode([
+                BodyKey.content.rawValue: comment
+            ])
             
         default:
             return nil
