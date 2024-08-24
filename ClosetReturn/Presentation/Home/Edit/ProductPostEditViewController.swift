@@ -186,7 +186,8 @@ final class ProductPostEditViewController: BaseViewController {
                 conditionSButtonTapped: conditionSOptionButton.rx.tap,
                 conditionAButtonTapped: conditionAOptionButton.rx.tap,
                 conditionBButtonTapped: conditionBOptionButton.rx.tap,
-                conditionCButtonTapped: conditionCOptionButton.rx.tap
+                conditionCButtonTapped: conditionCOptionButton.rx.tap,
+                content: contentTextView.rx.text.orEmpty
             )
             let output = viewModel.transform(input: input)
             
@@ -254,9 +255,10 @@ final class ProductPostEditViewController: BaseViewController {
                     }
                 }
                 .disposed(by: disposeBag)
-                
             
-            
+            output.contentPlaceholder
+                .bind(to: contentTextView.placeholderLabel.rx.isHidden)
+                .disposed(by: disposeBag)
         }
     }
     

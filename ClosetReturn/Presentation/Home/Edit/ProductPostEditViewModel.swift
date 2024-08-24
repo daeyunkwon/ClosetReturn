@@ -23,6 +23,7 @@ final class ProductPostEditViewModel: BaseViewModel {
     private var size: String = ""
     private var category: String = ""
     private var condition: String = ""
+    private var content: String = ""
     
     private var imageValid = false
     private var titleValid = false
@@ -31,6 +32,7 @@ final class ProductPostEditViewModel: BaseViewModel {
     private var sizeValid = false
     private var categoryValid = false
     private var conditionValid = false
+    private var contentValid = false
     
     enum InvalidType: String, CaseIterable {
         case image = "상품 이미지를 등록해 주세요"
@@ -40,6 +42,7 @@ final class ProductPostEditViewModel: BaseViewModel {
         case size = "사이즈 정보를 입력해 주세요"
         case category = "카테고리 정보를 입력해 주세요"
         case condition = "컨디션 상태를 선택해 주세요"
+        case content = "내용을 입력해 주세요"
     }
     
     //MARK: - Inputs
@@ -59,6 +62,7 @@ final class ProductPostEditViewModel: BaseViewModel {
         let conditionAButtonTapped: ControlEvent<Void>
         let conditionBButtonTapped: ControlEvent<Void>
         let conditionCButtonTapped: ControlEvent<Void>
+        let content: ControlProperty<String>
     }
     
     //MARK: - Outputs
@@ -71,6 +75,7 @@ final class ProductPostEditViewModel: BaseViewModel {
         let priceString: PublishRelay<String>
         let doneButtonTapped: ControlEvent<Void>
         let selectedConditionButton: PublishRelay<String>
+        let contentPlaceholder: PublishRelay<Bool>
     }
     
     //MARK: - Methods
@@ -81,10 +86,11 @@ final class ProductPostEditViewModel: BaseViewModel {
         let invalidInfo = PublishRelay<InvalidType>()
         let priceString = PublishRelay<String>()
         let selectedConditionButton = PublishRelay<String>()
+        let contentPlaceholder = PublishRelay<Bool>()
         
         input.doneButtonTapped
             .bind(with: self) { owner, _ in
-                let validList = [owner.imageValid, owner.titleValid, owner.priceValid, owner.brandValid, owner.sizeValid, owner.categoryValid, owner.conditionValid]
+                let validList = [owner.imageValid, owner.titleValid, owner.priceValid, owner.brandValid, owner.sizeValid, owner.categoryValid, owner.conditionValid, owner.contentValid]
                 for i in 0...validList.count - 1 {
                     if validList[i] == false {
                         invalidInfo.accept(InvalidType.allCases[i])
@@ -207,6 +213,20 @@ final class ProductPostEditViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
+        input.content
+            .bind(with: self) { owner, value in
+                owner.content = value
+                
+                if owner.content.trimmingCharacters(in: .whitespaces).isEmpty {
+                    contentPlaceholder.accept(false)
+                    owner.contentValid = false
+                } else {
+                    contentPlaceholder.accept(true)
+                    owner.contentValid = true
+                }
+            }
+            .disposed(by: disposeBag)
+        
         
         
         
@@ -217,7 +237,8 @@ final class ProductPostEditViewModel: BaseViewModel {
             invalidInfo: invalidInfo,
             priceString: priceString,
             doneButtonTapped: input.doneButtonTapped,
-            selectedConditionButton: selectedConditionButton
+            selectedConditionButton: selectedConditionButton,
+            contentPlaceholder: contentPlaceholder
         )
     }
 }

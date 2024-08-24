@@ -212,7 +212,7 @@ final class ProductDetailViewModel: BaseViewModel {
                     .asObservable()
                     .bind(with: self) { owner, result in
                         switch result {
-                        case .success(let value):
+                        case .success(_):
                             if newValue {
                                 UserDefaultsManager.shared.likeProducts[owner.postID] = true
                                 likeStatus.accept(true)
