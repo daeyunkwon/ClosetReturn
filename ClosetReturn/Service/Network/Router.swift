@@ -19,6 +19,7 @@ enum Router {
     case like(postID: String, isLike: Bool)
     case postDetail(postID: String)
     case imageUpload(image: [Data], fileName: String, mimeType: String)
+    case postUpload(uploadPostRequest: UploadPostRequestModel)
 }
 
 enum RouterType {
@@ -31,6 +32,7 @@ enum RouterType {
     case like
     case postDetail
     case imageUpload
+    case postUpload
 }
 
 extension Router: URLRequestConvertible {
@@ -40,7 +42,7 @@ extension Router: URLRequestConvertible {
     
     var method: HTTPMethod {
         switch self {
-        case .emailValidation, .joinUser, .loginUser, .like, .imageUpload:
+        case .emailValidation, .joinUser, .loginUser, .like, .imageUpload, .postUpload:
             return .post
             
         case .posts, .imageFetch, .refresh, .postDetail:
@@ -59,6 +61,7 @@ extension Router: URLRequestConvertible {
         case .like(let postID, _): return APIURL.likeURL(postID: postID)
         case .postDetail(let postID): return APIURL.postDetailURL(postID: postID)
         case .imageUpload: return APIURL.imageUpload
+        case .postUpload: return APIURL.posts
         }
     }
     
@@ -83,7 +86,7 @@ extension Router: URLRequestConvertible {
                 HeaderKey.refresh.rawValue: UserDefaultsManager.shared.refreshToken
             ]
             
-        case .like, .postDetail:
+        case .like, .postDetail, .postUpload:
             return [
                 HeaderKey.contentType.rawValue: HeaderKey.json.rawValue,
                 HeaderKey.authorization.rawValue: UserDefaultsManager.shared.accessToken,
@@ -121,6 +124,9 @@ extension Router: URLRequestConvertible {
             return try? JSONEncoder().encode([
                 BodyKey.like_status.rawValue: isLike
             ])
+            
+        case .postUpload(let uploadPostRequest):
+            return try? JSONEncoder().encode(uploadPostRequest)
             
         default:
             return nil
