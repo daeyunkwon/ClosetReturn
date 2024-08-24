@@ -20,6 +20,7 @@ enum Router {
     case postDetail(postID: String)
     case imageUpload(image: [Data], fileName: String, mimeType: String)
     case postUpload(uploadPostRequest: UploadPostRequestModel)
+    case modifyPost(postID: String, uploadPostRequest: UploadPostRequestModel)
 }
 
 enum RouterType {
@@ -47,6 +48,9 @@ extension Router: URLRequestConvertible {
             
         case .posts, .imageFetch, .refresh, .postDetail:
             return .get
+            
+        case .modifyPost:
+            return .put
         }
     }
     
@@ -62,6 +66,7 @@ extension Router: URLRequestConvertible {
         case .postDetail(let postID): return APIURL.postDetailURL(postID: postID)
         case .imageUpload: return APIURL.imageUpload
         case .postUpload: return APIURL.posts
+        case .modifyPost(let postID, _): return APIURL.postModifyURL(postID: postID)
         }
     }
     
@@ -86,10 +91,10 @@ extension Router: URLRequestConvertible {
                 HeaderKey.refresh.rawValue: UserDefaultsManager.shared.refreshToken
             ]
             
-        case .like, .postDetail, .postUpload:
+        case .like, .postDetail, .postUpload, .modifyPost:
             return [
-                HeaderKey.contentType.rawValue: HeaderKey.json.rawValue,
                 HeaderKey.authorization.rawValue: UserDefaultsManager.shared.accessToken,
+                HeaderKey.contentType.rawValue: HeaderKey.json.rawValue,
                 HeaderKey.sesacKey.rawValue: APIKey.sesacKey,
             ]
             
@@ -126,6 +131,9 @@ extension Router: URLRequestConvertible {
             ])
             
         case .postUpload(let uploadPostRequest):
+            return try? JSONEncoder().encode(uploadPostRequest)
+            
+        case .modifyPost(_, let uploadPostRequest):
             return try? JSONEncoder().encode(uploadPostRequest)
             
         default:
