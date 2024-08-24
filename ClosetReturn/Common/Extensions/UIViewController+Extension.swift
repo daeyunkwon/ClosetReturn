@@ -7,6 +7,8 @@
 
 import UIKit
 
+import Toast
+
 extension UIViewController {
     
     func setRootViewController(_ viewController: UIViewController) {
@@ -95,5 +97,11 @@ extension UIViewController {
         }))
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         present(alert, animated: true)
+    }
+    
+    func showToast(message: String, position: ToastPosition) {
+        var style = ToastStyle()
+        style.backgroundColor = Constant.Color.brandColor
+        view.makeToast(message, position: position, style: style)
     }
 }

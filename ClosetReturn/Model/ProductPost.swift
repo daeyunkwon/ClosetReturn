@@ -21,7 +21,7 @@ struct ProductPost: Decodable {
     let content2: String
     let content3: String
     let content4: String
-    let content5: String
+    let content5: String?
     let createdAt: String
     let creator: Creator
     let files: [String]

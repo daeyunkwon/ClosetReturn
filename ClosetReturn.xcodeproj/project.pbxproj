@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		443A2F082C79CCD60010FB19 /* Files.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443A2F072C79CCD60010FB19 /* Files.swift */; };
+		443A2F0A2C79DA910010FB19 /* UploadPostRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443A2F092C79DA910010FB19 /* UploadPostRequestModel.swift */; };
 		4486AD8D2C7789D900A8BA9C /* ProductPostEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4486AD8C2C7789D900A8BA9C /* ProductPostEditViewController.swift */; };
 		4486AD8F2C778AAC00A8BA9C /* ProductPostEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4486AD8E2C778AAC00A8BA9C /* ProductPostEditViewModel.swift */; };
 		4486AD912C78776000A8BA9C /* RoundedBackTitleContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4486AD902C78776000A8BA9C /* RoundedBackTitleContainerView.swift */; };
@@ -67,6 +68,7 @@
 
 /* Begin PBXFileReference section */
 		443A2F072C79CCD60010FB19 /* Files.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Files.swift; sourceTree = "<group>"; };
+		443A2F092C79DA910010FB19 /* UploadPostRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostRequestModel.swift; sourceTree = "<group>"; };
 		4486AD8C2C7789D900A8BA9C /* ProductPostEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPostEditViewController.swift; sourceTree = "<group>"; };
 		4486AD8E2C778AAC00A8BA9C /* ProductPostEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPostEditViewModel.swift; sourceTree = "<group>"; };
 		4486AD902C78776000A8BA9C /* RoundedBackTitleContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedBackTitleContainerView.swift; sourceTree = "<group>"; };
@@ -240,6 +242,7 @@
 				449AD07E2C6E0BA800B0ED37 /* BodyKey.swift */,
 				449AD0802C6E0E3800B0ED37 /* NetworkError.swift */,
 				44C0BAB02C738CA900136643 /* RefreshModel.swift */,
+				443A2F092C79DA910010FB19 /* UploadPostRequestModel.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -463,6 +466,7 @@
 				44A39D5E2C733F87009BCC44 /* HomeTableViewCell.swift in Sources */,
 				449AD03D2C6CA0B200B0ED37 /* ViewController.swift in Sources */,
 				449AD08D2C6F2CD100B0ED37 /* InputTextFieldView.swift in Sources */,
+				443A2F0A2C79DA910010FB19 /* UploadPostRequestModel.swift in Sources */,
 				449AD0392C6CA0B200B0ED37 /* AppDelegate.swift in Sources */,
 				44C0BAD62C76064F00136643 /* ProductDetailCollectionViewCell.swift in Sources */,
 				449AD05E2C6D787400B0ED37 /* Constant.swift in Sources */,

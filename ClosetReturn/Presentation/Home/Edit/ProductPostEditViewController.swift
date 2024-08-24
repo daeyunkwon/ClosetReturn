@@ -11,7 +11,6 @@ import PhotosUI
 import RxSwift
 import RxCocoa
 import SnapKit
-import Toast
 
 final class ProductPostEditViewController: BaseViewController {
     
@@ -157,6 +156,8 @@ final class ProductPostEditViewController: BaseViewController {
     구매자가 알아야 할 정보를 입력해 주세요.
     
     고장, 파손, 오염, 물빠짐, 얼룩 등의 손상 정보는 꼭 기재해 주세요!!
+    
+    #해시태그1 #해시태그2 와 같은 방법으로 해시태그를 설정 가능합니다:)
     """)
     
     //MARK: - Life Cycle
@@ -211,9 +212,7 @@ final class ProductPostEditViewController: BaseViewController {
             
             output.invalidInfo
                 .bind(with: self) { owner, type in
-                    var style = ToastStyle()
-                    style.backgroundColor = Constant.Color.brandColor
-                    owner.view.makeToast(type.rawValue,position: .center ,style: style)
+                    owner.showToast(message: type.rawValue, position: .center)
                 }
                 .disposed(by: disposeBag)
             
@@ -263,6 +262,14 @@ final class ProductPostEditViewController: BaseViewController {
             output.networkError
                 .bind(with: self) { owner, value in
                     owner.showNetworkRequestFailAlert(errorType: value.0, routerType: value.1)
+                }
+                .disposed(by: disposeBag)
+            
+            output.succeedUpload
+                .bind(with: self) { owner, _ in
+                    let viewModel = viewModel as ProductPostEditViewModel
+                    viewModel.postUploadSucceed(true)
+                    owner.dismiss(animated: true)
                 }
                 .disposed(by: disposeBag)
         }

@@ -14,6 +14,8 @@ final class ProductPostEditViewModel: BaseViewModel {
     
     //MARK: - Properties
     
+    var postUploadSucceed: (Bool) -> Void = { sender in }
+    
     private let disposeBag = DisposeBag()
     
     private var images: [Data] = []
@@ -77,6 +79,7 @@ final class ProductPostEditViewModel: BaseViewModel {
         let selectedConditionButton: PublishRelay<String>
         let contentPlaceholder: PublishRelay<Bool>
         let networkError: PublishRelay<(NetworkError, RouterType)>
+        let succeedUpload: PublishRelay<Bool>
     }
     
     //MARK: - Methods
@@ -89,9 +92,12 @@ final class ProductPostEditViewModel: BaseViewModel {
         let selectedConditionButton = PublishRelay<String>()
         let contentPlaceholder = PublishRelay<Bool>()
         let networkError = PublishRelay<(NetworkError, RouterType)>()
+        let succeedUpload = PublishRelay<Bool>()
         
         input.doneButtonTapped
-            .bind(with: self) { owner, _ in
+            .bind(with: self) {
+                owner,
+                _ in
                 //상품 등록 거부
                 let validList = [owner.imageValid, owner.titleValid, owner.priceValid, owner.brandValid, owner.sizeValid, owner.categoryValid, owner.conditionValid, owner.contentValid]
                 for i in 0...validList.count - 1 {
@@ -104,10 +110,38 @@ final class ProductPostEditViewModel: BaseViewModel {
                 //상품 등록 허용
                 NetworkManager.shared.uploadImage(images: owner.images)
                     .asObservable()
-                    .bind(with: self) { owner, result in
+                    .bind(with: self) {
+                        owner,
+                        result in
                         switch result {
                         case .success(let value):
-                            print(value)
+                            //이미지 업로드 이후에 포스트 업로드 시도
+                            let uploadPostRequest = UploadPostRequestModel(
+                                title: owner.title,
+                                price: owner.price,
+                                content: owner.content,
+                                content1: owner.size,
+                                content2: owner.category,
+                                content3: owner.brand,
+                                content4: owner.condition,
+                                content5: nil,
+                                product_id: APIKey.productID,
+                                files: value.files
+                            )
+                            NetworkManager.shared.performRequest(api: .postUpload(uploadPostRequest: uploadPostRequest), model: ProductPost.self)
+                                .asObservable()
+                                .bind(with: self) { owner, result in
+                                    switch result {
+                                    case .success(_):
+                                        print("DEBUG: 포스트 업로드 성공")
+                                        succeedUpload.accept(true)
+                                        
+                                    case .failure(let error):
+                                        networkError.accept((error, RouterType.postUpload))
+                                    }
+                                }
+                                .disposed(by: owner.disposeBag)
+                            
                         case .failure(let error):
                             networkError.accept((error, RouterType.imageUpload))
                         }
@@ -254,7 +288,8 @@ final class ProductPostEditViewModel: BaseViewModel {
             doneButtonTapped: input.doneButtonTapped,
             selectedConditionButton: selectedConditionButton,
             contentPlaceholder: contentPlaceholder,
-            networkError: networkError
+            networkError: networkError,
+            succeedUpload: succeedUpload
         )
     }
 }

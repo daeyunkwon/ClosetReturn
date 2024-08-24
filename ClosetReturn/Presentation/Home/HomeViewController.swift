@@ -119,6 +119,10 @@ final class HomeViewController: BaseViewController {
         output.createPostButtonTapped
             .bind(with: self) { owner, _ in
                 let vm = ProductPostEditViewModel()
+                vm.postUploadSucceed = { [weak self] sender in
+                    guard let self else { return }
+                    self.showToast(message: "상품이 등록되었습니다🎉", position: .bottom)
+                }
                 let vc = ProductPostEditViewController(viewModel: vm)
                 let navi = UINavigationController(rootViewController: vc)
                 navi.modalPresentationStyle = .fullScreen
