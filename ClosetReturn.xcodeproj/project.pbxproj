@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		443A2F082C79CCD60010FB19 /* Files.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443A2F072C79CCD60010FB19 /* Files.swift */; };
 		4486AD8D2C7789D900A8BA9C /* ProductPostEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4486AD8C2C7789D900A8BA9C /* ProductPostEditViewController.swift */; };
 		4486AD8F2C778AAC00A8BA9C /* ProductPostEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4486AD8E2C778AAC00A8BA9C /* ProductPostEditViewModel.swift */; };
 		4486AD912C78776000A8BA9C /* RoundedBackTitleContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4486AD902C78776000A8BA9C /* RoundedBackTitleContainerView.swift */; };
@@ -65,6 +66,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		443A2F072C79CCD60010FB19 /* Files.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Files.swift; sourceTree = "<group>"; };
 		4486AD8C2C7789D900A8BA9C /* ProductPostEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPostEditViewController.swift; sourceTree = "<group>"; };
 		4486AD8E2C778AAC00A8BA9C /* ProductPostEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPostEditViewModel.swift; sourceTree = "<group>"; };
 		4486AD902C78776000A8BA9C /* RoundedBackTitleContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedBackTitleContainerView.swift; sourceTree = "<group>"; };
@@ -255,6 +257,7 @@
 				44C0BAB22C7493DC00136643 /* JoinUser.swift */,
 				44A39D562C7334D7009BCC44 /* Login.swift */,
 				44A39D5F2C7347AF009BCC44 /* ProductPost.swift */,
+				443A2F072C79CCD60010FB19 /* Files.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -473,6 +476,7 @@
 				4486AD992C7898FE00A8BA9C /* PhotoButton.swift in Sources */,
 				449AD07B2C6DFEF700B0ED37 /* Router.swift in Sources */,
 				449AD0932C6F693A00B0ED37 /* SignUpViewModel.swift in Sources */,
+				443A2F082C79CCD60010FB19 /* Files.swift in Sources */,
 				44A39D5C2C73391D009BCC44 /* HomeViewModel.swift in Sources */,
 				44C0BAB32C7493DC00136643 /* JoinUser.swift in Sources */,
 				44A39D572C7334D7009BCC44 /* Login.swift in Sources */,

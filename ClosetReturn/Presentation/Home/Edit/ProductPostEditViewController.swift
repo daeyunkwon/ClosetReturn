@@ -259,6 +259,12 @@ final class ProductPostEditViewController: BaseViewController {
             output.contentPlaceholder
                 .bind(to: contentTextView.placeholderLabel.rx.isHidden)
                 .disposed(by: disposeBag)
+            
+            output.networkError
+                .bind(with: self) { owner, value in
+                    owner.showNetworkRequestFailAlert(errorType: value.0, routerType: value.1)
+                }
+                .disposed(by: disposeBag)
         }
     }
     

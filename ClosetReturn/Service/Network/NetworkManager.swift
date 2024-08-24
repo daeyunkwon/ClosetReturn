@@ -116,7 +116,7 @@ final class NetworkManager {
     
     func fetchImageData(imagePath: String, completionHandler: @escaping (Result<Data, NetworkError>) -> Void) {
         do {
-            let request = try Router.image(imagePath: imagePath).asURLRequest()
+            let request = try Router.imageFetch(imagePath: imagePath).asURLRequest()
             AF.request(request)
                 .validate(statusCode: 200...299)
                 .responseData { response in
@@ -170,6 +170,66 @@ final class NetworkManager {
         } catch {
             print("Error: request 생성 실패 \(error)")
             completionHandler(.failure(NetworkError.failedToCreateRequest))
+        }
+    }
+    
+    func uploadImage(images: [Data]) -> Single<Result<Files, NetworkError>> {
+        return Single.create { single in
+            
+            let api = Router.imageUpload(image: images, fileName: "", mimeType: "")
+            let url = api.baseURL + api.path
+            let headers: HTTPHeaders = [
+                HeaderKey.sesacKey.rawValue: APIKey.sesacKey,
+                HeaderKey.contentType.rawValue: HeaderKey.multipart.rawValue,
+                HeaderKey.authorization.rawValue: UserDefaultsManager.shared.accessToken
+            ]
+            
+            AF.upload(multipartFormData: { multipartFormData in
+                for image in images {
+                    multipartFormData.append(image, withName: "files", fileName: UUID().uuidString, mimeType: "image/jpeg")
+                }
+            }, to: url, headers: headers)
+            .validate(statusCode: 200..<300)
+            .responseDecodable(of: Files.self) { response in
+                
+                if response.response?.statusCode == 419 {
+                    //토큰 만료 -> 액세스 토큰 갱신 시도
+                    self.refreshToken { result in
+                        switch result {
+                        case .success(_):
+                            print("DEBUG: 액세스 토큰 갱신 완료")
+                            
+                            switch response.result {
+                            case .success(let value):
+                                print("DEBUG: 이미지 파일 업로드 성공")
+                                single(.success(.success(value)))
+                                
+                            case .failure(let error):
+                                print("DEBUG: 이미지 파일 업로드 실패")
+                                print(error)
+                                single(.success(.failure(NetworkError.statusError(codeNumber: error.responseCode ?? 0))))
+                            }
+                            
+                        case .failure(let error):
+                            print("Error: 액세스 토큰 갱신 실패")
+                            single(.success(.failure(error)))
+                            return
+                        }
+                    }
+                } else {
+                    switch response.result {
+                    case .success(let value):
+                        print("DEBUG: 이미지 파일 업로드 성공")
+                        single(.success(.success(value)))
+                        
+                    case .failure(let error):
+                        print("DEBUG: 이미지 파일 업로드 실패")
+                        print(error)
+                        single(.success(.failure(NetworkError.statusError(codeNumber: error.responseCode ?? 0))))
+                    }
+                }
+            }
+            return Disposables.create()
         }
     }
     

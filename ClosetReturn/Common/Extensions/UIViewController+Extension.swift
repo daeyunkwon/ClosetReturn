@@ -22,7 +22,7 @@ extension UIViewController {
     func showNetworkRequestFailAlert(errorType: NetworkError, routerType: RouterType) {
         var message: String = "오류가 발생하였습니다. 잠시 후 다시 시도해 주세요."
         var errorType = errorType
-        print("얼럿에서 받은 에러타입: \(errorType)")
+        print("DEBUG: 얼럿에서 받은 에러타입: \(errorType)")
         
         switch errorType {
             
@@ -32,7 +32,11 @@ extension UIViewController {
         case .statusError(let codeNumber):
             switch codeNumber {
             case 400:
-                message = "이메일 또는 비밀번호를 입력해주세요."
+                switch routerType {
+                case .loginUser: message = "이메일 또는 비밀번호를 입력해주세요."
+                case .imageUpload: message = "제한 사항과 맞지 않아 업로드 실패되었습니다.(파일 용량은 5MB 이하만 허용됩니다.)"
+                default: break
+                }
                 
             case 401:
                 switch routerType {

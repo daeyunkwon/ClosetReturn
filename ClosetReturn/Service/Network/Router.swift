@@ -14,10 +14,11 @@ enum Router {
     case joinUser(email: String, password: String, nick: String, phoneNum: String?, birthDay: String?)
     case loginUser(email: String, password: String)
     case posts(next: String, limit: String, product_id: String)
-    case image(imagePath: String)
+    case imageFetch(imagePath: String)
     case refresh
     case like(postID: String, isLike: Bool)
     case postDetail(postID: String)
+    case imageUpload(image: [Data], fileName: String, mimeType: String)
 }
 
 enum RouterType {
@@ -29,6 +30,7 @@ enum RouterType {
     case refresh
     case like
     case postDetail
+    case imageUpload
 }
 
 extension Router: URLRequestConvertible {
@@ -38,10 +40,10 @@ extension Router: URLRequestConvertible {
     
     var method: HTTPMethod {
         switch self {
-        case .emailValidation, .joinUser, .loginUser, .like:
+        case .emailValidation, .joinUser, .loginUser, .like, .imageUpload:
             return .post
             
-        case .posts, .image, .refresh, .postDetail:
+        case .posts, .imageFetch, .refresh, .postDetail:
             return .get
         }
     }
@@ -52,10 +54,11 @@ extension Router: URLRequestConvertible {
         case .joinUser: return APIURL.usersJoin
         case .loginUser: return APIURL.usersLogin
         case .posts: return APIURL.posts
-        case .image(let imagePath): return "v1/\(imagePath)"
+        case .imageFetch(let imagePath): return "v1/\(imagePath)"
         case .refresh: return APIURL.refresh
         case .like(let postID, _): return APIURL.likeURL(postID: postID)
         case .postDetail(let postID): return APIURL.postDetailURL(postID: postID)
+        case .imageUpload: return APIURL.imageUpload
         }
     }
     
@@ -67,7 +70,7 @@ extension Router: URLRequestConvertible {
                 HeaderKey.sesacKey.rawValue: APIKey.sesacKey
             ]
         
-        case .posts, .image:
+        case .posts, .imageFetch:
             return [
                 HeaderKey.authorization.rawValue: UserDefaultsManager.shared.accessToken,
                 HeaderKey.sesacKey.rawValue: APIKey.sesacKey,
@@ -86,6 +89,9 @@ extension Router: URLRequestConvertible {
                 HeaderKey.authorization.rawValue: UserDefaultsManager.shared.accessToken,
                 HeaderKey.sesacKey.rawValue: APIKey.sesacKey,
             ]
+            
+        default:
+            return [:]
         }
     }
     

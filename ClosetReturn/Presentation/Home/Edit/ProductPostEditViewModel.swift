@@ -76,6 +76,7 @@ final class ProductPostEditViewModel: BaseViewModel {
         let doneButtonTapped: ControlEvent<Void>
         let selectedConditionButton: PublishRelay<String>
         let contentPlaceholder: PublishRelay<Bool>
+        let networkError: PublishRelay<(NetworkError, RouterType)>
     }
     
     //MARK: - Methods
@@ -87,9 +88,11 @@ final class ProductPostEditViewModel: BaseViewModel {
         let priceString = PublishRelay<String>()
         let selectedConditionButton = PublishRelay<String>()
         let contentPlaceholder = PublishRelay<Bool>()
+        let networkError = PublishRelay<(NetworkError, RouterType)>()
         
         input.doneButtonTapped
             .bind(with: self) { owner, _ in
+                //상품 등록 거부
                 let validList = [owner.imageValid, owner.titleValid, owner.priceValid, owner.brandValid, owner.sizeValid, owner.categoryValid, owner.conditionValid, owner.contentValid]
                 for i in 0...validList.count - 1 {
                     if validList[i] == false {
@@ -98,6 +101,18 @@ final class ProductPostEditViewModel: BaseViewModel {
                     }
                 }
                 
+                //상품 등록 허용
+                NetworkManager.shared.uploadImage(images: owner.images)
+                    .asObservable()
+                    .bind(with: self) { owner, result in
+                        switch result {
+                        case .success(let value):
+                            print(value)
+                        case .failure(let error):
+                            networkError.accept((error, RouterType.imageUpload))
+                        }
+                    }
+                    .disposed(by: owner.disposeBag)
             }
             .disposed(by: disposeBag)
         
@@ -238,7 +253,8 @@ final class ProductPostEditViewModel: BaseViewModel {
             priceString: priceString,
             doneButtonTapped: input.doneButtonTapped,
             selectedConditionButton: selectedConditionButton,
-            contentPlaceholder: contentPlaceholder
+            contentPlaceholder: contentPlaceholder,
+            networkError: networkError
         )
     }
 }
