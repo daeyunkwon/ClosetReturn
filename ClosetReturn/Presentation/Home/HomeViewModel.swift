@@ -25,6 +25,7 @@ final class HomeViewModel: BaseViewModel {
         let cellLikeButtonTap: PublishRelay<(String, Bool, Int)>
         let cellTapped: ControlEvent<ProductPost>
         let createPostButtonTapped: ControlEvent<Void>
+        let fetchReload: PublishRelay<Void>
     }
     
     //MARK: - Outputs
@@ -71,6 +72,13 @@ final class HomeViewModel: BaseViewModel {
         }
         
         fetchPosts(nextCursor: "")
+        
+        input.fetchReload
+            .bind(with: self) { owner, _ in
+                owner.productPosts = []
+                fetchPosts(nextCursor: "")
+            }
+            .disposed(by: disposeBag)
         
         input.cellWillDisplay
             .bind(with: self) { owner, value in

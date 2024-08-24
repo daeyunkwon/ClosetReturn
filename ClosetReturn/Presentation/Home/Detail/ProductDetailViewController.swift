@@ -251,12 +251,15 @@ final class ProductDetailViewController: BaseViewController {
         if let viewModel = viewModel as? ProductDetailViewModel {
             
             let fetch = PublishRelay<Void>()
+            let deleteAlertButtonTapped = PublishRelay<Void>()
             
             let input = ProductDetailViewModel.Input(
                 fetchData: fetch,
                 backButtonTapped: backButton.rx.tap,
                 likeButtonTapped: likeButton.rx.tap,
-                editMenuButtonTapped: editMenuTapped
+                editMenuButtonTapped: editMenuTapped,
+                deleteMenuButtonTapped: deleteMenuTapped, 
+                deleteAlertButtonTapped: deleteAlertButtonTapped
             )
             let output = viewModel.transform(input: input)
             
@@ -359,6 +362,21 @@ final class ProductDetailViewController: BaseViewController {
                     let navi = UINavigationController(rootViewController: vc)
                     navi.modalPresentationStyle = .fullScreen
                     owner.present(navi, animated: true)
+                }
+                .disposed(by: disposeBag)
+            
+            output.deleteMenuButtonTapped
+                .bind(with: self) { owner, _ in
+                    owner.showDeleteCheckAlert { okAction in
+                        deleteAlertButtonTapped.accept(())
+                    }
+                }
+                .disposed(by: disposeBag)
+            
+            output.succeedDelete
+                .bind(with: self) { owner, _ in
+                    viewModel.postDeleteSucceed()
+                    owner.popViewController()
                 }
                 .disposed(by: disposeBag)
             
@@ -557,5 +575,12 @@ final class ProductDetailViewController: BaseViewController {
             self.likeButton.setImage(UIImage(systemName: "suit.heart")?.applyingSymbolConfiguration(.init(weight: .semibold)), for: .normal)
             self.likeButton.tintColor = .white
         }
+    }
+    
+    private func showDeleteCheckAlert(okAction: @escaping ((UIAlertAction) -> Void)) {
+        let alert = UIAlertController(title: "등록 상품 삭제", message: "정말 삭제하시겠습니까?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "삭제하기", style: .destructive, handler: okAction))
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        self.present(alert, animated: true)
     }
 }

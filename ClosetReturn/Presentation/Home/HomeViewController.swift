@@ -63,12 +63,14 @@ final class HomeViewController: BaseViewController {
     
     override func bind() {
         let likeButtonTap = PublishRelay<(String, Bool, Int)>()
+        let fetchReload = PublishRelay<Void>()
         
         let input = HomeViewModel.Input(
             cellWillDisplay: tableView.rx.willDisplayCell,
             cellLikeButtonTap: likeButtonTap,
             cellTapped: tableView.rx.modelSelected(ProductPost.self),
-            createPostButtonTapped: createPostButton.rx.tap
+            createPostButtonTapped: createPostButton.rx.tap,
+            fetchReload: fetchReload
         )
         let output = viewModel.transform(input: input)
             
@@ -76,6 +78,10 @@ final class HomeViewController: BaseViewController {
         output.cellTapped
             .bind(with: self) { owner, data in
                 let vm = ProductDetailViewModel()
+                vm.postDeleteSucceed = { [weak self] in
+                    self?.showToast(message: "해당 상품이 삭제되었습니다", position: .bottom)
+                    fetchReload.accept(())
+                }
                 vm.postID = data.post_id
                 let vc = ProductDetailViewController(viewModel: vm)
                 owner.pushViewController(vc)

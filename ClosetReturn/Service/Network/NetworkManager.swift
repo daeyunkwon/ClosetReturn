@@ -233,6 +233,59 @@ final class NetworkManager {
         }
     }
     
+    func postDelete(api: Router) -> Single<Result<Void, NetworkError>> {
+        return Single.create { single in
+            do {
+                
+                let request = try api.asURLRequest()
+                
+                AF.request(request).response { response in
+                    
+                    if response.response?.statusCode == 419 {
+                        //토큰 만료 -> 액세스 토큰 갱신 시도
+                        self.refreshToken { result in
+                            switch result {
+                            case .success(_):
+                                print("DEBUG: 액세스 토큰 갱신 완료")
+                                
+                                switch response.result {
+                                case .success(let value):
+                                    print("DEBUG: 포스트 삭제 성공")
+                                    single(.success(.success(())))
+                                    
+                                case .failure(let error):
+                                    print("DEBUG: 포스트 삭제 실패")
+                                    print(error)
+                                    single(.success(.failure(NetworkError.statusError(codeNumber: error.responseCode ?? 0))))
+                                }
+                                
+                            case .failure(let error):
+                                print("Error: 액세스 토큰 갱신 실패")
+                                single(.success(.failure(error)))
+                                return
+                            }
+                        }
+                    } else {
+                        switch response.result {
+                        case .success(let value):
+                            print("DEBUG: 포스트 삭제 성공")
+                            single(.success(.success(())))
+                            
+                        case .failure(let error):
+                            print("DEBUG: 포스트 삭제 실패")
+                            print(error)
+                            single(.success(.failure(NetworkError.statusError(codeNumber: error.responseCode ?? 0))))
+                        }
+                    }
+                }
+            } catch {
+                print("Error: request 만들기 실패: \(error)")
+                single(.success(.failure(NetworkError.failedToCreateRequest)))
+            }
+            return Disposables.create()
+        }
+    }
+    
     func refreshToken(completionHandler: @escaping (Result<Bool, NetworkError>) -> Void) {
         do {
             let request = try Router.refresh.asURLRequest()

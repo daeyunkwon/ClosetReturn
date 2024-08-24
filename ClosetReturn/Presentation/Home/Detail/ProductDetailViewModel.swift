@@ -21,6 +21,8 @@ final class ProductDetailViewModel: BaseViewModel {
     
     private var productImageList: [Data] = []
     
+    var postDeleteSucceed: () -> Void = { }
+    
     //MARK: - Inputs
     
     struct Input {
@@ -28,6 +30,8 @@ final class ProductDetailViewModel: BaseViewModel {
         let backButtonTapped: ControlEvent<Void>
         let likeButtonTapped: ControlEvent<Void>
         let editMenuButtonTapped: PublishRelay<Void>
+        let deleteMenuButtonTapped: PublishRelay<Void>
+        let deleteAlertButtonTapped: PublishRelay<Void>
     }
     
     //MARK: - Outputs
@@ -48,6 +52,8 @@ final class ProductDetailViewModel: BaseViewModel {
         let likeStatus: PublishRelay<Bool>
         let editMenuButtonTapped: PublishRelay<ProductPost>
         let hideMenuButton: PublishRelay<Bool>
+        let deleteMenuButtonTapped: PublishRelay<Void>
+        let succeedDelete: PublishRelay<Void>
 
         let networkError: PublishRelay<(NetworkError, RouterType)>
     }
@@ -72,6 +78,7 @@ final class ProductDetailViewModel: BaseViewModel {
         let likeStatus = PublishRelay<Bool>()
         let editMenuButtonTapped = PublishRelay<ProductPost>()
         let hideMenuButton = PublishRelay<Bool>()
+        let succeedDelete = PublishRelay<Void>()
         
         let networkError = PublishRelay<(NetworkError, RouterType)>()
         
@@ -254,7 +261,22 @@ final class ProductDetailViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
-        
+        input.deleteAlertButtonTapped
+            .bind(with: self) { owner, _ in
+                
+                NetworkManager.shared.postDelete(api: .postDelete(postID: owner.postID))
+                    .asObservable()
+                    .bind(onNext: { result in
+                        switch result {
+                        case .success(_):
+                            succeedDelete.accept(())
+                        case .failure(let error):
+                            networkError.accept((error, RouterType.postDelete))
+                        }
+                    })
+                    .disposed(by: owner.disposeBag)
+            }
+            .disposed(by: disposeBag)
         
         
         return Output(
@@ -273,7 +295,13 @@ final class ProductDetailViewModel: BaseViewModel {
             likeStatus: likeStatus,
             editMenuButtonTapped: editMenuButtonTapped,
             hideMenuButton: hideMenuButton,
+            deleteMenuButtonTapped: input.deleteMenuButtonTapped,
+            succeedDelete: succeedDelete,
             networkError: networkError
         )
     }
+}
+
+struct Test: Decodable {
+    
 }
