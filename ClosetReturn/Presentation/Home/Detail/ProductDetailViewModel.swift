@@ -32,6 +32,7 @@ final class ProductDetailViewModel: BaseViewModel {
         let editMenuButtonTapped: PublishRelay<Void>
         let deleteMenuButtonTapped: PublishRelay<Void>
         let deleteAlertButtonTapped: PublishRelay<Void>
+        let commentButtonTapped: ControlEvent<Void>
     }
     
     //MARK: - Outputs
@@ -54,6 +55,7 @@ final class ProductDetailViewModel: BaseViewModel {
         let hideMenuButton: PublishRelay<Bool>
         let deleteMenuButtonTapped: PublishRelay<Void>
         let succeedDelete: PublishRelay<Void>
+        let commentButtonTapped: ControlEvent<Void>
 
         let networkError: PublishRelay<(NetworkError, RouterType)>
     }
@@ -297,6 +299,7 @@ final class ProductDetailViewModel: BaseViewModel {
             hideMenuButton: hideMenuButton,
             deleteMenuButtonTapped: input.deleteMenuButtonTapped,
             succeedDelete: succeedDelete,
+            commentButtonTapped: input.commentButtonTapped,
             networkError: networkError
         )
     }

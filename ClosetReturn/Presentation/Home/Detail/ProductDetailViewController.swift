@@ -259,7 +259,8 @@ final class ProductDetailViewController: BaseViewController {
                 likeButtonTapped: likeButton.rx.tap,
                 editMenuButtonTapped: editMenuTapped,
                 deleteMenuButtonTapped: deleteMenuTapped, 
-                deleteAlertButtonTapped: deleteAlertButtonTapped
+                deleteAlertButtonTapped: deleteAlertButtonTapped,
+                commentButtonTapped: commentButton.rx.tap
             )
             let output = viewModel.transform(input: input)
             
@@ -383,6 +384,13 @@ final class ProductDetailViewController: BaseViewController {
             output.hideMenuButton
                 .bind(to: menuButton.rx.isHidden)
                 .disposed(by: disposeBag)
+            
+            output.commentButtonTapped
+                .bind(with: self) { owner, _ in
+                    let vc = CommentViewController()
+                    owner.pushViewController(vc)
+                }
+                .disposed(by: disposeBag)
         }
     }
     
@@ -400,6 +408,7 @@ final class ProductDetailViewController: BaseViewController {
     }
     
     override func setupNavi() {
+        navigationItem.title = ""
         navigationItem.setHidesBackButton(true, animated: false)
     }
     
