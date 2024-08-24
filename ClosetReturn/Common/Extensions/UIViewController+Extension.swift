@@ -65,6 +65,13 @@ extension UIViewController {
                 message = "과호출로 인해 서버에서 데이터 제공이 거부되었습니다. 잠시 후 다시 시도해 주세요."
             case 444:
                 message = "비정상 URL 접근으로 인해 데이터를 불러오는데 실패하였습니다. 잠시 후 다시 시도해 주세요."
+            
+            case 445:
+                switch routerType {
+                case .postDelete: message = "본인이 작성한 글에 대해서만 삭제 가능합니다."
+                default: break
+                }
+                
             case 500:
                 message = "서버에 문제가 발생하여 데이터를 불러오는데 실패하였습니다. 잠시 후 다시 시도해 주세요."
             default: break

@@ -20,7 +20,8 @@ enum Router {
     case postDetail(postID: String)
     case imageUpload(image: [Data], fileName: String, mimeType: String)
     case postUpload(uploadPostRequest: UploadPostRequestModel)
-    case modifyPost(postID: String, uploadPostRequest: UploadPostRequestModel)
+    case postModify(postID: String, uploadPostRequest: UploadPostRequestModel)
+    case postDelete(postID: String)
 }
 
 enum RouterType {
@@ -34,6 +35,8 @@ enum RouterType {
     case postDetail
     case imageUpload
     case postUpload
+    case postModify
+    case postDelete
 }
 
 extension Router: URLRequestConvertible {
@@ -49,8 +52,11 @@ extension Router: URLRequestConvertible {
         case .posts, .imageFetch, .refresh, .postDetail:
             return .get
             
-        case .modifyPost:
+        case .postModify:
             return .put
+            
+        case .postDelete:
+            return .delete
         }
     }
     
@@ -66,7 +72,8 @@ extension Router: URLRequestConvertible {
         case .postDetail(let postID): return APIURL.postDetailURL(postID: postID)
         case .imageUpload: return APIURL.imageUpload
         case .postUpload: return APIURL.posts
-        case .modifyPost(let postID, _): return APIURL.postModifyURL(postID: postID)
+        case .postModify(let postID, _): return APIURL.postModifyURL(postID: postID)
+        case .postDelete(let postID): return APIURL.postDeleteURL(postID: postID)
         }
     }
     
@@ -78,7 +85,7 @@ extension Router: URLRequestConvertible {
                 HeaderKey.sesacKey.rawValue: APIKey.sesacKey
             ]
         
-        case .posts, .imageFetch:
+        case .posts, .imageFetch, .postDelete:
             return [
                 HeaderKey.authorization.rawValue: UserDefaultsManager.shared.accessToken,
                 HeaderKey.sesacKey.rawValue: APIKey.sesacKey,
@@ -91,7 +98,7 @@ extension Router: URLRequestConvertible {
                 HeaderKey.refresh.rawValue: UserDefaultsManager.shared.refreshToken
             ]
             
-        case .like, .postDetail, .postUpload, .modifyPost:
+        case .like, .postDetail, .postUpload, .postModify:
             return [
                 HeaderKey.authorization.rawValue: UserDefaultsManager.shared.accessToken,
                 HeaderKey.contentType.rawValue: HeaderKey.json.rawValue,
@@ -133,7 +140,7 @@ extension Router: URLRequestConvertible {
         case .postUpload(let uploadPostRequest):
             return try? JSONEncoder().encode(uploadPostRequest)
             
-        case .modifyPost(_, let uploadPostRequest):
+        case .postModify(_, let uploadPostRequest):
             return try? JSONEncoder().encode(uploadPostRequest)
             
         default:
