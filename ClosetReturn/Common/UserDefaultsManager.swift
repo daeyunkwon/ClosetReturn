@@ -39,10 +39,10 @@ final class UserDefaultsManager {
     
     var userID: String {
         get {
-            return UserDefaults.standard.string(forKey: UserDefaultsKey.refreshToken.rawValue) ?? ""
+            return UserDefaults.standard.string(forKey: UserDefaultsKey.userID.rawValue) ?? ""
         }
         set {
-            UserDefaults.standard.setValue(newValue, forKey: UserDefaultsKey.refreshToken.rawValue)
+            UserDefaults.standard.setValue(newValue, forKey: UserDefaultsKey.userID.rawValue)
         }
     }
     

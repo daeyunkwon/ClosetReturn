@@ -17,6 +17,7 @@ final class ProductDetailViewModel: BaseViewModel {
     private let disposeBag = DisposeBag()
     
     var postID = ""
+    private var productPost: ProductPost?
     
     private var productImageList: [Data] = []
     
@@ -26,6 +27,7 @@ final class ProductDetailViewModel: BaseViewModel {
         let fetchData: PublishRelay<Void>
         let backButtonTapped: ControlEvent<Void>
         let likeButtonTapped: ControlEvent<Void>
+        let editMenuButtonTapped: PublishRelay<Void>
     }
     
     //MARK: - Outputs
@@ -44,6 +46,8 @@ final class ProductDetailViewModel: BaseViewModel {
         let productImageDatas: PublishRelay<[Data]>
         let backButtonTapped: ControlEvent<Void>
         let likeStatus: PublishRelay<Bool>
+        let editMenuButtonTapped: PublishRelay<ProductPost>
+        let hideMenuButton: PublishRelay<Bool>
 
         let networkError: PublishRelay<(NetworkError, RouterType)>
     }
@@ -66,6 +70,8 @@ final class ProductDetailViewModel: BaseViewModel {
         let content = PublishRelay<String>()
         let productImageDatas = PublishRelay<[Data]>()
         let likeStatus = PublishRelay<Bool>()
+        let editMenuButtonTapped = PublishRelay<ProductPost>()
+        let hideMenuButton = PublishRelay<Bool>()
         
         let networkError = PublishRelay<(NetworkError, RouterType)>()
         
@@ -80,9 +86,18 @@ final class ProductDetailViewModel: BaseViewModel {
             .subscribe(with: self) { owner, result in
                 switch result {
                 case .success(let data):
+                    owner.productPost = data
                     resultData.onNext(data)
+                    
+                    if data.creator.user_id == UserDefaultsManager.shared.userID {
+                        hideMenuButton.accept(false)
+                    } else {
+                        hideMenuButton.accept(true)
+                    }
+                    
                 case .failure(let error):
                     networkError.accept((error, RouterType.postDetail))
+                    hideMenuButton.accept(true)
                 }
                 
                 if UserDefaultsManager.shared.likeProducts[owner.postID] != nil {
@@ -100,6 +115,8 @@ final class ProductDetailViewModel: BaseViewModel {
             .map { $0.files }
             .filter { !$0.isEmpty}
             .subscribe(with: self) { owner, path in
+                
+                owner.productImageList = []
                 
                 for path in path {
                     NetworkManager.shared.fetchImageData(imagePath: path) { result in
@@ -229,6 +246,15 @@ final class ProductDetailViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
+        input.editMenuButtonTapped
+            .bind(with: self) { owner, _ in
+                if let data = owner.productPost {
+                    editMenuButtonTapped.accept(data)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        
         
         
         return Output(
@@ -245,6 +271,8 @@ final class ProductDetailViewModel: BaseViewModel {
             productImageDatas: productImageDatas,
             backButtonTapped: input.backButtonTapped,
             likeStatus: likeStatus,
+            editMenuButtonTapped: editMenuButtonTapped,
+            hideMenuButton: hideMenuButton,
             networkError: networkError
         )
     }

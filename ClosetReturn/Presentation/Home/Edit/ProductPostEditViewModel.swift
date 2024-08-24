@@ -14,9 +14,12 @@ final class ProductPostEditViewModel: BaseViewModel {
     
     //MARK: - Properties
     
-    var postUploadSucceed: (Bool) -> Void = { sender in }
-    
     private let disposeBag = DisposeBag()
+    
+    var postUploadSucceed: (Bool) -> Void = { sender in }
+    var productPost: ProductPost?
+    
+    private var navigationTitle: String
     
     private var images: [Data] = []
     private var title: String = ""
@@ -47,9 +50,29 @@ final class ProductPostEditViewModel: BaseViewModel {
         case content = "내용을 입력해 주세요"
     }
     
+    enum ViewType {
+        case new
+        case modify
+    }
+    var viewType: ViewType
+    
+    //MARK: - Init
+    
+    init(viewType: ViewType) {
+        self.viewType = viewType
+        
+        switch viewType {
+        case .new:
+            self.navigationTitle = "상품 등록"
+        case .modify:
+            self.navigationTitle = "상품 수정"
+        }
+    }
+    
     //MARK: - Inputs
     
     struct Input {
+        let viewDidLoad: Observable<Void>
         let cancelButtonTapped: ControlEvent<Void>
         let selectedImages: PublishRelay<[Data]>
         let photoSelectButton: ControlEvent<Void>
@@ -80,6 +103,14 @@ final class ProductPostEditViewModel: BaseViewModel {
         let contentPlaceholder: PublishRelay<Bool>
         let networkError: PublishRelay<(NetworkError, RouterType)>
         let succeedUpload: PublishRelay<Bool>
+        let title: BehaviorRelay<String>
+        let price: BehaviorRelay<String>
+        let brand: BehaviorRelay<String>
+        let size: BehaviorRelay<String>
+        let category: BehaviorRelay<String>
+        let condition: BehaviorRelay<String>
+        let content: BehaviorRelay<String>
+        let navigationTitle: BehaviorRelay<String>
     }
     
     //MARK: - Methods
@@ -93,6 +124,60 @@ final class ProductPostEditViewModel: BaseViewModel {
         let contentPlaceholder = PublishRelay<Bool>()
         let networkError = PublishRelay<(NetworkError, RouterType)>()
         let succeedUpload = PublishRelay<Bool>()
+        
+        let title = BehaviorRelay<String>(value: self.title)
+        let price = BehaviorRelay<String>(value: String(self.price))
+        let brand = BehaviorRelay<String>(value: self.brand)
+        let size = BehaviorRelay<String>(value: self.size)
+        let category = BehaviorRelay<String>(value: self.category)
+        let condition = BehaviorRelay<String>(value: self.condition)
+        let content = BehaviorRelay<String>(value: self.content)
+        let navigationTitle = BehaviorRelay<String>(value: self.navigationTitle)
+        
+        
+        input.viewDidLoad
+            .bind(with: self) { owner, _ in
+                if let data = self.productPost {
+                    
+                    for imagePath in data.files {
+                        NetworkManager.shared.fetchImageData(imagePath: imagePath) { [weak self] result in
+                            switch result {
+                            case .success(let value):
+                                self?.images.append(value)
+                                selectedImageList.accept(owner.images)
+                            case .failure(let error):
+                                print(error)
+                            }
+                        }
+                    }
+                    
+                    owner.title = data.title
+                    owner.price = data.price ?? 0
+                    owner.brand = data.content3
+                    owner.size = data.content1
+                    owner.category = data.content2
+                    owner.condition = data.content4
+                    owner.content = data.content
+                    
+                    owner.imageValid = true
+                    owner.titleValid = true
+                    owner.priceValid = true
+                    owner.brandValid = true
+                    owner.sizeValid = true
+                    owner.categoryValid = true
+                    owner.conditionValid = true
+                    owner.contentValid = true
+                    
+                    title.accept(owner.title)
+                    price.accept(String(owner.price))
+                    brand.accept(owner.brand)
+                    size.accept(owner.size)
+                    category.accept(owner.category)
+                    condition.accept(owner.condition)
+                    content.accept(owner.content)
+                }
+            }
+            .disposed(by: disposeBag)
         
         input.doneButtonTapped
             .bind(with: self) {
@@ -128,19 +213,38 @@ final class ProductPostEditViewModel: BaseViewModel {
                                 product_id: APIKey.productID,
                                 files: value.files
                             )
-                            NetworkManager.shared.performRequest(api: .postUpload(uploadPostRequest: uploadPostRequest), model: ProductPost.self)
-                                .asObservable()
-                                .bind(with: self) { owner, result in
-                                    switch result {
-                                    case .success(_):
-                                        print("DEBUG: 포스트 업로드 성공")
-                                        succeedUpload.accept(true)
-                                        
-                                    case .failure(let error):
-                                        networkError.accept((error, RouterType.postUpload))
+                            
+                            switch owner.viewType {
+                            case .new:
+                                NetworkManager.shared.performRequest(api: .postUpload(uploadPostRequest: uploadPostRequest), model: ProductPost.self)
+                                    .asObservable()
+                                    .bind(with: self) { owner, result in
+                                        switch result {
+                                        case .success(_):
+                                            print("DEBUG: 포스트 업로드 성공")
+                                            succeedUpload.accept(true)
+                                            
+                                        case .failure(let error):
+                                            networkError.accept((error, RouterType.postUpload))
+                                        }
                                     }
-                                }
-                                .disposed(by: owner.disposeBag)
+                                    .disposed(by: owner.disposeBag)
+                            
+                            case .modify:
+                                NetworkManager.shared.performRequest(api: .modifyPost(postID: owner.productPost?.post_id ?? "", uploadPostRequest: uploadPostRequest), model: ProductPost.self)
+                                    .asObservable()
+                                    .bind(with: self) { owner, result in
+                                        switch result {
+                                        case .success(_):
+                                            print("DEBUG: 포스트 수정 성공")
+                                            succeedUpload.accept(true)
+                                            
+                                        case .failure(let error):
+                                            networkError.accept((error, RouterType.postUpload))
+                                        }
+                                    }
+                                    .disposed(by: owner.disposeBag)
+                            }
                             
                         case .failure(let error):
                             networkError.accept((error, RouterType.imageUpload))
@@ -172,9 +276,9 @@ final class ProductPostEditViewModel: BaseViewModel {
             .disposed(by: disposeBag)
         
         input.title
+            .skip(1)
             .bind(with: self) { owner, value in
                 owner.title = value
-                
                 if owner.title.trimmingCharacters(in: .whitespaces).isEmpty {
                     owner.titleValid = false
                 } else {
@@ -184,6 +288,7 @@ final class ProductPostEditViewModel: BaseViewModel {
             .disposed(by: disposeBag)
         
         input.price
+            .skip(1)
             .map { $0.replacingOccurrences(of: ",", with: "").replacingOccurrences(of: "₩", with: "") }
             .bind(with: self) { owner, value in
                 
@@ -204,6 +309,7 @@ final class ProductPostEditViewModel: BaseViewModel {
             .disposed(by: disposeBag)
         
         input.brand
+            .skip(1)
             .bind(with: self) { owner, value in
                 owner.brand = value
                 
@@ -216,6 +322,7 @@ final class ProductPostEditViewModel: BaseViewModel {
             .disposed(by: disposeBag)
         
         input.size
+            .skip(1)
             .bind(with: self) { owner, value in
                 owner.size = value
                 
@@ -228,6 +335,7 @@ final class ProductPostEditViewModel: BaseViewModel {
             .disposed(by: disposeBag)
         
         input.category
+            .skip(1)
             .bind(with: self) { owner, value in
                 owner.category = value
                 
@@ -249,6 +357,7 @@ final class ProductPostEditViewModel: BaseViewModel {
             .map { "C" }
         
         Observable.merge(conditionS, conditionA, conditionB, conditionC)
+            .skip(1)
             .subscribe(with: self) { owner, value in
                 owner.condition = value
                 
@@ -263,6 +372,7 @@ final class ProductPostEditViewModel: BaseViewModel {
             .disposed(by: disposeBag)
         
         input.content
+            .skip(1)
             .bind(with: self) { owner, value in
                 owner.content = value
                 
@@ -289,7 +399,15 @@ final class ProductPostEditViewModel: BaseViewModel {
             selectedConditionButton: selectedConditionButton,
             contentPlaceholder: contentPlaceholder,
             networkError: networkError,
-            succeedUpload: succeedUpload
+            succeedUpload: succeedUpload,
+            title: title,
+            price: price,
+            brand: brand,
+            size: size,
+            category: category,
+            condition: condition,
+            content: content,
+            navigationTitle: navigationTitle
         )
     }
 }

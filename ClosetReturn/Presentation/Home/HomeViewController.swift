@@ -118,7 +118,7 @@ final class HomeViewController: BaseViewController {
         
         output.createPostButtonTapped
             .bind(with: self) { owner, _ in
-                let vm = ProductPostEditViewModel()
+                let vm = ProductPostEditViewModel(viewType: .new)
                 vm.postUploadSucceed = { [weak self] sender in
                     guard let self else { return }
                     self.showToast(message: "상품이 등록되었습니다🎉", position: .bottom)

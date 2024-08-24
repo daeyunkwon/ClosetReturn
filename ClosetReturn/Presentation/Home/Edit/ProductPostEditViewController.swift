@@ -174,6 +174,7 @@ final class ProductPostEditViewController: BaseViewController {
             let cellXmarkButtonTapped = PublishRelay<Int>()
             
             let input = ProductPostEditViewModel.Input(
+                viewDidLoad: Observable.just(()),
                 cancelButtonTapped: cancelButton.rx.tap,
                 selectedImages: selectedImages,
                 photoSelectButton: photoSelectButton.rx.tap,
@@ -191,6 +192,46 @@ final class ProductPostEditViewController: BaseViewController {
                 content: contentTextView.rx.text.orEmpty
             )
             let output = viewModel.transform(input: input)
+            
+            output.navigationTitle
+                .bind(to: navigationItem.rx.title)
+                .disposed(by: disposeBag)
+            
+            output.title
+                .bind(to: titleTextField.rx.text)
+                .disposed(by: disposeBag)
+            
+            output.price
+                .bind(to: priceTextField.rx.text)
+                .disposed(by: disposeBag)
+            
+            output.brand
+                .bind(to: brandTextField.rx.text)
+                .disposed(by: disposeBag)
+            
+            output.size
+                .bind(to: sizeTextField.rx.text)
+                .disposed(by: disposeBag)
+            
+            output.category
+                .bind(to: categoryTextField.rx.text)
+                .disposed(by: disposeBag)
+            
+            output.condition
+                .bind(with: self) { owner, value in
+                    switch value {
+                    case "S": owner.updateConditionOptionButtonAppearance(selected: owner.conditionSOptionButton)
+                    case "A": owner.updateConditionOptionButtonAppearance(selected: owner.conditionAOptionButton)
+                    case "B": owner.updateConditionOptionButtonAppearance(selected: owner.conditionBOptionButton)
+                    case "C": owner.updateConditionOptionButtonAppearance(selected: owner.conditionCOptionButton)
+                    default: owner.updateConditionOptionButtonAppearance(selected: UIButton())
+                    }
+                }
+                .disposed(by: disposeBag)
+            
+            output.content
+                .bind(to: contentTextView.rx.text)
+                .disposed(by: disposeBag)
             
             output.doneButtonTapped
                 .bind(with: self) { owner, _ in
@@ -276,7 +317,6 @@ final class ProductPostEditViewController: BaseViewController {
     }
     
     override func setupNavi() {
-        navigationItem.title = "상품 등록"
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneButton)
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: cancelButton)
     }

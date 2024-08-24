@@ -19,6 +19,9 @@ final class ProductDetailViewController: BaseViewController {
     
     private let disposeBag = DisposeBag()
     
+    private let editMenuTapped = PublishRelay<Void>()
+    private let deleteMenuTapped = PublishRelay<Void>()
+    
     //MARK: - Init
     
     init(viewModel: any BaseViewModel) {
@@ -212,6 +215,17 @@ final class ProductDetailViewController: BaseViewController {
         return btn
     }()
     
+    private let menuButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setImage(UIImage(systemName: "ellipsis.circle")?.applyingSymbolConfiguration(.init(font: .boldSystemFont(ofSize: 17))), for: .normal)
+        btn.tintColor = .white
+        btn.layer.shadowColor = UIColor.black.cgColor
+        btn.layer.shadowOpacity = 1
+        btn.layer.shadowOffset = .init(width: 0, height: 1)
+        btn.showsMenuAsPrimaryAction = true
+        return btn
+    }()
+    
     //MARK: - Life Cycle
     
     override func viewWillAppear(_ animated: Bool) {
@@ -228,6 +242,7 @@ final class ProductDetailViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupMenuButton()
     }
     
     //MARK: - Configurations
@@ -240,7 +255,8 @@ final class ProductDetailViewController: BaseViewController {
             let input = ProductDetailViewModel.Input(
                 fetchData: fetch,
                 backButtonTapped: backButton.rx.tap,
-                likeButtonTapped: likeButton.rx.tap
+                likeButtonTapped: likeButton.rx.tap,
+                editMenuButtonTapped: editMenuTapped
             )
             let output = viewModel.transform(input: input)
             
@@ -327,7 +343,46 @@ final class ProductDetailViewController: BaseViewController {
                     owner.popViewController()
                 }
                 .disposed(by: disposeBag)
+            
+            output.editMenuButtonTapped
+                .bind(with: self) { owner, value in
+                    let vm = ProductPostEditViewModel(viewType: .modify)
+                    vm.productPost = value
+                    
+                    vm.postUploadSucceed = { [weak self] sender in
+                        guard let self else { return }
+                        self.showToast(message: "상품이 수정되었습니다🎉", position: .bottom)
+                        
+                        fetch.accept(())
+                    }
+                    let vc = ProductPostEditViewController(viewModel: vm)
+                    let navi = UINavigationController(rootViewController: vc)
+                    navi.modalPresentationStyle = .fullScreen
+                    owner.present(navi, animated: true)
+                }
+                .disposed(by: disposeBag)
+            
+            output.hideMenuButton
+                .bind(to: menuButton.rx.isHidden)
+                .disposed(by: disposeBag)
         }
+    }
+    
+    private func setupMenuButton() {
+        let menu = UIMenu(title: "편집", children: [
+            UIAction(title: "수정하기", image: UIImage(systemName: "square.and.pencil")) { [weak self] _ in
+                self?.editMenuTapped.accept(())
+            },
+            UIAction(title: "삭제하기", image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
+                self?.deleteMenuTapped.accept(())
+            }
+        ])
+        
+        menuButton.menu = menu
+    }
+    
+    override func setupNavi() {
+        navigationItem.setHidesBackButton(true, animated: false)
     }
     
     override func configureHierarchy() {
@@ -357,10 +412,7 @@ final class ProductDetailViewController: BaseViewController {
             buyButton
         )
         view.addSubview(backButton)
-    }
-    
-    override func setupNavi() {
-        navigationItem.setHidesBackButton(true, animated: false)
+        view.addSubview(menuButton)
     }
     
     override func configureLayout() {
@@ -481,6 +533,12 @@ final class ProductDetailViewController: BaseViewController {
         backButton.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide)
             make.leading.equalTo(view.safeAreaLayoutGuide).inset(10)
+            make.size.equalTo(44)
+        }
+        
+        menuButton.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.trailing.equalTo(view.safeAreaLayoutGuide).inset(10)
             make.size.equalTo(44)
         }
     }

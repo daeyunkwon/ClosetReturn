@@ -67,9 +67,8 @@ final class LoginViewModel: BaseViewModel {
                             UserDefaultsManager.shared.refreshToken = value.refreshToken
                             
                             let access = value.accessToken
-                            let userID = value.user_id
                             UserDefaultsManager.shared.accessToken = access
-                            UserDefaultsManager.shared.userID = userID
+                            UserDefaultsManager.shared.userID = value.user_id
                             
                             print(value.accessToken)
                             print(UserDefaultsManager.shared.accessToken)
