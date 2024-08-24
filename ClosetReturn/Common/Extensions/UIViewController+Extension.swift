@@ -50,7 +50,6 @@ extension UIViewController {
                 }
                 
             case 409:
-                message = "사용이 불가한 이메일입니다."
                 switch routerType {
                 case .emailValidation:
                     message = "사용이 불가한 이메일입니다."
@@ -58,6 +57,12 @@ extension UIViewController {
                     message = "입력하신 닉네임이 이미 사용중인 닉네임으로 사용할 수 없습니다."
                 default: break
                 }                
+                
+            case 410:
+                switch routerType {
+                case .commnetUpload: message = "해당 게시물이 삭제되어 댓글 작성이 실패되었습니다."
+                default: break
+                }
                 
             case 420:
                 message = "인증키가 유효하지 않아 서버에 접근이 실패되었습니다. 잠시 후 다시 시도해 주세요."

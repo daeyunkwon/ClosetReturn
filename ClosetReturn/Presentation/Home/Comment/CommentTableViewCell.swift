@@ -13,10 +13,6 @@ import SnapKit
 
 final class CommentTableViewCell: BaseTableViewCell {
     
-    //MARK: - Properties
-    
-    
-    
     //MARK: - UI Components
     
     private let profileImageView: UIImageView = {
@@ -24,7 +20,7 @@ final class CommentTableViewCell: BaseTableViewCell {
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.backgroundColor = .lightGray
-        iv.layer.cornerRadius = 25
+        iv.layer.cornerRadius = 22
         return iv
     }()
     
@@ -43,8 +39,14 @@ final class CommentTableViewCell: BaseTableViewCell {
         return label
     }()
     
-    
-    
+    private let dateLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 12)
+        label.textColor = Constant.Color.Text.secondaryColor
+        label.textAlignment = .left
+        return label
+    }()
+        
     //MARK: - Life Cycle
     
     override func prepareForReuse() {
@@ -57,14 +59,15 @@ final class CommentTableViewCell: BaseTableViewCell {
         contentView.addSubviews(
             profileImageView,
             nameLabel,
-            commentLabel
+            commentLabel,
+            dateLabel
         )
     }
     
     override func configureLayout() {
         profileImageView.snp.makeConstraints { make in
             make.top.leading.equalToSuperview().inset(10)
-            make.size.equalTo(50)
+            make.size.equalTo(44)
         }
         
         nameLabel.snp.makeConstraints { make in
@@ -79,13 +82,24 @@ final class CommentTableViewCell: BaseTableViewCell {
             make.trailing.equalToSuperview().inset(10)
             make.bottom.equalToSuperview().inset(10)
         }
+        
+        dateLabel.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().inset(2)
+            make.trailing.equalToSuperview().inset(2)
+        }
     }
     
     override func configureUI() {
         super.configureUI()
     }
     
-    func cellConfig() {
-        
+    func cellConfig(data: Comment) {    
+        nameLabel.text = data.creator.nick
+        commentLabel.text = data.content
+        dateLabel.text = data.createDateString
+    }
+    
+    func configureProfileImage(data: Data) {
+        self.profileImageView.image = UIImage(data: data)
     }
 }

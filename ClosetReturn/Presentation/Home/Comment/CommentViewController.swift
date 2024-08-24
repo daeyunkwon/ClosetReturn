@@ -16,7 +16,18 @@ final class CommentViewController: BaseViewController {
     //MARK: - Properties
     
     private let disposeBag = DisposeBag()
-    private let viewModel = CommentViewModel()
+    private let viewModel: CommentViewModel
+    
+    //MARK: - Init
+    
+    init(viewModel: CommentViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     //MARK: - UI Components
     
@@ -42,6 +53,7 @@ final class CommentViewController: BaseViewController {
         let btn = UIButton(type: .system)
         btn.tintColor = Constant.Color.brandColor
         btn.setImage(UIImage(systemName: "paperplane.circle.fill")?.applyingSymbolConfiguration(.init(font: .boldSystemFont(ofSize: 20))), for: .normal)
+        btn.isEnabled = false
         return btn
     }()
     
@@ -66,6 +78,55 @@ final class CommentViewController: BaseViewController {
     
     override func bind() {
         
+        let fetchPorfileImage = PublishRelay<(Int, String)>()
+        
+        let input = CommentViewModel.Input(
+            fetchPorfileImage: fetchPorfileImage,
+            text: inputTextView.rx.text.orEmpty,
+            sendButtonTapped: sendButton.rx.tap
+        )
+        let output = viewModel.transform(
+            input: input
+        )
+        
+        output.comments
+            .bind(to: tableView.rx.items(cellIdentifier: CommentTableViewCell.identifier, cellType: CommentTableViewCell.self)) { row, element, cell in
+                cell.selectionStyle = .none
+                cell.cellConfig(data: element)
+                
+                if let path = element.creator.profileImage {
+                    fetchPorfileImage.accept((row, path))
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        output.profileImageData
+            .bind(with: self) { owner, value in
+                if let cell = owner.tableView.cellForRow(at: IndexPath(row: value.0, section: 0)) as? CommentTableViewCell {
+                    cell.configureProfileImage(data: value.1)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        output.hidePlaceholder
+            .bind(to: inputTextView.placeholderLabel.rx.isHidden)
+            .disposed(by: disposeBag)
+        
+        output.sendButtonEnabled
+            .bind(to: sendButton.rx.isEnabled)
+            .disposed(by: disposeBag)
+        
+        output.clearText
+            .bind(to: inputTextView.rx.text)
+            .disposed(by: disposeBag)
+        
+        
+        
+        output.networkError
+            .bind(with: self) { owner, value in
+                owner.showNetworkRequestFailAlert(errorType: value.0, routerType: value.1)
+            }
+            .disposed(by: disposeBag)
     }
     
     override func setupNavi() {
@@ -87,7 +148,7 @@ final class CommentViewController: BaseViewController {
         
         containerView.snp.makeConstraints { make in
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(10)
-            make.bottom.equalTo(view.safeAreaLayoutGuide)
+            make.bottom.equalTo(view.keyboardLayoutGuide.snp.top).offset(-3)
             make.height.greaterThanOrEqualTo(30)
         }
         
@@ -108,5 +169,6 @@ final class CommentViewController: BaseViewController {
     override func configureUI() {
         super.configureUI()
         inputTextView.isScrollEnabled = false
+        inputTextView.iq.enableMode = .disabled
     }
 }

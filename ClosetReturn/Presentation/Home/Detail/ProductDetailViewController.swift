@@ -386,8 +386,13 @@ final class ProductDetailViewController: BaseViewController {
                 .disposed(by: disposeBag)
             
             output.commentButtonTapped
-                .bind(with: self) { owner, _ in
-                    let vc = CommentViewController()
+                .bind(with: self) { owner, value in
+                    let vm = CommentViewModel(postID: value.post_id, comments: value.comments)
+                    vm.newCommentUpload = { [weak self] in
+                        guard let self else { return }
+                        fetch.accept(())
+                    }
+                    let vc = CommentViewController(viewModel: vm)
                     owner.pushViewController(vc)
                 }
                 .disposed(by: disposeBag)

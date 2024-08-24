@@ -249,7 +249,7 @@ final class NetworkManager {
                                 print("DEBUG: 액세스 토큰 갱신 완료")
                                 
                                 switch response.result {
-                                case .success(let value):
+                                case .success(_):
                                     print("DEBUG: 포스트 삭제 성공")
                                     single(.success(.success(())))
                                     
@@ -267,7 +267,7 @@ final class NetworkManager {
                         }
                     } else {
                         switch response.result {
-                        case .success(let value):
+                        case .success(_):
                             print("DEBUG: 포스트 삭제 성공")
                             single(.success(.success(())))
                             

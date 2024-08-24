@@ -55,7 +55,7 @@ final class ProductDetailViewModel: BaseViewModel {
         let hideMenuButton: PublishRelay<Bool>
         let deleteMenuButtonTapped: PublishRelay<Void>
         let succeedDelete: PublishRelay<Void>
-        let commentButtonTapped: ControlEvent<Void>
+        let commentButtonTapped: PublishRelay<ProductPost>
 
         let networkError: PublishRelay<(NetworkError, RouterType)>
     }
@@ -81,6 +81,7 @@ final class ProductDetailViewModel: BaseViewModel {
         let editMenuButtonTapped = PublishRelay<ProductPost>()
         let hideMenuButton = PublishRelay<Bool>()
         let succeedDelete = PublishRelay<Void>()
+        let commentButtonTapped = PublishRelay<ProductPost>()
         
         let networkError = PublishRelay<(NetworkError, RouterType)>()
         
@@ -280,6 +281,14 @@ final class ProductDetailViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
+        input.commentButtonTapped
+            .bind(with: self) { owner, _ in
+                if let data = owner.productPost {
+                    commentButtonTapped.accept(data)
+                }
+            }
+            .disposed(by: disposeBag)
+        
         
         return Output(
             profileImageData: profileImageData,
@@ -299,7 +308,7 @@ final class ProductDetailViewModel: BaseViewModel {
             hideMenuButton: hideMenuButton,
             deleteMenuButtonTapped: input.deleteMenuButtonTapped,
             succeedDelete: succeedDelete,
-            commentButtonTapped: input.commentButtonTapped,
+            commentButtonTapped: commentButtonTapped,
             networkError: networkError
         )
     }

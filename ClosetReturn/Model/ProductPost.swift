@@ -40,7 +40,7 @@ struct ProductPost: Decodable {
             return "NONE"
         }
 
-        dateFormatter.dateFormat = "yyyy년 MM월 dd일 HH:mm:ss"
+        dateFormatter.dateFormat = "yyyy년 MM월 dd일 a h:mm:ss"
         dateFormatter.timeZone = TimeZone.current
         return dateFormatter.string(from: date)
     }
@@ -55,5 +55,34 @@ struct Creator: Decodable {
 struct Comment: Decodable {
     let comment_id: String
     let createdAt: String
+    let content: String
     let creator: Creator
+    
+    var createDateString: String {
+        let dateFormatter = DateFormatter()
+        
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0) // UTC time zone
+    
+        guard let date = dateFormatter.date(from: self.createdAt) else {
+            return "NONE"
+        }
+
+        dateFormatter.dateFormat = "yyyy년 MM월 dd일 a h:mm:ss"
+        dateFormatter.timeZone = TimeZone.current
+        return dateFormatter.string(from: date)
+    }
+    
+    var createDate: Date {
+        let dateFormatter = DateFormatter()
+        
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0) // UTC time zone
+    
+        guard let date = dateFormatter.date(from: self.createdAt) else {
+            return Date()
+        }
+        
+        return date
+    }
 }
