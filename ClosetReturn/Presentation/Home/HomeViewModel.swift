@@ -26,6 +26,7 @@ final class HomeViewModel: BaseViewModel {
         let cellTapped: ControlEvent<ProductPost>
         let createPostButtonTapped: ControlEvent<Void>
         let fetchReload: PublishRelay<Void>
+        let startRefresh: ControlEvent<Void>
     }
     
     //MARK: - Outputs
@@ -36,6 +37,7 @@ final class HomeViewModel: BaseViewModel {
         let networkError: PublishRelay<(NetworkError, RouterType)>
         let cellTapped: ControlEvent<ProductPost>
         let createPostButtonTapped: ControlEvent<Void>
+        let endRefresh: PublishRelay<Void>
     }
     
     //MARK: - Methods
@@ -45,6 +47,7 @@ final class HomeViewModel: BaseViewModel {
         let productPosts = BehaviorSubject<[ProductPost]>(value: self.productPosts)
         let likeStatus = PublishRelay<(Bool, Int)>()
         let networkError = PublishRelay<(NetworkError, RouterType)>()
+        let endRefresh = PublishRelay<Void>()
         
         func fetchPosts(nextCursor: String) {
             NetworkManager.shared.performRequest(api: .posts(next: nextCursor, limit: "7", product_id: APIKey.productID), model: ProductPostData.self)
@@ -114,6 +117,13 @@ final class HomeViewModel: BaseViewModel {
                     .disposed(by: owner.disposeBag)
             }
             .disposed(by: disposeBag)
+        
+        input.startRefresh
+            .bind(with: self) { owner, _ in
+                fetchPosts(nextCursor: "")
+                endRefresh.accept(())
+            }
+            .disposed(by: disposeBag)
             
         
         return Output(
@@ -121,7 +131,8 @@ final class HomeViewModel: BaseViewModel {
             likeStatus: likeStatus,
             networkError: networkError,
             cellTapped: input.cellTapped,
-            createPostButtonTapped: input.createPostButtonTapped
+            createPostButtonTapped: input.createPostButtonTapped,
+            endRefresh: endRefresh
         )
     }
 }

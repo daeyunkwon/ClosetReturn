@@ -31,9 +31,9 @@ final class TabBarController: UITabBarController, UITabBarControllerDelegate {
         homeVC.tabBarItem.tag = 0
         
         
-        let dummy2 = UINavigationController(rootViewController: UIViewController())
-        dummy2.tabBarItem = UITabBarItem(title: "피드", image: UIImage(systemName: "doc.richtext"), selectedImage: UIImage(systemName: "doc.richtext.fill"))
-        dummy2.tabBarItem.tag = 1
+        let feedVC = UINavigationController(rootViewController: FeedViewController())
+        feedVC.tabBarItem = UITabBarItem(title: "피드", image: UIImage(systemName: "doc.richtext"), selectedImage: UIImage(systemName: "doc.richtext.fill"))
+        feedVC.tabBarItem.tag = 1
         
         let dummy3 = UINavigationController(rootViewController: UIViewController())
         dummy3.tabBarItem = UITabBarItem(title: "좋아요", image: UIImage(systemName: "suit.heart"), selectedImage: UIImage(systemName: "suit.heart.fill"))
@@ -43,11 +43,11 @@ final class TabBarController: UITabBarController, UITabBarControllerDelegate {
         dummy4.tabBarItem = UITabBarItem(title: "나", image: UIImage(systemName: "person"), selectedImage: UIImage(systemName: "person.fill"))
         dummy4.tabBarItem.tag = 3
         
-        [homeVC, dummy2, dummy3, dummy4].forEach {
+        [homeVC, feedVC, dummy3, dummy4].forEach {
             $0.view.backgroundColor = .white
         }
         
-        self.setViewControllers([homeVC, dummy2, dummy3, dummy4], animated: false)
+        self.setViewControllers([homeVC, feedVC, dummy3, dummy4], animated: false)
     }
     
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {

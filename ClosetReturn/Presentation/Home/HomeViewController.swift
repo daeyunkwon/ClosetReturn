@@ -20,18 +20,16 @@ final class HomeViewController: BaseViewController {
     
     //MARK: - UI Components
     
-    private let navigationTitleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "옷장리턴"
-        label.font = Constant.Font.brandFont
-        return label
-    }()
+    private let refreshControl = UIRefreshControl()
+    
+    private let navigationTitleLabel: UILabel = NavigationTitleLabel(text: "옷장리턴")
     
     private lazy var tableView: UITableView = {
         let tv = UITableView()
         tv.separatorStyle = .none
         tv.register(HomeTableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.identifier)
         tv.rowHeight = 210
+        tv.refreshControl = refreshControl
         return tv
     }()
     
@@ -70,7 +68,8 @@ final class HomeViewController: BaseViewController {
             cellLikeButtonTap: likeButtonTap,
             cellTapped: tableView.rx.modelSelected(ProductPost.self),
             createPostButtonTapped: createPostButton.rx.tap,
-            fetchReload: fetchReload
+            fetchReload: fetchReload,
+            startRefresh: refreshControl.rx.controlEvent(.valueChanged)
         )
         let output = viewModel.transform(input: input)
             
@@ -141,6 +140,15 @@ final class HomeViewController: BaseViewController {
                 owner.showNetworkRequestFailAlert(errorType: value.0, routerType: value.1)
             }
             .disposed(by: disposeBag)
+        
+        output.endRefresh
+            .bind(with: self) { owner, _ in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    owner.refreshControl.endRefreshing()
+                }
+            }
+            .disposed(by: disposeBag)
+        
     }
     
     override func setupNavi() {

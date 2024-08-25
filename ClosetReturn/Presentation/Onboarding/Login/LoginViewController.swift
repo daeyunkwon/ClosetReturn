@@ -139,7 +139,7 @@ final class LoginViewController: BaseViewController {
         loginButton.snp.makeConstraints { make in
             make.top.equalTo(passwordInputView.snp.bottom).offset(50)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(20)
-            make.height.equalTo(45)
+            make.height.equalTo(49)
         }
         
         signUpButton.snp.makeConstraints { make in
