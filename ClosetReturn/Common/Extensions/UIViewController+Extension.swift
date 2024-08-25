@@ -102,8 +102,26 @@ extension UIViewController {
         present(alert, animated: true)
     }
     
-    func showEditCancelCheckAlert() {
-        let alert = UIAlertController(title: "상품 등록", message: "상품 등록을 그만하시겠습니까?", preferredStyle: .alert)
+    enum EditCancelAlertType {
+        case product
+        case feed
+    }
+    
+    func showEditCancelCheckAlert(type: EditCancelAlertType) {
+        
+        var title: String
+        var message: String
+        
+        switch type {
+        case .product:
+            title = "상품 등록"
+            message = "상품 등록을 그만하시겠습니까?"
+        case .feed:
+            title = "피드 등록"
+            message = "피드 등록을 그만하시겠습니까?"
+        }
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "그만하기", style: .default, handler: {[weak self] okAction in
             self?.dismiss(animated: true)
         }))
@@ -115,5 +133,10 @@ extension UIViewController {
         var style = ToastStyle()
         style.backgroundColor = Constant.Color.brandColor
         view.makeToast(message, position: position, style: style)
+    }
+    
+    func performHapticFeedback() {
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.impactOccurred()
     }
 }

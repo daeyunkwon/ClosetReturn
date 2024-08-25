@@ -73,6 +73,9 @@
 		44E546F02C7B2A1A00C27AAE /* NavigationTitleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E546EF2C7B2A1A00C27AAE /* NavigationTitleLabel.swift */; };
 		44E546F22C7B2D0D00C27AAE /* FeedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E546F12C7B2D0D00C27AAE /* FeedCollectionViewCell.swift */; };
 		44E546F42C7B560700C27AAE /* FeedPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E546F32C7B560700C27AAE /* FeedPost.swift */; };
+		44E546F72C7B6ADC00C27AAE /* FeedEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E546F62C7B6ADC00C27AAE /* FeedEditViewController.swift */; };
+		44E546F92C7B6AE500C27AAE /* FeedEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E546F82C7B6AE500C27AAE /* FeedEditViewModel.swift */; };
+		44E546FB2C7B846C00C27AAE /* UploadFeedRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E546FA2C7B846C00C27AAE /* UploadFeedRequestModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -137,6 +140,9 @@
 		44E546EF2C7B2A1A00C27AAE /* NavigationTitleLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationTitleLabel.swift; sourceTree = "<group>"; };
 		44E546F12C7B2D0D00C27AAE /* FeedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCollectionViewCell.swift; sourceTree = "<group>"; };
 		44E546F32C7B560700C27AAE /* FeedPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPost.swift; sourceTree = "<group>"; };
+		44E546F62C7B6ADC00C27AAE /* FeedEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEditViewController.swift; sourceTree = "<group>"; };
+		44E546F82C7B6AE500C27AAE /* FeedEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEditViewModel.swift; sourceTree = "<group>"; };
+		44E546FA2C7B846C00C27AAE /* UploadFeedRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadFeedRequestModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -261,6 +267,7 @@
 				449AD0802C6E0E3800B0ED37 /* NetworkError.swift */,
 				44C0BAB02C738CA900136643 /* RefreshModel.swift */,
 				443A2F092C79DA910010FB19 /* UploadPostRequestModel.swift */,
+				44E546FA2C7B846C00C27AAE /* UploadFeedRequestModel.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -412,8 +419,18 @@
 				44E546EB2C7B297A00C27AAE /* FeedViewModel.swift */,
 				44E546ED2C7B29C200C27AAE /* FeedViewController.swift */,
 				44E546F12C7B2D0D00C27AAE /* FeedCollectionViewCell.swift */,
+				44E546F52C7B6AAD00C27AAE /* Edit */,
 			);
 			path = Feed;
+			sourceTree = "<group>";
+		};
+		44E546F52C7B6AAD00C27AAE /* Edit */ = {
+			isa = PBXGroup;
+			children = (
+				44E546F82C7B6AE500C27AAE /* FeedEditViewModel.swift */,
+				44E546F62C7B6ADC00C27AAE /* FeedEditViewController.swift */,
+			);
+			path = Edit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -509,10 +526,12 @@
 				44E546E92C7B0CA800C27AAE /* CommentEditViewModel.swift in Sources */,
 				449AD07D2C6E0B1900B0ED37 /* HeaderKey.swift in Sources */,
 				449AD0642C6DC4FB00B0ED37 /* UIView+Extension.swift in Sources */,
+				44E546F92C7B6AE500C27AAE /* FeedEditViewModel.swift in Sources */,
 				4486AD912C78776000A8BA9C /* RoundedBackTitleContainerView.swift in Sources */,
 				4486AD972C7896C000A8BA9C /* PhotoButtonView.swift in Sources */,
 				44A39D4B2C723843009BCC44 /* SignUpCompleteViewController.swift in Sources */,
 				44C0BAD42C75E68E00136643 /* ProductDetailViewModel.swift in Sources */,
+				44E546F72C7B6ADC00C27AAE /* FeedEditViewController.swift in Sources */,
 				449AD08F2C6F462B00B0ED37 /* LoginViewModel.swift in Sources */,
 				44E546E62C7B0C3900C27AAE /* CommentEditViewController.swift in Sources */,
 				449AD0742C6DCFC700B0ED37 /* TabBarController.swift in Sources */,
@@ -541,6 +560,7 @@
 				44E546E42C7A4B1200C27AAE /* CommentTableViewCell.swift in Sources */,
 				44A39D602C7347AF009BCC44 /* ProductPost.swift in Sources */,
 				44E546F22C7B2D0D00C27AAE /* FeedCollectionViewCell.swift in Sources */,
+				44E546FB2C7B846C00C27AAE /* UploadFeedRequestModel.swift in Sources */,
 				44E546EE2C7B29C200C27AAE /* FeedViewController.swift in Sources */,
 				449AD06B2C6DC5CE00B0ED37 /* BaseTableViewCell.swift in Sources */,
 				44E546F42C7B560700C27AAE /* FeedPost.swift in Sources */,

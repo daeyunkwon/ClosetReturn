@@ -36,6 +36,7 @@ final class LoginViewModel: BaseViewModel {
         let failedToLogin: PublishSubject<(NetworkError, RouterType)>
         let signButtonTapped: ControlEvent<Void>
         let hideButtonTapped: ControlEvent<Void>
+        let loginButtonTapped: ControlEvent<Void>
     }
     
     //MARK: - Methods
@@ -93,6 +94,12 @@ final class LoginViewModel: BaseViewModel {
             .disposed(by: disposeBag)
         
         
-        return Output(succeedToLogin: succeedToLogin, failedToLogin: failedToLogin, signButtonTapped: input.signButtonTapped, hideButtonTapped: input.hideButtonTapped)
+        return Output(
+            succeedToLogin: succeedToLogin,
+            failedToLogin: failedToLogin,
+            signButtonTapped: input.signButtonTapped,
+            hideButtonTapped: input.hideButtonTapped,
+            loginButtonTapped: input.loginButtonTapped
+        )
     }
 }

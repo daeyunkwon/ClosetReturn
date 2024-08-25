@@ -19,8 +19,8 @@ enum Router {
     case like(postID: String, isLike: Bool)
     case postDetail(postID: String)
     case imageUpload(image: [Data], fileName: String, mimeType: String)
-    case postUpload(uploadPostRequest: UploadPostRequestModel)
-    case postModify(postID: String, uploadPostRequest: UploadPostRequestModel)
+    case postUpload(uploadPostRequest: UploadPostRequestModel?, uploadFeedRequest: UploadFeedRequestModel?)
+    case postModify(postID: String, uploadPostRequest: UploadPostRequestModel?, uploadFeedRequest: UploadFeedRequestModel?)
     case postDelete(postID: String)
     case commentUpload(postID: String, comment: String)
     case commentModify(postID: String, commentID: String, comment: String)
@@ -78,7 +78,7 @@ extension Router: URLRequestConvertible {
         case .postDetail(let postID): return APIURL.postDetailURL(postID: postID)
         case .imageUpload: return APIURL.imageUpload
         case .postUpload: return APIURL.posts
-        case .postModify(let postID, _): return APIURL.postModifyURL(postID: postID)
+        case .postModify(let postID, _, _): return APIURL.postModifyURL(postID: postID)
         case .postDelete(let postID): return APIURL.postDeleteURL(postID: postID)
         case .commentUpload(let postID, _): return APIURL.commentUploadURL(postID: postID)
         case .commentModify(let postID, let commentID, _): return APIURL.commentModifyURL(postID: postID, commentID: commentID)
@@ -146,11 +146,19 @@ extension Router: URLRequestConvertible {
                 BodyKey.like_status.rawValue: isLike
             ])
             
-        case .postUpload(let uploadPostRequest):
-            return try? JSONEncoder().encode(uploadPostRequest)
+        case .postUpload(let uploadPostRequest, let uploadFeedRequest):
+            if uploadPostRequest != nil && uploadFeedRequest == nil {
+                return try? JSONEncoder().encode(uploadPostRequest)
+            } else {
+                return try? JSONEncoder().encode(uploadFeedRequest)
+            }
             
-        case .postModify(_, let uploadPostRequest):
-            return try? JSONEncoder().encode(uploadPostRequest)
+        case .postModify(_, let uploadPostRequest, let uploadFeedRequest):
+            if uploadPostRequest != nil && uploadFeedRequest == nil {
+                return try? JSONEncoder().encode(uploadPostRequest)
+            } else {
+                return try? JSONEncoder().encode(uploadFeedRequest)
+            }
             
         case .commentUpload(_, let comment):
             return try? JSONEncoder().encode([

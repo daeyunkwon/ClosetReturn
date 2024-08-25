@@ -120,6 +120,7 @@ final class HomeViewModel: BaseViewModel {
         
         input.startRefresh
             .bind(with: self) { owner, _ in
+                owner.productPosts = []
                 fetchPosts(nextCursor: "")
                 endRefresh.accept(())
             }

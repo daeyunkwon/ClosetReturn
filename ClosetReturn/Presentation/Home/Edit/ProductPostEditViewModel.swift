@@ -216,7 +216,7 @@ final class ProductPostEditViewModel: BaseViewModel {
                             
                             switch owner.viewType {
                             case .new:
-                                NetworkManager.shared.performRequest(api: .postUpload(uploadPostRequest: uploadPostRequest), model: ProductPost.self)
+                                NetworkManager.shared.performRequest(api: .postUpload(uploadPostRequest: uploadPostRequest, uploadFeedRequest: nil), model: ProductPost.self)
                                     .asObservable()
                                     .bind(with: self) { owner, result in
                                         switch result {
@@ -231,7 +231,7 @@ final class ProductPostEditViewModel: BaseViewModel {
                                     .disposed(by: owner.disposeBag)
                             
                             case .modify:
-                                NetworkManager.shared.performRequest(api: .postModify(postID: owner.productPost?.post_id ?? "", uploadPostRequest: uploadPostRequest), model: ProductPost.self)
+                                NetworkManager.shared.performRequest(api: .postModify(postID: owner.productPost?.post_id ?? "", uploadPostRequest: uploadPostRequest, uploadFeedRequest: nil), model: ProductPost.self)
                                     .asObservable()
                                     .bind(with: self) { owner, result in
                                         switch result {

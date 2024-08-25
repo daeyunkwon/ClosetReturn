@@ -64,8 +64,13 @@ final class LoginViewController: BaseViewController {
     
     override func bind() {
         
-        let input = LoginViewModel.Input(email: emailInputView.inputTextField.rx.text.orEmpty, password: passwordInputView.inputTextField.rx.text.orEmpty, loginButtonTapped: loginButton.rx.tap, signButtonTapped: signUpButton.rx.tap, hideButtonTapped: passwordInputView.hideButton.rx.tap)
-        
+        let input = LoginViewModel.Input(
+            email: emailInputView.inputTextField.rx.text.orEmpty,
+            password: passwordInputView.inputTextField.rx.text.orEmpty,
+            loginButtonTapped: loginButton.rx.tap,
+            signButtonTapped: signUpButton.rx.tap,
+            hideButtonTapped: passwordInputView.hideButton.rx.tap
+        )
         let output = viewModel.transform(input: input)
         
         output.hideButtonTapped
@@ -97,6 +102,12 @@ final class LoginViewController: BaseViewController {
             .bind(with: self) { owner, _ in
                 owner.pushViewController(SignUpViewController())
                 owner.view.endEditing(true)
+            }
+            .disposed(by: disposeBag)
+        
+        output.loginButtonTapped
+            .bind(with: self) { owner, _ in
+                owner.performHapticFeedback()
             }
             .disposed(by: disposeBag)
     }

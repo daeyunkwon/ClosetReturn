@@ -241,12 +241,13 @@ final class ProductPostEditViewController: BaseViewController {
             
             output.cancelButtonTapped
                 .bind(with: self) { owner, _ in
-                    owner.showEditCancelCheckAlert()
+                    owner.showEditCancelCheckAlert(type: .product)
                 }
                 .disposed(by: disposeBag)
             
             output.photoSelectButtonTapped
                 .bind(with: self) { owner, _ in
+                    owner.photoSelectButton.bounce()
                     owner.openPHPicker()
                 }
                 .disposed(by: disposeBag)

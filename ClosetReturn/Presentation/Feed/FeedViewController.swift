@@ -104,7 +104,15 @@ final class FeedViewController: BaseViewController {
         
         output.newButtonTapped
             .bind(with: self) { owner, _ in
-                
+                let vm = FeedEditViewModel(viewType: .new)
+                vm.postUploadSucceed = { [weak self] in
+                    
+                    self?.showToast(message: "피드가 등록되었습니다", position: .bottom)
+                }
+                let vc = FeedEditViewController(viewModel: vm)
+                let navi = UINavigationController(rootViewController: vc)
+                navi.modalPresentationStyle = .fullScreen
+                owner.present(navi, animated: true)
             }
             .disposed(by: disposeBag)
         
