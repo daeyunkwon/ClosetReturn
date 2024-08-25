@@ -24,6 +24,7 @@ enum Router {
     case postDelete(postID: String)
     case commentUpload(postID: String, comment: String)
     case commentModify(postID: String, commentID: String, comment: String)
+    case commentDelete(postID: String, commentID: String)
 }
 
 enum RouterType {
@@ -41,6 +42,7 @@ enum RouterType {
     case postDelete
     case commnetUpload
     case commentModify
+    case commnetDelete
 }
 
 extension Router: URLRequestConvertible {
@@ -59,7 +61,7 @@ extension Router: URLRequestConvertible {
         case .postModify, .commentModify:
             return .put
             
-        case .postDelete:
+        case .postDelete, .commentDelete:
             return .delete
         }
     }
@@ -80,6 +82,7 @@ extension Router: URLRequestConvertible {
         case .postDelete(let postID): return APIURL.postDeleteURL(postID: postID)
         case .commentUpload(let postID, _): return APIURL.commentUploadURL(postID: postID)
         case .commentModify(let postID, let commentID, _): return APIURL.commentModifyURL(postID: postID, commentID: commentID)
+        case .commentDelete(let postID, let commentID): return APIURL.commentDeleteURL(postID: postID, commentID: commentID)
         }
     }
     
@@ -91,7 +94,7 @@ extension Router: URLRequestConvertible {
                 HeaderKey.sesacKey.rawValue: APIKey.sesacKey
             ]
         
-        case .posts, .imageFetch, .postDelete:
+        case .posts, .imageFetch, .postDelete, .commentDelete:
             return [
                 HeaderKey.authorization.rawValue: UserDefaultsManager.shared.accessToken,
                 HeaderKey.sesacKey.rawValue: APIKey.sesacKey,

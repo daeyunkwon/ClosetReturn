@@ -233,7 +233,7 @@ final class NetworkManager {
         }
     }
     
-    func postDelete(api: Router) -> Single<Result<Void, NetworkError>> {
+    func performDeleteReuqest(api: Router) -> Single<Result<Void, NetworkError>> {
         return Single.create { single in
             do {
                 
