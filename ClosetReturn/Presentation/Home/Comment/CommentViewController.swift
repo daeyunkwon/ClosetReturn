@@ -79,17 +79,22 @@ final class CommentViewController: BaseViewController {
     override func bind() {
         
         let fetchPorfileImage = PublishRelay<(Int, String)>()
+        let alertDeleteButtonTapped = PublishRelay<String>()
         
         let input = CommentViewModel.Input(
             fetchPorfileImage: fetchPorfileImage,
             text: inputTextView.rx.text.orEmpty,
-            sendButtonTapped: sendButton.rx.tap
+            sendButtonTapped: sendButton.rx.tap,
+            alertDeleteButtonTapped: alertDeleteButtonTapped
         )
         let output = viewModel.transform(
             input: input
         )
         
         output.comments
+            .map({ value in
+                return value.0
+            })
             .bind(to: tableView.rx.items(cellIdentifier: CommentTableViewCell.identifier, cellType: CommentTableViewCell.self)) { row, element, cell in
                 cell.selectionStyle = .none
                 cell.cellConfig(data: element)
@@ -97,6 +102,30 @@ final class CommentViewController: BaseViewController {
                 if let path = element.creator.profileImage {
                     fetchPorfileImage.accept((row, path))
                 }
+                
+                cell.editButton.rx.tap
+                    .bind(with: self) { owner, _ in
+                        let vm = CommentEditViewModel(comment: cell.commentLabel.text ?? "None", postID: output.comments.value.1, commnetID: element.comment_id)
+                        owner.view.endEditing(true)
+                        vm.editSucceed = {[weak self] sender in
+                            self?.tableView.beginUpdates()
+                            cell.commentLabel.text = sender
+                            self?.tableView.endUpdates()
+                        }
+                        let vc = CommentEditViewController(viewModel: vm)
+                        let navi = UINavigationController(rootViewController: vc)
+                        owner.present(navi, animated: true)
+                    }
+                    .disposed(by: cell.disposeBag)
+                
+                cell.deleteButton.rx.tap
+                    .bind(with: self) { owner, _ in
+                        owner.view.endEditing(true)
+                        owner.showCommentDeleteCheckAlert { deleteAction in
+                            alertDeleteButtonTapped.accept(element.comment_id)
+                        }
+                    }
+                    .disposed(by: cell.disposeBag)
             }
             .disposed(by: disposeBag)
         
@@ -143,7 +172,7 @@ final class CommentViewController: BaseViewController {
         tableView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
-            make.bottom.equalToSuperview()
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-80)
         }
         
         containerView.snp.makeConstraints { make in
@@ -170,5 +199,14 @@ final class CommentViewController: BaseViewController {
         super.configureUI()
         inputTextView.isScrollEnabled = false
         inputTextView.iq.enableMode = .disabled
+    }
+    
+    //MARK: - Methods
+    
+    func showCommentDeleteCheckAlert(completionHandler: @escaping (UIAlertAction) -> Void) {
+        let alert = UIAlertController(title: "댓글 삭제", message: "해당 댓글을 삭제할까요?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "삭제하기", style: .default, handler: completionHandler))
+        alert.addAction(UIAlertAction(title: "취소", style: .default))
+        self.present(alert, animated: true)
     }
 }

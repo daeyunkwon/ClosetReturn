@@ -37,12 +37,13 @@ final class CommentViewModel: BaseViewModel {
         let fetchPorfileImage: PublishRelay<(Int, String)>
         let text: ControlProperty<String>
         let sendButtonTapped: ControlEvent<Void>
+        let alertDeleteButtonTapped: PublishRelay<String>
     }
     
     //MARK: - Outputs
     
     struct Output {
-        let comments: BehaviorRelay<[Comment]>
+        let comments: BehaviorRelay<([Comment], String)>
         let profileImageData: PublishRelay<(Int, Data)>
         let networkError: PublishRelay<(NetworkError, RouterType)>
         let hidePlaceholder: PublishRelay<Bool>
@@ -54,7 +55,7 @@ final class CommentViewModel: BaseViewModel {
 
     func transform(input: Input) -> Output {
         
-        let comments = BehaviorRelay<[Comment]>(value: self.comments)
+        let comments = BehaviorRelay<([Comment], String)>(value: (self.comments, self.postID))
         let profileImageData = PublishRelay<(Int, Data)>()
         let networkError = PublishRelay<(NetworkError, RouterType)>()
         let hidePlaceholder = PublishRelay<Bool>()
@@ -102,7 +103,7 @@ final class CommentViewModel: BaseViewModel {
                         switch result {
                         case .success(let data):
                             owner.comments.append(data)
-                            comments.accept(owner.comments)
+                            comments.accept((owner.comments, owner.postID))
                             clearText.accept("")
                             owner.newCommentUpload()
                             
@@ -114,6 +115,28 @@ final class CommentViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
+        input.alertDeleteButtonTapped
+            .bind(with: self) { owner, commentID in
+                NetworkManager.shared.performDeleteReuqest(api: .commentDelete(postID: owner.postID, commentID: commentID))
+                    .asObservable()
+                    .bind(with: self) { owner, result in
+                        switch result {
+                        case .success(_):
+                            for i in 0...owner.comments.count - 1 {
+                                if owner.comments[i].comment_id == commentID {
+                                    owner.comments.remove(at: i)
+                                }
+                            }
+                            
+                            comments.accept((owner.comments, owner.postID))
+                            
+                        case .failure(let error):
+                            networkError.accept((error, RouterType.commnetDelete))
+                        }
+                    }
+                    .disposed(by: owner.disposeBag)
+            }
+            .disposed(by: disposeBag)
         
         
         

@@ -12,6 +12,10 @@ import RxCocoa
 import SnapKit
 
 final class CommentTableViewCell: BaseTableViewCell {
+
+    //MARK: - Properties
+    
+    var disposeBag = DisposeBag()
     
     //MARK: - UI Components
     
@@ -31,7 +35,7 @@ final class CommentTableViewCell: BaseTableViewCell {
         return label
     }()
     
-    private let commentLabel: UILabel = {
+    let commentLabel: UILabel = {
         let label = UILabel()
         label.font = Constant.Font.bodyFont
         label.numberOfLines = 0
@@ -46,11 +50,26 @@ final class CommentTableViewCell: BaseTableViewCell {
         label.textAlignment = .left
         return label
     }()
+    
+    let editButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("수정", for: .normal)
+        btn.setTitleColor(Constant.Color.Text.secondaryColor, for: .normal)
+        return btn
+    }()
+    
+    let deleteButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("삭제", for: .normal)
+        btn.setTitleColor(Constant.Color.Text.secondaryColor, for: .normal)
+        return btn
+    }()
         
     //MARK: - Life Cycle
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        self.disposeBag = DisposeBag()
     }
     
     //MARK: - Configurations
@@ -60,6 +79,8 @@ final class CommentTableViewCell: BaseTableViewCell {
             profileImageView,
             nameLabel,
             commentLabel,
+            editButton,
+            deleteButton,
             dateLabel
         )
     }
@@ -80,12 +101,25 @@ final class CommentTableViewCell: BaseTableViewCell {
             make.top.equalTo(nameLabel.snp.bottom).offset(5)
             make.leading.equalTo(profileImageView.snp.trailing).offset(5)
             make.trailing.equalToSuperview().inset(10)
-            make.bottom.equalToSuperview().inset(10)
+        }
+        
+        editButton.snp.makeConstraints { make in
+            make.top.equalTo(commentLabel.snp.bottom).offset(5)
+            make.leading.equalTo(commentLabel.snp.leading)
+            make.height.equalTo(10)
+        }
+        
+        deleteButton.snp.makeConstraints { make in
+            make.top.equalTo(commentLabel.snp.bottom).offset(5)
+            make.leading.equalTo(editButton.snp.trailing).offset(7)
+            make.bottom.equalTo(editButton)
+            make.height.equalTo(10)
         }
         
         dateLabel.snp.makeConstraints { make in
+            make.top.equalTo(commentLabel.snp.bottom).offset(5)
             make.bottom.equalToSuperview().inset(2)
-            make.trailing.equalToSuperview().inset(2)
+            make.trailing.equalToSuperview().inset(10)
         }
     }
     
@@ -97,6 +131,12 @@ final class CommentTableViewCell: BaseTableViewCell {
         nameLabel.text = data.creator.nick
         commentLabel.text = data.content
         dateLabel.text = data.createDateString
+        
+        if data.creator.user_id == UserDefaultsManager.shared.userID {
+            [editButton, deleteButton].forEach { $0.isHidden = false }
+        } else {
+            [editButton, deleteButton].forEach { $0.isHidden = true }
+        }
     }
     
     func configureProfileImage(data: Data) {

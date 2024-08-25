@@ -21,6 +21,7 @@ final class ProductDetailViewController: BaseViewController {
     
     private let editMenuTapped = PublishRelay<Void>()
     private let deleteMenuTapped = PublishRelay<Void>()
+    private let fetch = PublishRelay<Void>()
     
     //MARK: - Init
     
@@ -232,6 +233,7 @@ final class ProductDetailViewController: BaseViewController {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = true
         navigationController?.navigationBar.isHidden = true
+        fetch.accept(())
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -250,7 +252,7 @@ final class ProductDetailViewController: BaseViewController {
     override func bind() {
         if let viewModel = viewModel as? ProductDetailViewModel {
             
-            let fetch = PublishRelay<Void>()
+            
             let deleteAlertButtonTapped = PublishRelay<Void>()
             
             let input = ProductDetailViewModel.Input(
@@ -357,7 +359,7 @@ final class ProductDetailViewController: BaseViewController {
                         guard let self else { return }
                         self.showToast(message: "상품이 수정되었습니다🎉", position: .bottom)
                         
-                        fetch.accept(())
+                        self.fetch.accept(())
                     }
                     let vc = ProductPostEditViewController(viewModel: vm)
                     let navi = UINavigationController(rootViewController: vc)
@@ -388,9 +390,8 @@ final class ProductDetailViewController: BaseViewController {
             output.commentButtonTapped
                 .bind(with: self) { owner, value in
                     let vm = CommentViewModel(postID: value.post_id, comments: value.comments)
-                    vm.newCommentUpload = { [weak self] in
-                        guard let self else { return }
-                        fetch.accept(())
+                    vm.newCommentUpload = {
+                        owner.fetch.accept(())
                     }
                     let vc = CommentViewController(viewModel: vm)
                     owner.pushViewController(vc)

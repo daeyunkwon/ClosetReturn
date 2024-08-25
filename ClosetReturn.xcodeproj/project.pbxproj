@@ -67,6 +67,8 @@
 		44E546E02C7A42A500C27AAE /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E546DF2C7A42A500C27AAE /* CommentViewController.swift */; };
 		44E546E22C7A42B000C27AAE /* CommentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E546E12C7A42B000C27AAE /* CommentViewModel.swift */; };
 		44E546E42C7A4B1200C27AAE /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E546E32C7A4B1200C27AAE /* CommentTableViewCell.swift */; };
+		44E546E62C7B0C3900C27AAE /* CommentEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E546E52C7B0C3900C27AAE /* CommentEditViewController.swift */; };
+		44E546E92C7B0CA800C27AAE /* CommentEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E546E82C7B0CA800C27AAE /* CommentEditViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -125,6 +127,8 @@
 		44E546DF2C7A42A500C27AAE /* CommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
 		44E546E12C7A42B000C27AAE /* CommentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewModel.swift; sourceTree = "<group>"; };
 		44E546E32C7A4B1200C27AAE /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
+		44E546E52C7B0C3900C27AAE /* CommentEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentEditViewController.swift; sourceTree = "<group>"; };
+		44E546E82C7B0CA800C27AAE /* CommentEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentEditViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -378,8 +382,18 @@
 				44E546E12C7A42B000C27AAE /* CommentViewModel.swift */,
 				44E546DF2C7A42A500C27AAE /* CommentViewController.swift */,
 				44E546E32C7A4B1200C27AAE /* CommentTableViewCell.swift */,
+				44E546E72C7B0C3D00C27AAE /* Edit */,
 			);
 			path = Comment;
+			sourceTree = "<group>";
+		};
+		44E546E72C7B0C3D00C27AAE /* Edit */ = {
+			isa = PBXGroup;
+			children = (
+				44E546E82C7B0CA800C27AAE /* CommentEditViewModel.swift */,
+				44E546E52C7B0C3900C27AAE /* CommentEditViewController.swift */,
+			);
+			path = Edit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -472,6 +486,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				44E546E22C7A42B000C27AAE /* CommentViewModel.swift in Sources */,
+				44E546E92C7B0CA800C27AAE /* CommentEditViewModel.swift in Sources */,
 				449AD07D2C6E0B1900B0ED37 /* HeaderKey.swift in Sources */,
 				449AD0642C6DC4FB00B0ED37 /* UIView+Extension.swift in Sources */,
 				4486AD912C78776000A8BA9C /* RoundedBackTitleContainerView.swift in Sources */,
@@ -479,6 +494,7 @@
 				44A39D4B2C723843009BCC44 /* SignUpCompleteViewController.swift in Sources */,
 				44C0BAD42C75E68E00136643 /* ProductDetailViewModel.swift in Sources */,
 				449AD08F2C6F462B00B0ED37 /* LoginViewModel.swift in Sources */,
+				44E546E62C7B0C3900C27AAE /* CommentEditViewController.swift in Sources */,
 				449AD0742C6DCFC700B0ED37 /* TabBarController.swift in Sources */,
 				449AD0702C6DC61800B0ED37 /* Reusable.swift in Sources */,
 				44A39D5E2C733F87009BCC44 /* HomeTableViewCell.swift in Sources */,

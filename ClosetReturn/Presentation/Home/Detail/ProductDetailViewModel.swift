@@ -267,7 +267,7 @@ final class ProductDetailViewModel: BaseViewModel {
         input.deleteAlertButtonTapped
             .bind(with: self) { owner, _ in
                 
-                NetworkManager.shared.postDelete(api: .postDelete(postID: owner.postID))
+                NetworkManager.shared.performDeleteReuqest(api: .postDelete(postID: owner.postID))
                     .asObservable()
                     .bind(onNext: { result in
                         switch result {
