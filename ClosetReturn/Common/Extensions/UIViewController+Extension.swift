@@ -37,6 +37,7 @@ extension UIViewController {
                 switch routerType {
                 case .loginUser: message = "이메일 또는 비밀번호를 입력해주세요."
                 case .imageUpload: message = "제한 사항과 맞지 않아 업로드 실패되었습니다.(파일 용량은 5MB 이하만 허용됩니다.)"
+                case .commentModify: message = "수정할 내용을 입력해 주세요."
                 default: break
                 }
                 
@@ -61,6 +62,7 @@ extension UIViewController {
             case 410:
                 switch routerType {
                 case .commnetUpload: message = "해당 게시물이 삭제되어 댓글 작성이 실패되었습니다."
+                case .commentModify: message = "해당 댓글이 삭제되어 댓글 수정이 실패되었습니다."
                 default: break
                 }
                 
@@ -72,10 +74,7 @@ extension UIViewController {
                 message = "비정상 URL 접근으로 인해 데이터를 불러오는데 실패하였습니다. 잠시 후 다시 시도해 주세요."
             
             case 445:
-                switch routerType {
-                case .postDelete: message = "본인이 작성한 글에 대해서만 삭제 가능합니다."
-                default: break
-                }
+                message = "수정 및 삭제 권한이 없습니다."
                 
             case 500:
                 message = "서버에 문제가 발생하여 데이터를 불러오는데 실패하였습니다. 잠시 후 다시 시도해 주세요."

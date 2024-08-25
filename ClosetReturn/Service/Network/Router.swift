@@ -23,6 +23,7 @@ enum Router {
     case postModify(postID: String, uploadPostRequest: UploadPostRequestModel)
     case postDelete(postID: String)
     case commentUpload(postID: String, comment: String)
+    case commentModify(postID: String, commentID: String, comment: String)
 }
 
 enum RouterType {
@@ -39,6 +40,7 @@ enum RouterType {
     case postModify
     case postDelete
     case commnetUpload
+    case commentModify
 }
 
 extension Router: URLRequestConvertible {
@@ -54,7 +56,7 @@ extension Router: URLRequestConvertible {
         case .posts, .imageFetch, .refresh, .postDetail:
             return .get
             
-        case .postModify:
+        case .postModify, .commentModify:
             return .put
             
         case .postDelete:
@@ -77,6 +79,7 @@ extension Router: URLRequestConvertible {
         case .postModify(let postID, _): return APIURL.postModifyURL(postID: postID)
         case .postDelete(let postID): return APIURL.postDeleteURL(postID: postID)
         case .commentUpload(let postID, _): return APIURL.commentUploadURL(postID: postID)
+        case .commentModify(let postID, let commentID, _): return APIURL.commentModifyURL(postID: postID, commentID: commentID)
         }
     }
     
@@ -101,7 +104,7 @@ extension Router: URLRequestConvertible {
                 HeaderKey.refresh.rawValue: UserDefaultsManager.shared.refreshToken
             ]
             
-        case .like, .postDetail, .postUpload, .postModify, .commentUpload:
+        case .like, .postDetail, .postUpload, .postModify, .commentUpload, .commentModify:
             return [
                 HeaderKey.authorization.rawValue: UserDefaultsManager.shared.accessToken,
                 HeaderKey.contentType.rawValue: HeaderKey.json.rawValue,
@@ -147,6 +150,11 @@ extension Router: URLRequestConvertible {
             return try? JSONEncoder().encode(uploadPostRequest)
             
         case .commentUpload(_, let comment):
+            return try? JSONEncoder().encode([
+                BodyKey.content.rawValue: comment
+            ])
+            
+        case .commentModify(_, _, let comment):
             return try? JSONEncoder().encode([
                 BodyKey.content.rawValue: comment
             ])
