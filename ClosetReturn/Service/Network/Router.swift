@@ -25,6 +25,7 @@ enum Router {
     case commentUpload(postID: String, comment: String)
     case commentModify(postID: String, commentID: String, comment: String)
     case commentDelete(postID: String, commentID: String)
+    case like2(postID: String, isLike: Bool)
 }
 
 enum RouterType {
@@ -43,6 +44,7 @@ enum RouterType {
     case commnetUpload
     case commentModify
     case commnetDelete
+    case like2
 }
 
 extension Router: URLRequestConvertible {
@@ -52,7 +54,7 @@ extension Router: URLRequestConvertible {
     
     var method: HTTPMethod {
         switch self {
-        case .emailValidation, .joinUser, .loginUser, .like, .imageUpload, .postUpload, .commentUpload:
+        case .emailValidation, .joinUser, .loginUser, .like, .imageUpload, .postUpload, .commentUpload, .like2:
             return .post
             
         case .posts, .imageFetch, .refresh, .postDetail:
@@ -83,6 +85,7 @@ extension Router: URLRequestConvertible {
         case .commentUpload(let postID, _): return APIURL.commentUploadURL(postID: postID)
         case .commentModify(let postID, let commentID, _): return APIURL.commentModifyURL(postID: postID, commentID: commentID)
         case .commentDelete(let postID, let commentID): return APIURL.commentDeleteURL(postID: postID, commentID: commentID)
+        case .like2(let postID, _): return APIURL.like2URL(postID: postID)
         }
     }
     
@@ -107,7 +110,7 @@ extension Router: URLRequestConvertible {
                 HeaderKey.refresh.rawValue: UserDefaultsManager.shared.refreshToken
             ]
             
-        case .like, .postDetail, .postUpload, .postModify, .commentUpload, .commentModify:
+        case .like, .postDetail, .postUpload, .postModify, .commentUpload, .commentModify, .like2:
             return [
                 HeaderKey.authorization.rawValue: UserDefaultsManager.shared.accessToken,
                 HeaderKey.contentType.rawValue: HeaderKey.json.rawValue,
@@ -141,7 +144,7 @@ extension Router: URLRequestConvertible {
                 BodyKey.password.rawValue: password
             ])
             
-        case .like(_, let isLike):
+        case .like(_, let isLike), .like2(_, let isLike):
             return try? JSONEncoder().encode([
                 BodyKey.like_status.rawValue: isLike
             ])

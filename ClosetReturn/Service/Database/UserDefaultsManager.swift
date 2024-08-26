@@ -12,11 +12,12 @@ final class UserDefaultsManager {
     static let shared = UserDefaultsManager()
     private init() {}
     
-    private enum UserDefaultsKey: String {
+    private enum UserDefaultsKey: String, CaseIterable {
         case accessToken
         case refreshToken
         case userID
         case likeProducts
+        case likeFeed
     }
     
     var accessToken: String {
@@ -55,10 +56,18 @@ final class UserDefaultsManager {
         }
     }
     
+    var likeFeed: [String: Bool] {
+        get {
+            return UserDefaults.standard.dictionary(forKey: UserDefaultsKey.likeFeed.rawValue) as? [String: Bool] ?? [:]
+        }
+        set {
+            UserDefaults.standard.setValue(newValue, forKey: UserDefaultsKey.likeFeed.rawValue)
+        }
+    }
+    
     func removeAll() {
-        UserDefaults.standard.removeObject(forKey: UserDefaultsKey.accessToken.rawValue)
-        UserDefaults.standard.removeObject(forKey: UserDefaultsKey.refreshToken.rawValue)
-        UserDefaults.standard.removeObject(forKey: UserDefaultsKey.userID.rawValue)
-        UserDefaults.standard.removeObject(forKey: UserDefaultsKey.likeProducts.rawValue)
+        UserDefaultsKey.allCases.forEach { key in
+            UserDefaults.standard.removeObject(forKey: key.rawValue)
+        }
     }
 }

@@ -29,6 +29,7 @@ final class FeedViewModel: BaseViewModel {
         let cellWillDisplay: PublishRelay<IndexPath>
         let startRefresh: ControlEvent<()>
         let newButtonTapped: ControlEvent<Void>
+        let modelSelected: ControlEvent<FeedPost>
     }
     
     //MARK: - Outputs
@@ -39,6 +40,7 @@ final class FeedViewModel: BaseViewModel {
         let cellImageData: PublishRelay<(Int, Data)>
         let endRefresh: PublishRelay<Void>
         let newButtonTapped: ControlEvent<Void>
+        let modelSelected: ControlEvent<FeedPost>
     }
     
     //MARK: - Methods
@@ -120,7 +122,8 @@ final class FeedViewModel: BaseViewModel {
             networkError: networkError,
             cellImageData: cellImageData,
             endRefresh: endRefresh,
-            newButtonTapped: input.newButtonTapped
+            newButtonTapped: input.newButtonTapped,
+            modelSelected: input.modelSelected
         )
     }
 }

@@ -242,7 +242,6 @@
 			isa = PBXGroup;
 			children = (
 				449AD05D2C6D787400B0ED37 /* Constant.swift */,
-				44A39D4C2C725F86009BCC44 /* UserDefaultsManager.swift */,
 				449AD0652C6DC59400B0ED37 /* Base */,
 				449AD06E2C6DC60900B0ED37 /* Protocols */,
 				449AD0622C6DC4CF00B0ED37 /* Extensions */,
@@ -279,6 +278,7 @@
 		449AD0572C6CD7AC00B0ED37 /* Database */ = {
 			isa = PBXGroup;
 			children = (
+				44A39D4C2C725F86009BCC44 /* UserDefaultsManager.swift */,
 			);
 			path = Database;
 			sourceTree = "<group>";

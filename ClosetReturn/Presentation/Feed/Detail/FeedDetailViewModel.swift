@@ -14,22 +14,204 @@ final class FeedDetailViewModel: BaseViewModel {
     
     //MARK: - Properties
     
+    private let disposeBag = DisposeBag()
+    
+    private var postID: String
+    private var feedPost: FeedPost?
+    
+    //MARK: - Init
+    
+    init(postID: String) {
+        self.postID = postID
+    }
     
     //MARK: - Inputs
     
     struct Input {
-        
+        let fetch: PublishRelay<Void>
+        let likeButtonTapped: ControlEvent<Void>
     }
     
     //MARK: - Outputs
     
     struct Output {
-        
+        let networkError: PublishRelay<(NetworkError, RouterType)>
+        let profileImage: PublishRelay<Data>
+        let nickname: PublishRelay<String>
+        let feedImages: PublishRelay<[Data]>
+        let likeCount: PublishRelay<Int>
+        let commentCount: PublishRelay<Int>
+        let content: PublishRelay<String>
+        let date: PublishRelay<String>
+        let like: PublishRelay<Bool>
     }
     
     //MARK: - Methods
     
     func transform(input: Input) -> Output {
-        return Output()
+        
+        let resultData = PublishRelay<FeedPost>()
+        
+        let networkError = PublishRelay<(NetworkError, RouterType)>()
+        let profileImage = PublishRelay<Data>()
+        let nickname = PublishRelay<String>()
+        let feedImages = PublishRelay<[Data]>()
+        let likeCount = PublishRelay<Int>()
+        let commentCount = PublishRelay<Int>()
+        let content = PublishRelay<String>()
+        let date = PublishRelay<String>()
+        let like = PublishRelay<Bool>()
+        
+        
+        input.fetch
+            .bind(with: self) { owner, _ in
+                NetworkManager.shared.performRequest(api: .postDetail(postID: owner.postID), model: FeedPost.self)
+                    .asObservable()
+                    .bind(with: self) { owner, result in
+                        switch result {
+                        case .success(let data):
+                            owner.feedPost = data
+                            
+                            if let feed = owner.feedPost {
+                                resultData.accept(feed)
+                            }
+                            
+                        case .failure(let error):
+                            networkError.accept((error, RouterType.postDetail))
+                        }
+                    }
+                    .disposed(by: owner.disposeBag)
+            }
+            .disposed(by: disposeBag)
+        
+        let feed = resultData.share()
+        
+        feed
+            .map { $0.creator.nick }
+            .bind(with: self) { owner, value in
+                nickname.accept(value)
+            }
+            .disposed(by: disposeBag)
+        
+        feed
+            .map { $0.likes2.count }
+            .bind(with: self) { owner, value in
+                likeCount.accept(value)
+            }
+            .disposed(by: disposeBag)
+        
+        feed
+            .map { $0.comments.count }
+            .bind(with: self) { owner, value in
+                commentCount.accept(value)
+            }
+            .disposed(by: disposeBag)
+        
+        feed
+            .map { $0.content }
+            .bind(with: self) { owner, value in
+                content.accept(value)
+            }
+            .disposed(by: disposeBag)
+        
+        feed
+            .map { $0.createDateString }
+            .bind(with: self) { owner, value in
+                date.accept(value)
+            }
+            .disposed(by: disposeBag)
+        
+        feed
+            .map { $0.creator.profileImage }
+            .compactMap { $0 }
+            .bind(with: self) { owner, value in
+                NetworkManager.shared.fetchImageData(imagePath: value) { result in
+                    switch result {
+                    case .success(let profile):
+                        profileImage.accept(profile)
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        feed
+            .map { $0.files }
+            .filter { !$0.isEmpty }
+            .bind(with: self) { owner, list in
+                
+                var temp: [Data] = []
+                let group = DispatchGroup()
+                
+                for path in list {
+                    
+                    group.enter()
+                    NetworkManager.shared.fetchImageData(imagePath: path) { result in
+                        switch result {
+                        case .success(let data):
+                            temp.append(data)
+                            group.leave()
+                        case .failure(let error):
+                            print(error)
+                            group.leave()
+                        }
+                    }
+                }
+                
+                group.notify(queue: .main) {
+                    feedImages.accept(temp)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        input.likeButtonTapped
+            .bind(with: self) { owner, _ in
+                
+                var newValue: Bool
+                if UserDefaultsManager.shared.likeFeed[owner.postID] != nil {
+                    newValue = false
+                } else {
+                    newValue = true
+                }
+                
+                NetworkManager.shared.performRequest(api: .like2(postID: owner.postID, isLike: newValue), model: [String: Bool].self)
+                    .asObservable()
+                    .bind(with: self) { owner, result in
+                        switch result {
+                        case .success(let data):
+                            if let changedValue = data.first?.value {
+                                var count = owner.feedPost?.likes2.count ?? 0
+                                
+                                if changedValue {
+                                    UserDefaultsManager.shared.likeFeed[owner.postID] = true
+                                    like.accept(true)
+                                    likeCount.accept(count + 1)
+                                } else {
+                                    UserDefaultsManager.shared.likeFeed.removeValue(forKey: owner.postID)
+                                    like.accept(false)
+                                    likeCount.accept(count)
+                                }
+                            }
+                        case .failure(let error):
+                            networkError.accept((error, RouterType.like2))
+                        }
+                    }
+                    .disposed(by: owner.disposeBag)
+            }
+            .disposed(by: disposeBag)
+            
+        
+        return Output(
+            networkError: networkError,
+            profileImage: profileImage,
+            nickname: nickname,
+            feedImages: feedImages,
+            likeCount: likeCount,
+            commentCount: commentCount,
+            content: content,
+            date: date,
+            like: like
+        )
     }
 }

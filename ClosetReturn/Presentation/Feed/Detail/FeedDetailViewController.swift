@@ -18,6 +18,7 @@ final class FeedDetailViewController: BaseViewController {
     private let disposeBag = DisposeBag()
     private let viewModel: FeedDetailViewModel
     
+    private let fetch = PublishRelay<Void>()
     
     //MARK: - Init
     
@@ -56,12 +57,13 @@ final class FeedDetailViewController: BaseViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 0
-        layout.itemSize = CGSize(width: view.frame.size.width, height: view.frame.size.width)
+        layout.itemSize = CGSize(width: view.frame.size.width, height: view.frame.size.width * 1.3)
         
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.register(DetailCollectionViewCell.self, forCellWithReuseIdentifier: DetailCollectionViewCell.identifier)
         cv.contentInsetAdjustmentBehavior = .never
         cv.isPagingEnabled = true
+        cv.showsHorizontalScrollIndicator = false
         return cv
     }()
     
@@ -89,7 +91,7 @@ final class FeedDetailViewController: BaseViewController {
     
     private let commentButton: UIButton = {
         let btn = UIButton(type: .system)
-        btn.setImage(UIImage(systemName: "captions.bubble.fill")?.applyingSymbolConfiguration(.init(weight: .semibold)), for: .normal)
+        btn.setImage(UIImage(systemName: "captions.bubble")?.applyingSymbolConfiguration(.init(weight: .semibold)), for: .normal)
         btn.tintColor = .black
         return btn
     }()
@@ -119,14 +121,95 @@ final class FeedDetailViewController: BaseViewController {
     
     //MARK: - Life Cycle
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetch.accept(())
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupMenuButton()
     }
     
     //MARK: - Configurations
     
     override func bind() {
         
+        let input = FeedDetailViewModel.Input(
+            fetch: fetch,
+            likeButtonTapped: likeButton.rx.tap
+        )
+        let output = viewModel.transform(input: input)
+        
+        let feedImageList = output.feedImages.share()
+        
+        feedImageList
+            .bind(to: collectionView.rx.items(cellIdentifier: DetailCollectionViewCell.identifier, cellType: DetailCollectionViewCell.self)) { row, element, cell in
+                cell.productImageView.image = UIImage(data: element)
+            }
+            .disposed(by: disposeBag)
+        
+        feedImageList
+            .map { $0.count }
+            .bind(with: self) { owner, value in
+                if value <= 1 {
+                    owner.pageControl.isHidden = true
+                } else {
+                    owner.pageControl.isHidden = false
+                }
+                owner.pageControl.numberOfPages = value
+            }
+            .disposed(by: disposeBag)
+        
+        output.profileImage
+            .map { UIImage(data: $0) }
+            .bind(to: profileImageView.rx.image)
+            .disposed(by: disposeBag)
+        
+        output.nickname
+            .bind(to: nicknameLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.likeCount
+            .debug()
+            .map { $0.formatted() }
+            .bind(to: likeCountLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.commentCount
+            .map { $0.formatted() }
+            .bind(to: commentCountLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.content
+            .bind(to: contentTextView.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.date
+            .bind(to: dateLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.like
+            .bind(with: self) { owner, value in
+                owner.updateLikeButtonAppearance(isLiked: value)
+            }
+            .disposed(by: disposeBag)
+        
+        collectionView.rx.contentOffset
+            .map { [weak self] contentOffset -> CGFloat in
+                guard let self = self else { return 0.0 }
+                return contentOffset.x / self.view.frame.size.width
+            }
+            .map { CGFloat((round($0))) }
+            .map { Int($0) }
+            .bind(to: pageControl.rx.currentPage)
+            .disposed(by: disposeBag)
+        
+        output.networkError
+            .bind(with: self) { owner, value in
+                owner.showNetworkRequestFailAlert(errorType: value.0, routerType: value.1)
+            }
+            .disposed(by: disposeBag)
     }
     
     private func setupMenuButton() {
@@ -192,7 +275,7 @@ final class FeedDetailViewController: BaseViewController {
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(profileImageView.snp.bottom).offset(8)
             make.horizontalEdges.equalToSuperview()
-            make.height.equalTo(view.frame.size.width)
+            make.height.equalTo(view.frame.size.width * 1.3)
         }
         
         likeButton.snp.makeConstraints { make in
@@ -225,12 +308,38 @@ final class FeedDetailViewController: BaseViewController {
             make.leading.equalToSuperview().inset(10)
             make.bottom.equalToSuperview().inset(30)
         }
+        
+        pageControl.snp.makeConstraints { make in
+            make.horizontalEdges.equalToSuperview().inset(10)
+            make.bottom.equalTo(collectionView.snp.bottom).offset(-20)
+        }
     }
     
     override func configureUI() {
         super.configureUI()
         contentTextView.backgroundColor = .white
         profileImageView.layer.cornerRadius = 19
+    }
+    
+    //MARK: - Methods
+    
+    private func updateLikeButtonAppearance(isLiked: Bool) {
+        if isLiked {
+            self.likeButton.bounce()
+            self.likeButton.setImage(UIImage(systemName: "suit.heart.fill")?.applyingSymbolConfiguration(.init(weight: .semibold)), for: .normal)
+            self.likeButton.tintColor = Constant.Color.Button.likeColor
+        } else {
+            self.likeButton.bounce()
+            self.likeButton.setImage(UIImage(systemName: "suit.heart")?.applyingSymbolConfiguration(.init(weight: .semibold)), for: .normal)
+            self.likeButton.tintColor = .black
+        }
+    }
+    
+    private func showDeleteCheckAlert(okAction: @escaping ((UIAlertAction) -> Void)) {
+        let alert = UIAlertController(title: "피드 삭제", message: "해당 피드를 삭제하시겠습니까?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "삭제하기", style: .destructive, handler: okAction))
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        self.present(alert, animated: true)
     }
 }
 

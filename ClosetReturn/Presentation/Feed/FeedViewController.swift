@@ -62,7 +62,8 @@ final class FeedViewController: BaseViewController {
             fetchCellImage: fetchCellImage,
             cellWillDisplay: fetchNextPage,
             startRefresh: refreshControl.rx.controlEvent(.valueChanged),
-            newButtonTapped: newButton.rx.tap
+            newButtonTapped: newButton.rx.tap,
+            modelSelected: collectionView.rx.modelSelected(FeedPost.self)
             
         )
         let output = viewModel.transform(
@@ -116,10 +117,13 @@ final class FeedViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
-        
-        
-        
-        
+        output.modelSelected
+            .bind(with: self) { owner, feedPost in
+                let vm = FeedDetailViewModel(postID: feedPost.post_id)
+                let vc = FeedDetailViewController(viewModel: vm)
+                owner.pushViewController(vc)
+            }
+            .disposed(by: disposeBag)
         
         output.networkError
             .bind(with: self) { owner, value in
@@ -129,6 +133,7 @@ final class FeedViewController: BaseViewController {
     }
     
     override func setupNavi() {
+        navigationItem.title = ""
         let label = NavigationTitleLabel(text: "피드")
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: label)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: newButton)
