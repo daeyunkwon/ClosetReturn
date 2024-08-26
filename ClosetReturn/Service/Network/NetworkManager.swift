@@ -268,11 +268,11 @@ final class NetworkManager {
                     } else {
                         switch response.result {
                         case .success(_):
-                            print("DEBUG: 포스트 삭제 성공")
+                            print("DEBUG: 삭제 작업 성공")
                             single(.success(.success(())))
                             
                         case .failure(let error):
-                            print("DEBUG: 포스트 삭제 실패")
+                            print("DEBUG: 삭제 작업 실패")
                             print(error)
                             single(.success(.failure(NetworkError.statusError(codeNumber: error.responseCode ?? 0))))
                         }

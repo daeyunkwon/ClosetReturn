@@ -125,6 +125,7 @@ final class CommentViewModel: BaseViewModel {
                             for i in 0...owner.comments.count - 1 {
                                 if owner.comments[i].comment_id == commentID {
                                     owner.comments.remove(at: i)
+                                    break
                                 }
                             }
                             

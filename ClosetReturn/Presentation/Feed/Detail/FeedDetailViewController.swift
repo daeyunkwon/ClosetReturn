@@ -125,7 +125,13 @@ final class FeedDetailViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationItem.title = "게시물"
         fetch.accept(())
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationItem.title = ""
     }
     
     override func viewDidLoad() {
@@ -144,7 +150,8 @@ final class FeedDetailViewController: BaseViewController {
             likeButtonTapped: likeButton.rx.tap,
             editButtonTapped: editMenuTapped,
             deleteButtonTapped: deleteMenuTapped,
-            alertDeleteButtonTapped: alertDeleteButtonTapped
+            alertDeleteButtonTapped: alertDeleteButtonTapped,
+            commentButtonTapped: commentButton.rx.tap
         )
         let output = viewModel.transform(input: input)
         
@@ -246,6 +253,14 @@ final class FeedDetailViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
+        output.commentButtonTapped
+            .bind(with: self) { owner, value in
+                let vm = CommentViewModel(postID: value.post_id, comments: value.comments)
+                let vc = CommentViewController(viewModel: vm)
+                owner.pushViewController(vc)
+            }
+            .disposed(by: disposeBag)
+        
         output.networkError
             .bind(with: self) { owner, value in
                 owner.showNetworkRequestFailAlert(errorType: value.0, routerType: value.1)
@@ -263,10 +278,6 @@ final class FeedDetailViewController: BaseViewController {
             }
         ])
         menuButton.menu = menu
-    }
-    
-    override func setupNavi() {
-        navigationItem.title = "게시물"
     }
     
     override func configureHierarchy() {

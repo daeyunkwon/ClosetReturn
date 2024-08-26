@@ -36,6 +36,7 @@ final class FeedDetailViewModel: BaseViewModel {
         let editButtonTapped: PublishRelay<Void>
         let deleteButtonTapped: PublishRelay<Void>
         let alertDeleteButtonTapped: PublishRelay<Void>
+        let commentButtonTapped: ControlEvent<Void>
     }
     
     //MARK: - Outputs
@@ -54,6 +55,7 @@ final class FeedDetailViewModel: BaseViewModel {
         let editButtonTapped: PublishRelay<(String, String, [Data])>
         let deleteButtonTapped: PublishRelay<Void>
         let deleteSucceed: PublishRelay<Void>
+        let commentButtonTapped: PublishRelay<(FeedPost)>
     }
     
     //MARK: - Methods
@@ -74,6 +76,7 @@ final class FeedDetailViewModel: BaseViewModel {
         let hideMenuButton = PublishRelay<Bool>()
         let editButtonTapped = PublishRelay<(String, String, [Data])>()
         let deleteSucceed = PublishRelay<Void>()
+        let commentButtonTapped = PublishRelay<(FeedPost)>()
         
         
         input.fetch
@@ -248,6 +251,13 @@ final class FeedDetailViewModel: BaseViewModel {
                     .disposed(by: owner.disposeBag)
             }
             .disposed(by: disposeBag)
+        
+        input.commentButtonTapped
+            .bind(with: self) { owner, _ in
+                guard let data = owner.feedPost else { return }
+                commentButtonTapped.accept(data)
+            }
+            .disposed(by: disposeBag)
             
         
         return Output(
@@ -263,7 +273,8 @@ final class FeedDetailViewModel: BaseViewModel {
             hideMenuButton: hideMenuButton,
             editButtonTapped: editButtonTapped,
             deleteButtonTapped: input.deleteButtonTapped,
-            deleteSucceed: deleteSucceed
+            deleteSucceed: deleteSucceed,
+            commentButtonTapped: commentButtonTapped
         )
     }
 }
