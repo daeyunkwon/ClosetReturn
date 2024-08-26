@@ -157,8 +157,9 @@ final class FeedEditViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
-        
-        
+        output.content
+            .bind(to: contentTextView.rx.text)
+            .disposed(by: disposeBag)
         
         output.doneButtonTapped
             .bind(with: self) { owner, _ in

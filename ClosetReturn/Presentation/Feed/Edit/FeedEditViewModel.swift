@@ -16,12 +16,11 @@ final class FeedEditViewModel: BaseViewModel {
     
     private let disposeBag = DisposeBag()
     
-    private var images: [Data] = []
-    private var content = ""
+    var postID: String = ""
+    var content = ""
+    var images: [Data] = []
     private var imageValid = false
     private var contentValid = false
-    
-    var feedPost: FeedPost?
     
     enum InvalidType: String, CaseIterable {
         case image = "피드 이미지를 등록해 주세요"
@@ -66,6 +65,7 @@ final class FeedEditViewModel: BaseViewModel {
         let networkError: PublishRelay<(NetworkError, RouterType)>
         let succeedUpload: PublishRelay<Void>
         let doneButtonTapped: ControlEvent<Void>
+        let content: PublishRelay<String>
     }
     
     //MARK: - Methods
@@ -78,6 +78,7 @@ final class FeedEditViewModel: BaseViewModel {
         let invalidInfo = PublishRelay<InvalidType>()
         let networkError = PublishRelay<(NetworkError, RouterType)>()
         let succeedUpload = PublishRelay<Void>()
+        let content = PublishRelay<String>()
         
         input.viewDidLoad
             .bind(with: self) { owner, _ in
@@ -86,6 +87,15 @@ final class FeedEditViewModel: BaseViewModel {
                     navigationTitle.accept("피드 등록")
                 case .modify:
                     navigationTitle.accept("피드 수정")
+                    if !owner.images.isEmpty {
+                        owner.imageValid = true
+                        selectedImageList.accept(owner.images)
+                    }
+                    
+                    if !owner.content.isEmpty {
+                        owner.contentValid = true
+                        content.accept(owner.content)
+                    }
                 }
             }
             .disposed(by: disposeBag)
@@ -106,6 +116,7 @@ final class FeedEditViewModel: BaseViewModel {
             .disposed(by: disposeBag)
         
         input.content
+            .skip(1)
             .bind(with: self) { owner, value in
                 owner.content = value
                 
@@ -160,7 +171,7 @@ final class FeedEditViewModel: BaseViewModel {
                                     .disposed(by: owner.disposeBag)
                             
                             case .modify:
-                                NetworkManager.shared.performRequest(api: .postModify(postID: owner.feedPost?.post_id ?? "", uploadPostRequest: nil, uploadFeedRequest: uploadFeedRequest), model: FeedPost.self)
+                                NetworkManager.shared.performRequest(api: .postModify(postID: owner.postID, uploadPostRequest: nil, uploadFeedRequest: uploadFeedRequest), model: FeedPost.self)
                                     .asObservable()
                                     .bind(with: self) { owner, result in
                                         switch result {
@@ -196,7 +207,8 @@ final class FeedEditViewModel: BaseViewModel {
             invalidInfo: invalidInfo,
             networkError: networkError,
             succeedUpload: succeedUpload,
-            doneButtonTapped: input.doneButtonTapped
+            doneButtonTapped: input.doneButtonTapped,
+            content: content
         )
     }
 }

@@ -19,6 +19,7 @@ final class FeedDetailViewController: BaseViewController {
     private let viewModel: FeedDetailViewModel
     
     private let fetch = PublishRelay<Void>()
+    private let editMenuTapped = PublishRelay<Void>()
     
     //MARK: - Init
     
@@ -137,7 +138,8 @@ final class FeedDetailViewController: BaseViewController {
         
         let input = FeedDetailViewModel.Input(
             fetch: fetch,
-            likeButtonTapped: likeButton.rx.tap
+            likeButtonTapped: likeButton.rx.tap,
+            editButtonTapped: editMenuTapped
         )
         let output = viewModel.transform(input: input)
         
@@ -171,7 +173,6 @@ final class FeedDetailViewController: BaseViewController {
             .disposed(by: disposeBag)
         
         output.likeCount
-            .debug()
             .map { $0.formatted() }
             .bind(to: likeCountLabel.rx.text)
             .disposed(by: disposeBag)
@@ -209,6 +210,22 @@ final class FeedDetailViewController: BaseViewController {
             .bind(to: pageControl.rx.currentPage)
             .disposed(by: disposeBag)
         
+        output.editButtonTapped
+            .bind(with: self) { owner, value in
+                let vm = FeedEditViewModel(viewType: .modify)
+                vm.postID = value.0
+                vm.content = value.1
+                vm.images = value.2
+                vm.postUploadSucceed = {
+                    owner.showToast(message: "피드가 수정되었습니다", position: .bottom)
+                    owner.fetch.accept(())
+                }
+                let vc = FeedEditViewController(viewModel: vm)
+                let navi = UINavigationController(rootViewController: vc)
+                owner.present(navi, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
         output.networkError
             .bind(with: self) { owner, value in
                 owner.showNetworkRequestFailAlert(errorType: value.0, routerType: value.1)
@@ -219,7 +236,7 @@ final class FeedDetailViewController: BaseViewController {
     private func setupMenuButton() {
         let menu = UIMenu(title: "편집", children: [
             UIAction(title: "수정하기", image: UIImage(systemName: "square.and.pencil")) { [weak self] _ in
-                //self?.editMenuTapped.accept(())
+                self?.editMenuTapped.accept(())
             },
             UIAction(title: "삭제하기", image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
                 //self?.deleteMenuTapped.accept(())

@@ -18,6 +18,7 @@ final class FeedDetailViewModel: BaseViewModel {
     
     private var postID: String
     private var feedPost: FeedPost?
+    private var imageDatas: [Data] = []
     
     //MARK: - Init
     
@@ -30,6 +31,7 @@ final class FeedDetailViewModel: BaseViewModel {
     struct Input {
         let fetch: PublishRelay<Void>
         let likeButtonTapped: ControlEvent<Void>
+        let editButtonTapped: PublishRelay<Void>
     }
     
     //MARK: - Outputs
@@ -45,6 +47,7 @@ final class FeedDetailViewModel: BaseViewModel {
         let date: PublishRelay<String>
         let like: PublishRelay<Bool>
         let hideMenuButton: PublishRelay<Bool>
+        let editButtonTapped: PublishRelay<(String, String, [Data])>
     }
     
     //MARK: - Methods
@@ -63,6 +66,7 @@ final class FeedDetailViewModel: BaseViewModel {
         let date = PublishRelay<String>()
         let like = PublishRelay<Bool>()
         let hideMenuButton = PublishRelay<Bool>()
+        let editButtonTapped = PublishRelay<(String, String, [Data])>()
         
         
         input.fetch
@@ -162,6 +166,7 @@ final class FeedDetailViewModel: BaseViewModel {
                 }
                 
                 group.notify(queue: .main) {
+                    owner.imageDatas = temp
                     feedImages.accept(temp)
                 }
             }
@@ -213,6 +218,13 @@ final class FeedDetailViewModel: BaseViewModel {
                     .disposed(by: owner.disposeBag)
             }
             .disposed(by: disposeBag)
+        
+        input.editButtonTapped
+            .bind(with: self) { owner, _ in
+                guard let data = owner.feedPost else { return }
+                editButtonTapped.accept((data.post_id, data.content, owner.imageDatas))
+            }
+            .disposed(by: disposeBag)
             
         
         return Output(
@@ -225,7 +237,8 @@ final class FeedDetailViewModel: BaseViewModel {
             content: content,
             date: date,
             like: like,
-            hideMenuButton: hideMenuButton
+            hideMenuButton: hideMenuButton,
+            editButtonTapped: editButtonTapped
         )
     }
 }
