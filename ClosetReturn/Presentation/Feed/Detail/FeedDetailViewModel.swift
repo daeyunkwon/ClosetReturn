@@ -20,6 +20,8 @@ final class FeedDetailViewModel: BaseViewModel {
     private var feedPost: FeedPost?
     private var imageDatas: [Data] = []
     
+    var postDeleteSucceed: () -> Void = { }
+    
     //MARK: - Init
     
     init(postID: String) {
@@ -32,6 +34,8 @@ final class FeedDetailViewModel: BaseViewModel {
         let fetch: PublishRelay<Void>
         let likeButtonTapped: ControlEvent<Void>
         let editButtonTapped: PublishRelay<Void>
+        let deleteButtonTapped: PublishRelay<Void>
+        let alertDeleteButtonTapped: PublishRelay<Void>
     }
     
     //MARK: - Outputs
@@ -48,6 +52,8 @@ final class FeedDetailViewModel: BaseViewModel {
         let like: PublishRelay<Bool>
         let hideMenuButton: PublishRelay<Bool>
         let editButtonTapped: PublishRelay<(String, String, [Data])>
+        let deleteButtonTapped: PublishRelay<Void>
+        let deleteSucceed: PublishRelay<Void>
     }
     
     //MARK: - Methods
@@ -67,6 +73,7 @@ final class FeedDetailViewModel: BaseViewModel {
         let like = PublishRelay<Bool>()
         let hideMenuButton = PublishRelay<Bool>()
         let editButtonTapped = PublishRelay<(String, String, [Data])>()
+        let deleteSucceed = PublishRelay<Void>()
         
         
         input.fetch
@@ -225,6 +232,22 @@ final class FeedDetailViewModel: BaseViewModel {
                 editButtonTapped.accept((data.post_id, data.content, owner.imageDatas))
             }
             .disposed(by: disposeBag)
+        
+        input.alertDeleteButtonTapped
+            .bind(with: self) { owner, _ in
+                NetworkManager.shared.performDeleteReuqest(api: .postDelete(postID: owner.postID))
+                    .asObservable()
+                    .bind { result in
+                        switch result {
+                        case .success(_):
+                            deleteSucceed.accept(())
+                        case .failure(let error):
+                            networkError.accept((error, RouterType.postDelete))
+                        }
+                    }
+                    .disposed(by: owner.disposeBag)
+            }
+            .disposed(by: disposeBag)
             
         
         return Output(
@@ -238,7 +261,9 @@ final class FeedDetailViewModel: BaseViewModel {
             date: date,
             like: like,
             hideMenuButton: hideMenuButton,
-            editButtonTapped: editButtonTapped
+            editButtonTapped: editButtonTapped,
+            deleteButtonTapped: input.deleteButtonTapped,
+            deleteSucceed: deleteSucceed
         )
     }
 }

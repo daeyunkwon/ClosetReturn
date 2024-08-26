@@ -20,6 +20,7 @@ final class FeedDetailViewController: BaseViewController {
     
     private let fetch = PublishRelay<Void>()
     private let editMenuTapped = PublishRelay<Void>()
+    private let deleteMenuTapped = PublishRelay<Void>()
     
     //MARK: - Init
     
@@ -136,10 +137,14 @@ final class FeedDetailViewController: BaseViewController {
     
     override func bind() {
         
+        let alertDeleteButtonTapped = PublishRelay<Void>()
+        
         let input = FeedDetailViewModel.Input(
             fetch: fetch,
             likeButtonTapped: likeButton.rx.tap,
-            editButtonTapped: editMenuTapped
+            editButtonTapped: editMenuTapped,
+            deleteButtonTapped: deleteMenuTapped,
+            alertDeleteButtonTapped: alertDeleteButtonTapped
         )
         let output = viewModel.transform(input: input)
         
@@ -226,6 +231,21 @@ final class FeedDetailViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
+        output.deleteButtonTapped
+            .bind(with: self) { owner, _ in
+                owner.showDeleteCheckAlert { deleteAction in
+                    alertDeleteButtonTapped.accept(())
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        output.deleteSucceed
+            .bind(with: self) { owner, _ in
+                owner.viewModel.postDeleteSucceed()
+                owner.popViewController()
+            }
+            .disposed(by: disposeBag)
+        
         output.networkError
             .bind(with: self) { owner, value in
                 owner.showNetworkRequestFailAlert(errorType: value.0, routerType: value.1)
@@ -239,7 +259,7 @@ final class FeedDetailViewController: BaseViewController {
                 self?.editMenuTapped.accept(())
             },
             UIAction(title: "삭제하기", image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
-                //self?.deleteMenuTapped.accept(())
+                self?.deleteMenuTapped.accept(())
             }
         ])
         menuButton.menu = menu

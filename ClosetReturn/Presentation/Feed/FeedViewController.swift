@@ -120,6 +120,10 @@ final class FeedViewController: BaseViewController {
         output.modelSelected
             .bind(with: self) { owner, feedPost in
                 let vm = FeedDetailViewModel(postID: feedPost.post_id)
+                vm.postDeleteSucceed = {
+                    owner.showToast(message: "피드가 삭제되었습니다", position: .bottom)
+                    fetch.accept(())
+                }
                 let vc = FeedDetailViewController(viewModel: vm)
                 owner.pushViewController(vc)
             }
