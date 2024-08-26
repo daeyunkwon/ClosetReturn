@@ -51,7 +51,7 @@ final class ProductDetailViewController: BaseViewController {
         
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.isPagingEnabled = true
-        cv.register(ProductDetailCollectionViewCell.self, forCellWithReuseIdentifier: ProductDetailCollectionViewCell.identifier)
+        cv.register(DetailCollectionViewCell.self, forCellWithReuseIdentifier: DetailCollectionViewCell.identifier)
         cv.backgroundColor = .lightGray
         cv.layer.cornerRadius = 20
         cv.contentInsetAdjustmentBehavior = .never
@@ -266,7 +266,6 @@ final class ProductDetailViewController: BaseViewController {
             )
             let output = viewModel.transform(input: input)
             
-            fetch.accept(())
             
             output.profileImageData
                 .map { UIImage(data: $0) }
@@ -311,7 +310,7 @@ final class ProductDetailViewController: BaseViewController {
             
             output.productImageDatas
                 .share()
-                .bind(to: collectionView.rx.items(cellIdentifier: ProductDetailCollectionViewCell.identifier, cellType: ProductDetailCollectionViewCell.self)) { row, element, cell in
+                .bind(to: collectionView.rx.items(cellIdentifier: DetailCollectionViewCell.identifier, cellType: DetailCollectionViewCell.self)) { row, element, cell in
                     cell.productImageView.image = UIImage(data: element)
                 }
                 .disposed(by: disposeBag)
@@ -409,7 +408,6 @@ final class ProductDetailViewController: BaseViewController {
                 self?.deleteMenuTapped.accept(())
             }
         ])
-        
         menuButton.menu = menu
     }
     

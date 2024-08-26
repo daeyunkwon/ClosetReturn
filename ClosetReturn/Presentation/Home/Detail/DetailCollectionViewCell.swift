@@ -9,7 +9,7 @@ import UIKit
 
 import SnapKit
 
-final class ProductDetailCollectionViewCell: BaseCollectionViewCell {
+final class DetailCollectionViewCell: BaseCollectionViewCell {
     
     //MARK: - UI Components
     
@@ -17,7 +17,6 @@ final class ProductDetailCollectionViewCell: BaseCollectionViewCell {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
-        iv.image = UIImage(systemName: "star.fill")
         iv.backgroundColor = .lightGray
         return iv
     }()
