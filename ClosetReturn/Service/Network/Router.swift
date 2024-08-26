@@ -26,6 +26,8 @@ enum Router {
     case commentModify(postID: String, commentID: String, comment: String)
     case commentDelete(postID: String, commentID: String)
     case like2(postID: String, isLike: Bool)
+    case likeFetch(next: String, limit: String)
+    case like2Fetch(next: String, limit: String)
 }
 
 enum RouterType {
@@ -45,6 +47,8 @@ enum RouterType {
     case commentModify
     case commnetDelete
     case like2
+    case likeFetch
+    case like2Fetch
 }
 
 extension Router: URLRequestConvertible {
@@ -57,7 +61,7 @@ extension Router: URLRequestConvertible {
         case .emailValidation, .joinUser, .loginUser, .like, .imageUpload, .postUpload, .commentUpload, .like2:
             return .post
             
-        case .posts, .imageFetch, .refresh, .postDetail:
+        case .posts, .imageFetch, .refresh, .postDetail, .likeFetch, .like2Fetch:
             return .get
             
         case .postModify, .commentModify:
@@ -86,6 +90,8 @@ extension Router: URLRequestConvertible {
         case .commentModify(let postID, let commentID, _): return APIURL.commentModifyURL(postID: postID, commentID: commentID)
         case .commentDelete(let postID, let commentID): return APIURL.commentDeleteURL(postID: postID, commentID: commentID)
         case .like2(let postID, _): return APIURL.like2URL(postID: postID)
+        case .likeFetch(_, _): return APIURL.likeFetchURL
+        case .like2Fetch(_, _): return APIURL.like2FetchURL
         }
     }
     
@@ -185,6 +191,12 @@ extension Router: URLRequestConvertible {
                 URLQueryItem(name: "next", value: next),
                 URLQueryItem(name: "limit", value: limit),
                 URLQueryItem(name: "product_id", value: product_id),
+            ]
+            
+        case .likeFetch(let next, let limit), .like2Fetch(let next, let limit):
+            return [
+                URLQueryItem(name: "next", value: next),
+                URLQueryItem(name: "limit", value: limit),
             ]
             
         default:
