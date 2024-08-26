@@ -63,6 +63,14 @@ final class HomeTableViewCell: BaseTableViewCell {
         return label
     }()
     
+    private let categoryLabel: UILabel = {
+        let label = UILabel()
+        label.font = Constant.Font.secondaryFont
+        label.textColor = Constant.Color.Text.brandTitleColor
+        label.textAlignment = .left
+        return label
+    }()
+    
     private let priceLabel: UILabel = {
         let label = UILabel()
         label.font = Constant.Font.priceFont
@@ -86,6 +94,7 @@ final class HomeTableViewCell: BaseTableViewCell {
         containerView.addSubviews(
             titleLabel,
             brandLabel,
+            categoryLabel,
             likeButton,
             priceLabel
         )
@@ -116,6 +125,12 @@ final class HomeTableViewCell: BaseTableViewCell {
             make.trailing.equalTo(titleLabel)
         }
         
+        categoryLabel.snp.makeConstraints { make in
+            make.top.equalTo(brandLabel.snp.bottom).offset(10)
+            make.leading.equalTo(titleLabel)
+            make.trailing.equalTo(titleLabel)
+        }
+        
         likeButton.snp.makeConstraints { make in
             make.size.equalTo(30)
             make.trailing.equalToSuperview().inset(20)
@@ -136,9 +151,10 @@ final class HomeTableViewCell: BaseTableViewCell {
     //MARK: - Methods
     
     func cellConfig(data: ProductPost) {
-        titleLabel.text = data.content
+        titleLabel.text = data.title
         brandLabel.text = data.content3
-        priceLabel.text = (Int(data.content1)?.formatted() ?? "") + "원"
+        priceLabel.text = (data.price?.formatted() ?? "") + "원"
+        categoryLabel.text = data.content2
         
         if data.files.first != nil {
             NetworkManager.shared.fetchImageData(imagePath: data.files[0]) { [weak self] result in

@@ -92,6 +92,12 @@ final class FeedDetailViewModel: BaseViewModel {
                                 resultData.accept(feed)
                             }
                             
+                            if UserDefaultsManager.shared.likeFeed[data.post_id] != nil {
+                                like.accept(true)
+                            } else {
+                                like.accept(false)
+                            }
+                            
                         case .failure(let error):
                             networkError.accept((error, RouterType.postDetail))
                         }
