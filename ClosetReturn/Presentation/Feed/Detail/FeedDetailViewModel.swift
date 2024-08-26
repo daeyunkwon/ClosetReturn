@@ -44,6 +44,7 @@ final class FeedDetailViewModel: BaseViewModel {
         let content: PublishRelay<String>
         let date: PublishRelay<String>
         let like: PublishRelay<Bool>
+        let hideMenuButton: PublishRelay<Bool>
     }
     
     //MARK: - Methods
@@ -61,6 +62,7 @@ final class FeedDetailViewModel: BaseViewModel {
         let content = PublishRelay<String>()
         let date = PublishRelay<String>()
         let like = PublishRelay<Bool>()
+        let hideMenuButton = PublishRelay<Bool>()
         
         
         input.fetch
@@ -165,6 +167,17 @@ final class FeedDetailViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
+        feed
+            .map { $0.creator.user_id }
+            .bind { value in
+                if UserDefaultsManager.shared.userID == value {
+                    hideMenuButton.accept(false)
+                } else {
+                    hideMenuButton.accept(true)
+                }
+            }
+            .disposed(by: disposeBag)
+        
         input.likeButtonTapped
             .bind(with: self) { owner, _ in
                 
@@ -211,7 +224,8 @@ final class FeedDetailViewModel: BaseViewModel {
             commentCount: commentCount,
             content: content,
             date: date,
-            like: like
+            like: like,
+            hideMenuButton: hideMenuButton
         )
     }
 }

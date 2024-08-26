@@ -195,6 +195,10 @@ final class FeedDetailViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
+        output.hideMenuButton
+            .bind(to: menuButton.rx.isHidden)
+            .disposed(by: disposeBag)
+        
         collectionView.rx.contentOffset
             .map { [weak self] contentOffset -> CGFloat in
                 guard let self = self else { return 0.0 }
