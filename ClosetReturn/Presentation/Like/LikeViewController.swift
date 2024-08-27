@@ -220,9 +220,6 @@ final class LikeViewController: BaseViewController {
                 let vm = FeedDetailViewModel(postID: feedPost.post_id)
                 vm.postDeleteSucceed = {
                     owner.showToast(message: "피드가 삭제되었습니다", position: .bottom)
-                    //owner.fetchReloadToFeed.accept(())
-                    //owner.segmentControl.selectedSegmentIndex = 1
-                    owner.updateUnderLineXPosition()
                 }
                 let vc = FeedDetailViewController(viewModel: vm)
                 owner.pushViewController(vc)
@@ -289,15 +286,28 @@ final class LikeViewController: BaseViewController {
     //MARK: - Methods
     
     func updateUnderLineXPosition() {
-        let halfWidth = segmentControl.frame.width / 2
-        let xPosition = segmentControl.frame.origin.x + (halfWidth * CGFloat(segmentControl.selectedSegmentIndex))
-        
-        UIView.animate(withDuration: 0.2) {
-            self.underLineView.frame.origin.x = xPosition
+        if segmentControl.selectedSegmentIndex == 0 {
+            UIView.animate(withDuration: 0.2) { [weak self] in
+                guard let self else { return }
+                self.underLineView.snp.remakeConstraints { make in
+                    make.top.equalTo(self.segmentControl.snp.bottom).offset(10)
+                    make.leading.equalTo(self.segmentControl.snp.leading)
+                    make.width.equalTo(self.segmentControl.snp.width).dividedBy(2)
+                    make.height.equalTo(2)
+                }
+                self.view.layoutIfNeeded()
+            }
+        } else {
+            UIView.animate(withDuration: 0.2) { [weak self] in
+                guard let self else { return }
+                self.underLineView.snp.remakeConstraints { make in
+                    make.top.equalTo(self.segmentControl.snp.bottom).offset(10)
+                    make.trailing.equalTo(self.segmentControl.snp.trailing)
+                    make.width.equalTo(self.segmentControl.snp.width).dividedBy(2)
+                    make.height.equalTo(2)
+                }
+                self.view.layoutIfNeeded()
+            }
         }
-        
-        print("선택 세그먼트: \(segmentControl.selectedSegmentIndex)")
-        print("width: \(segmentControl.frame.width)")
-        print("xPosition: \(xPosition)")
     }
 }
