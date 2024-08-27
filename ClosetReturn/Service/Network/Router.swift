@@ -103,7 +103,7 @@ extension Router: URLRequestConvertible {
                 HeaderKey.sesacKey.rawValue: APIKey.sesacKey
             ]
         
-        case .posts, .imageFetch, .postDelete, .commentDelete:
+        case .posts, .imageFetch, .postDelete, .commentDelete, .likeFetch, .like2Fetch:
             return [
                 HeaderKey.authorization.rawValue: UserDefaultsManager.shared.accessToken,
                 HeaderKey.sesacKey.rawValue: APIKey.sesacKey,

@@ -224,7 +224,12 @@ final class FeedDetailViewModel: BaseViewModel {
                                 } else {
                                     UserDefaultsManager.shared.likeFeed.removeValue(forKey: owner.postID)
                                     like.accept(false)
-                                    likeCount.accept(count)
+                                    if count == 0 {
+                                        likeCount.accept(count)
+                                    } else {
+                                        likeCount.accept(count - 1)
+                                    }
+                                    
                                 }
                             }
                         case .failure(let error):

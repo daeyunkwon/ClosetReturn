@@ -17,7 +17,7 @@ final class FeedViewModel: BaseViewModel {
     private let disposeBag = DisposeBag()
     
     private var next_cursor = ""
-    private var limit = "20"
+    private var limit = "15"
     
     private var feeds: [FeedPost] = []
     
@@ -102,6 +102,8 @@ final class FeedViewModel: BaseViewModel {
                 if indexPath.row == owner.feeds.count - 1 {
                     if owner.next_cursor != "0" {
                         fetchFeed(next_cursor: owner.next_cursor) { }
+                    } else {
+                        print("DEBUG: 더 이상 피드가 존재하지 않으므로 fetch 미실행")
                     }
                 }
             }
