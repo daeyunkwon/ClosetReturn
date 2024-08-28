@@ -62,6 +62,9 @@
 		44B2229A2C7B91AD009BC14C /* FeedDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B222992C7B91AD009BC14C /* FeedDetailViewController.swift */; };
 		44B222A22C7CBAFD009BC14C /* LikeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B222A12C7CBAFD009BC14C /* LikeViewModel.swift */; };
 		44B222A42C7CBB08009BC14C /* LikeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B222A32C7CBB08009BC14C /* LikeViewController.swift */; };
+		44B222B32C7E2F5E009BC14C /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B222B22C7E2F5E009BC14C /* ProfileViewModel.swift */; };
+		44B222B52C7E2F6C009BC14C /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B222B42C7E2F6C009BC14C /* ProfileViewController.swift */; };
+		44B222C02C7F0B4C009BC14C /* ProductBuyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B222BF2C7F0B4C009BC14C /* ProductBuyTableViewCell.swift */; };
 		44C0BAB12C738CA900136643 /* RefreshModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C0BAB02C738CA900136643 /* RefreshModel.swift */; };
 		44C0BAB32C7493DC00136643 /* JoinUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C0BAB22C7493DC00136643 /* JoinUser.swift */; };
 		44C0BAD22C75E2EA00136643 /* ProductDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C0BAD12C75E2EA00136643 /* ProductDetailViewController.swift */; };
@@ -133,6 +136,9 @@
 		44B222992C7B91AD009BC14C /* FeedDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailViewController.swift; sourceTree = "<group>"; };
 		44B222A12C7CBAFD009BC14C /* LikeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeViewModel.swift; sourceTree = "<group>"; };
 		44B222A32C7CBB08009BC14C /* LikeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeViewController.swift; sourceTree = "<group>"; };
+		44B222B22C7E2F5E009BC14C /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		44B222B42C7E2F6C009BC14C /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		44B222BF2C7F0B4C009BC14C /* ProductBuyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductBuyTableViewCell.swift; sourceTree = "<group>"; };
 		44C0BAB02C738CA900136643 /* RefreshModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshModel.swift; sourceTree = "<group>"; };
 		44C0BAB22C7493DC00136643 /* JoinUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinUser.swift; sourceTree = "<group>"; };
 		44C0BAD12C75E2EA00136643 /* ProductDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailViewController.swift; sourceTree = "<group>"; };
@@ -414,6 +420,9 @@
 		44B222A02C7CBACF009BC14C /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				44B222B22C7E2F5E009BC14C /* ProfileViewModel.swift */,
+				44B222B42C7E2F6C009BC14C /* ProfileViewController.swift */,
+				44B222BF2C7F0B4C009BC14C /* ProductBuyTableViewCell.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -564,6 +573,8 @@
 				449AD07D2C6E0B1900B0ED37 /* HeaderKey.swift in Sources */,
 				449AD0642C6DC4FB00B0ED37 /* UIView+Extension.swift in Sources */,
 				44E546F92C7B6AE500C27AAE /* FeedEditViewModel.swift in Sources */,
+				44B222C02C7F0B4C009BC14C /* ProductBuyTableViewCell.swift in Sources */,
+				44B222B52C7E2F6C009BC14C /* ProfileViewController.swift in Sources */,
 				4486AD912C78776000A8BA9C /* RoundedBackTitleContainerView.swift in Sources */,
 				4486AD972C7896C000A8BA9C /* PhotoButtonView.swift in Sources */,
 				44A39D4B2C723843009BCC44 /* SignUpCompleteViewController.swift in Sources */,
@@ -606,6 +617,7 @@
 				44B222982C7B91A4009BC14C /* FeedDetailViewModel.swift in Sources */,
 				44A39D4D2C725F86009BCC44 /* UserDefaultsManager.swift in Sources */,
 				44E546EC2C7B297A00C27AAE /* FeedViewModel.swift in Sources */,
+				44B222B32C7E2F5E009BC14C /* ProfileViewModel.swift in Sources */,
 				449AD06D2C6DC5EA00B0ED37 /* BaseCollectionViewCell.swift in Sources */,
 				44A39D5A2C73377B009BCC44 /* HomeViewController.swift in Sources */,
 				449AD07F2C6E0BA800B0ED37 /* BodyKey.swift in Sources */,

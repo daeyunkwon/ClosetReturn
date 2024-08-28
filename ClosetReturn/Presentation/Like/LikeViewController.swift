@@ -25,8 +25,8 @@ final class LikeViewController: BaseViewController {
     
     private let segmentControl: UISegmentedControl = {
         let segment = UISegmentedControl()
-        segment.insertSegment(withTitle: "상품", at: 0, animated: true)
-        segment.insertSegment(withTitle: "피드", at: 1, animated: true)
+        segment.insertSegment(withTitle: "상품", at: 0, animated: false)
+        segment.insertSegment(withTitle: "피드", at: 1, animated: false)
         segment.selectedSegmentIndex = 0
         segment.setTitleTextAttributes(
             [NSAttributedString.Key.foregroundColor: UIColor.lightGray, NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 16)], for: .normal)
@@ -121,6 +121,7 @@ final class LikeViewController: BaseViewController {
             .disposed(by: disposeBag)
         
         output.selectedSegmentIndex
+            .skip(1)
             .bind(with: self) { owner, index in
                 owner.updateUnderLineXPosition()
                 
@@ -257,7 +258,7 @@ final class LikeViewController: BaseViewController {
     override func configureLayout() {
         segmentControl.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(15)
-            make.horizontalEdges.equalToSuperview().inset(20)
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(20)
             make.height.equalTo(30)
         }
         

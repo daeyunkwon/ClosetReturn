@@ -39,15 +39,15 @@ final class TabBarController: UITabBarController, UITabBarControllerDelegate {
         likeVC.tabBarItem = UITabBarItem(title: "좋아요", image: UIImage(systemName: "suit.heart"), selectedImage: UIImage(systemName: "suit.heart.fill"))
         likeVC.tabBarItem.tag = 2
         
-        let dummy4 = UINavigationController(rootViewController: UIViewController())
-        dummy4.tabBarItem = UITabBarItem(title: "나", image: UIImage(systemName: "person"), selectedImage: UIImage(systemName: "person.fill"))
-        dummy4.tabBarItem.tag = 3
+        let profileVC = UINavigationController(rootViewController: ProfileViewController())
+        profileVC.tabBarItem = UITabBarItem(title: "프로필", image: UIImage(systemName: "person"), selectedImage: UIImage(systemName: "person.fill"))
+        profileVC.tabBarItem.tag = 3
         
-        [homeVC, feedVC, likeVC, dummy4].forEach {
+        [homeVC, feedVC, likeVC, profileVC].forEach {
             $0.view.backgroundColor = .white
         }
         
-        self.setViewControllers([homeVC, feedVC, likeVC, dummy4], animated: false)
+        self.setViewControllers([homeVC, feedVC, likeVC, profileVC], animated: false)
     }
     
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {

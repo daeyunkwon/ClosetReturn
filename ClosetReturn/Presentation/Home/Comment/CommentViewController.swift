@@ -206,7 +206,7 @@ final class CommentViewController: BaseViewController {
     func showCommentDeleteCheckAlert(completionHandler: @escaping (UIAlertAction) -> Void) {
         let alert = UIAlertController(title: "댓글 삭제", message: "해당 댓글을 삭제할까요?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "삭제하기", style: .default, handler: completionHandler))
-        alert.addAction(UIAlertAction(title: "취소", style: .default))
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         self.present(alert, animated: true)
     }
 }
