@@ -28,6 +28,7 @@ enum Router {
     case like2(postID: String, isLike: Bool)
     case likeFetch(next: String, limit: String)
     case like2Fetch(next: String, limit: String)
+    case targetUserProfile(userID: String)
 }
 
 enum RouterType {
@@ -49,6 +50,7 @@ enum RouterType {
     case like2
     case likeFetch
     case like2Fetch
+    case targetUserProfile
 }
 
 extension Router: URLRequestConvertible {
@@ -61,7 +63,7 @@ extension Router: URLRequestConvertible {
         case .emailValidation, .joinUser, .loginUser, .like, .imageUpload, .postUpload, .commentUpload, .like2:
             return .post
             
-        case .posts, .imageFetch, .refresh, .postDetail, .likeFetch, .like2Fetch:
+        case .posts, .imageFetch, .refresh, .postDetail, .likeFetch, .like2Fetch, .targetUserProfile:
             return .get
             
         case .postModify, .commentModify:
@@ -92,6 +94,7 @@ extension Router: URLRequestConvertible {
         case .like2(let postID, _): return APIURL.like2URL(postID: postID)
         case .likeFetch(_, _): return APIURL.likeFetchURL
         case .like2Fetch(_, _): return APIURL.like2FetchURL
+        case .targetUserProfile(let userID): return APIURL.targetUserProfileFetchURL(userID: userID)
         }
     }
     
@@ -103,7 +106,7 @@ extension Router: URLRequestConvertible {
                 HeaderKey.sesacKey.rawValue: APIKey.sesacKey
             ]
         
-        case .posts, .imageFetch, .postDelete, .commentDelete, .likeFetch, .like2Fetch:
+        case .posts, .imageFetch, .postDelete, .commentDelete, .likeFetch, .like2Fetch, .targetUserProfile:
             return [
                 HeaderKey.authorization.rawValue: UserDefaultsManager.shared.accessToken,
                 HeaderKey.sesacKey.rawValue: APIKey.sesacKey,
