@@ -183,4 +183,24 @@ final class HomeTableViewCell: BaseTableViewCell {
             likeButton.setImage(UIImage(systemName: "suit.heart")?.applyingSymbolConfiguration(.init(weight: .semibold)), for: .normal)
         }
     }
+    
+    func cellConfig(withCommonPost data: CommonPost) {
+        titleLabel.text = data.title
+        brandLabel.text = data.content3
+        priceLabel.text = (data.price?.formatted() ?? "") + "원"
+        categoryLabel.text = data.content2
+        
+        if data.files.first != nil {
+            NetworkManager.shared.fetchImageData(imagePath: data.files[0]) { [weak self] result in
+                switch result {
+                case .success(let value):
+                    self?.productImageView.image = UIImage(data: value)
+                    
+                case .failure(let error):
+                    print("Error: 이미지 조회 API 실패")
+                    print(error)
+                }
+            }
+        }
+    }
 }

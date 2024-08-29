@@ -65,6 +65,9 @@
 		44B222B32C7E2F5E009BC14C /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B222B22C7E2F5E009BC14C /* ProfileViewModel.swift */; };
 		44B222B52C7E2F6C009BC14C /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B222B42C7E2F6C009BC14C /* ProfileViewController.swift */; };
 		44B222C02C7F0B4C009BC14C /* ProductBuyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B222BF2C7F0B4C009BC14C /* ProductBuyTableViewCell.swift */; };
+		44B222C22C7F2C22009BC14C /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B222C12C7F2C22009BC14C /* Profile.swift */; };
+		44B222C42C7F3CE3009BC14C /* CommonPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B222C32C7F3CE3009BC14C /* CommonPost.swift */; };
+		44B222D22C806EFA009BC14C /* iamport-ios in Frameworks */ = {isa = PBXBuildFile; productRef = 44B222D12C806EFA009BC14C /* iamport-ios */; };
 		44C0BAB12C738CA900136643 /* RefreshModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C0BAB02C738CA900136643 /* RefreshModel.swift */; };
 		44C0BAB32C7493DC00136643 /* JoinUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C0BAB22C7493DC00136643 /* JoinUser.swift */; };
 		44C0BAD22C75E2EA00136643 /* ProductDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C0BAD12C75E2EA00136643 /* ProductDetailViewController.swift */; };
@@ -139,6 +142,8 @@
 		44B222B22C7E2F5E009BC14C /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		44B222B42C7E2F6C009BC14C /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		44B222BF2C7F0B4C009BC14C /* ProductBuyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductBuyTableViewCell.swift; sourceTree = "<group>"; };
+		44B222C12C7F2C22009BC14C /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
+		44B222C32C7F3CE3009BC14C /* CommonPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonPost.swift; sourceTree = "<group>"; };
 		44C0BAB02C738CA900136643 /* RefreshModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshModel.swift; sourceTree = "<group>"; };
 		44C0BAB22C7493DC00136643 /* JoinUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinUser.swift; sourceTree = "<group>"; };
 		44C0BAD12C75E2EA00136643 /* ProductDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailViewController.swift; sourceTree = "<group>"; };
@@ -171,6 +176,7 @@
 				449AD08A2C6F260A00B0ED37 /* RxSwift in Frameworks */,
 				4486AD9E2C7905F900A8BA9C /* Toast in Frameworks */,
 				449AD0792C6DE9ED00B0ED37 /* Alamofire in Frameworks */,
+				44B222D22C806EFA009BC14C /* iamport-ios in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +309,8 @@
 				44A39D5F2C7347AF009BCC44 /* ProductPost.swift */,
 				443A2F072C79CCD60010FB19 /* Files.swift */,
 				44E546F32C7B560700C27AAE /* FeedPost.swift */,
+				44B222C12C7F2C22009BC14C /* Profile.swift */,
+				44B222C32C7F3CE3009BC14C /* CommonPost.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -502,6 +510,7 @@
 				449AD0972C6F6BC000B0ED37 /* IQKeyboardManagerSwift */,
 				44A39D642C735642009BCC44 /* Kingfisher */,
 				4486AD9D2C7905F900A8BA9C /* Toast */,
+				44B222D12C806EFA009BC14C /* iamport-ios */,
 			);
 			productName = ClosetReturn;
 			productReference = 449AD0352C6CA0B200B0ED37 /* ClosetReturn.app */;
@@ -538,6 +547,7 @@
 				449AD0962C6F6BC000B0ED37 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 				44A39D632C735642009BCC44 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				4486AD9C2C7905F900A8BA9C /* XCRemoteSwiftPackageReference "Toast-Swift" */,
+				44B222D02C806EF9009BC14C /* XCRemoteSwiftPackageReference "iamport-ios" */,
 			);
 			productRefGroup = 449AD0362C6CA0B200B0ED37 /* Products */;
 			projectDirPath = "";
@@ -586,6 +596,7 @@
 				449AD0702C6DC61800B0ED37 /* Reusable.swift in Sources */,
 				44A39D5E2C733F87009BCC44 /* HomeTableViewCell.swift in Sources */,
 				449AD08D2C6F2CD100B0ED37 /* InputTextFieldView.swift in Sources */,
+				44B222C22C7F2C22009BC14C /* Profile.swift in Sources */,
 				44B222A22C7CBAFD009BC14C /* LikeViewModel.swift in Sources */,
 				443A2F0A2C79DA910010FB19 /* UploadPostRequestModel.swift in Sources */,
 				449AD0392C6CA0B200B0ED37 /* AppDelegate.swift in Sources */,
@@ -600,6 +611,7 @@
 				4486AD8F2C778AAC00A8BA9C /* ProductPostEditViewModel.swift in Sources */,
 				449AD0832C6E0ED600B0ED37 /* UIViewController+Extension.swift in Sources */,
 				4486AD992C7898FE00A8BA9C /* PhotoButton.swift in Sources */,
+				44B222C42C7F3CE3009BC14C /* CommonPost.swift in Sources */,
 				449AD07B2C6DFEF700B0ED37 /* Router.swift in Sources */,
 				449AD0932C6F693A00B0ED37 /* SignUpViewModel.swift in Sources */,
 				443A2F082C79CCD60010FB19 /* Files.swift in Sources */,
@@ -904,6 +916,14 @@
 				minimumVersion = 7.12.0;
 			};
 		};
+		44B222D02C806EF9009BC14C /* XCRemoteSwiftPackageReference "iamport-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/iamport/iamport-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -941,6 +961,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 44A39D632C735642009BCC44 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		44B222D12C806EFA009BC14C /* iamport-ios */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 44B222D02C806EF9009BC14C /* XCRemoteSwiftPackageReference "iamport-ios" */;
+			productName = "iamport-ios";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -39,7 +39,7 @@ final class TabBarController: UITabBarController, UITabBarControllerDelegate {
         likeVC.tabBarItem = UITabBarItem(title: "좋아요", image: UIImage(systemName: "suit.heart"), selectedImage: UIImage(systemName: "suit.heart.fill"))
         likeVC.tabBarItem.tag = 2
         
-        let profileVC = UINavigationController(rootViewController: ProfileViewController())
+        let profileVC = UINavigationController(rootViewController: ProfileViewController(viewModel: ProfileViewModel(viewType: .loginUser, userID: UserDefaultsManager.shared.userID)))
         profileVC.tabBarItem = UITabBarItem(title: "프로필", image: UIImage(systemName: "person"), selectedImage: UIImage(systemName: "person.fill"))
         profileVC.tabBarItem.tag = 3
         

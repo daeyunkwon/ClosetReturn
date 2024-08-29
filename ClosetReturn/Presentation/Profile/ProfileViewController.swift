@@ -16,8 +16,22 @@ final class ProfileViewController: BaseViewController {
     //MARK: - Properties
     
     private let disposeBag = DisposeBag()
-    private let viewModel = ProfileViewModel()
+    private let viewModel: ProfileViewModel
     
+    private let fetchUserProfile = PublishRelay<Void>()
+    private let logoutMenuTapped = PublishRelay<Void>()
+    private let withdrawalMenuTapped = PublishRelay<Void>()
+    
+    //MARK: - Init
+    
+    init(viewModel: ProfileViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     //MARK: - UI Components
     
@@ -57,7 +71,7 @@ final class ProfileViewController: BaseViewController {
     private let nicknameLabel: UILabel = {
         let label = UILabel()
         label.textColor = Constant.Color.Text.titleColor
-        label.font = Constant.Font.bodyBoldFont
+        label.font = .boldSystemFont(ofSize: 20)
         return label
     }()
     
@@ -173,7 +187,7 @@ final class ProfileViewController: BaseViewController {
         let tv = UITableView()
         tv.separatorStyle = .none
         tv.register(HomeTableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.identifier)
-        tv.rowHeight = 180
+        tv.rowHeight = 200
         tv.refreshControl = productForSaleRefreshControl
         tv.isHidden = true
         tv.isScrollEnabled = false
@@ -193,6 +207,14 @@ final class ProfileViewController: BaseViewController {
         return tv
     }()
     
+    private let menuButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setImage(UIImage(systemName: "gearshape")?.applyingSymbolConfiguration(.init(font: .boldSystemFont(ofSize: 17))), for: .normal)
+        btn.tintColor = .black
+        btn.showsMenuAsPrimaryAction = true
+        return btn
+    }()
+    
     //MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -203,12 +225,178 @@ final class ProfileViewController: BaseViewController {
     
     override func bind() {
         
+        let fetchFeedCellImage = PublishRelay<(Int, String)>()
+        
+        
+        let input = ProfileViewModel.Input(
+            fetchUserProfile: self.fetchUserProfile,
+            segmentControlIndexChange: segmentControl.rx.controlEvent(.valueChanged),
+            fetchFeedCellImage: fetchFeedCellImage,
+            logoutMenuTapped: logoutMenuTapped,
+            withdrawalMenuTapped: withdrawalMenuTapped
+        )
+        let output = viewModel.transform(input: input)
+        
+        let feedList = output.feedPosts.share()
+        let productList = output.productPosts.share()
+        
+        output.nickname
+            .bind(to: nicknameLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.followerCount
+            .bind(with: self) { owner, value in
+                owner.updateLabelCount(count: value, uilabel: owner.followersLabel, text: "팔로워")
+            }
+            .disposed(by: disposeBag)
+        
+        output.followingCount
+            .bind(with: self) { owner, value in
+                owner.updateLabelCount(count: value, uilabel: owner.followingLabel, text: "팔로잉")
+            }
+            .disposed(by: disposeBag)
+        
+        output.profileImageData
+            .map { UIImage(data: $0) }
+            .bind(to: profileImageView.rx.image)
+            .disposed(by: disposeBag)
+        
+        productList
+            .bind(to: productForSaleTableView.rx.items(cellIdentifier: HomeTableViewCell.identifier, cellType: HomeTableViewCell.self)) { row, element, cell in
+                cell.selectionStyle = .none
+                cell.cellConfig(withCommonPost: element)
+            }
+            .disposed(by: disposeBag)
+        
+        productList
+            .bind(with: self) { owner, value in
+                owner.updateLabelCount(count: value.count, uilabel: owner.productsLabel, text: "판매 상품")
+            }
+            .disposed(by: disposeBag)
+        
+        feedList
+            .bind(to: feedCollectionView.rx.items(cellIdentifier: FeedCollectionViewCell.identifier, cellType: FeedCollectionViewCell.self)) { row, element, cell in
+                if let path = element.files.first {
+                    fetchFeedCellImage.accept((row, path))
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        feedList
+            .bind(with: self) { owner, value in
+                owner.updateLabelCount(count: value.count, uilabel: owner.feedsLabel, text: "피드")
+            }
+            .disposed(by: disposeBag)
+        
+        output.fetchFeedCellImage
+            .bind(with: self) { owner, value in
+                if let cell = owner.feedCollectionView.cellForItem(at: IndexPath(row: value.0, section: 0)) as? FeedCollectionViewCell {
+                    cell.imageView.image = UIImage(data: value.1)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        output.segmentControlIndexChange
+            .bind(with: self) { owner, _ in
+                if owner.segmentControl.selectedSegmentIndex == 0 {
+                    owner.feedCollectionView.isHidden = false
+                    owner.productForBuyTableView.isHidden = true
+                    owner.productForSaleTableView.isHidden = true
+                }
+                if owner.segmentControl.selectedSegmentIndex == 1 {
+                    owner.feedCollectionView.isHidden = true
+                    owner.productForBuyTableView.isHidden = true
+                    owner.productForSaleTableView.isHidden = false
+                }
+                if owner.segmentControl.selectedSegmentIndex == 2 {
+                    owner.feedCollectionView.isHidden = true
+                    owner.productForBuyTableView.isHidden = false
+                    owner.productForSaleTableView.isHidden = true
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        feedCollectionView.rx.observe(CGSize.self , "contentSize")
+            .bind(with: self) { owner, size in
+                owner.feedCollectionView.snp.updateConstraints { make in
+                    make.height.equalTo(size?.height ?? 0.0)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        productForSaleTableView.rx.observe(CGSize.self, "contentSize")
+            .bind(with: self) { owner, size in
+                owner.productForSaleTableView.snp.updateConstraints { make in
+                    make.height.equalTo(size?.height ?? 0.0)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        productForBuyTableView.rx.observe(CGSize.self, "contentSize")
+            .bind(with: self) { owner, size in
+                owner.productForBuyTableView.snp.updateConstraints { make in
+                    make.height.equalTo(size?.height ?? 0.0)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        
+        
+        
+        
+        
+        
+        output.logoutMenuTapped
+            .bind(with: self) { owner, _ in
+                //로그아웃 얼럿
+                print("탭")
+            }
+            .disposed(by: disposeBag)
+        
+        output.withdrawalMenuTapped
+            .bind(with: self) { owner, _ in
+                //탈퇴 얼럿
+                print("탭탭")
+            }
+            .disposed(by: disposeBag)
+            
+        output.viewType
+            .bind(with: self) { owner, value in
+                switch value {
+                case .loginUser:
+                    owner.updateEditFollowButtonAppearance(isCurrentLoginUser: true, isFollow: false)
+                case .notLoginUser:
+                    owner.updateEditFollowButtonAppearance(isCurrentLoginUser: false, isFollow: false)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        output.networkError
+            .bind(with: self) { owner, value in
+                owner.showNetworkRequestFailAlert(errorType: value.0, routerType: value.1)
+            }
+            .disposed(by: disposeBag)
+        
+        fetchUserProfile.accept(())
     }
     
     override func setupNavi() {
         let title = NavigationTitleLabel(text: "프로필")
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: title)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: menuButton)
         navigationItem.title = ""
+    }
+    
+    private func setupMenuButton() {
+        let menu = UIMenu(title: "편집", children: [
+            UIAction(title: "로그아웃", image: UIImage(systemName: "power")) { [weak self] _ in
+                self?.logoutMenuTapped.accept(())
+            },
+            UIAction(title: "탈퇴하기", image: UIImage(systemName: "person.badge.minus"), attributes: .destructive) { [weak self] _ in
+                self?.withdrawalMenuTapped.accept(())
+            }
+        ])
+        menuButton.menu = menu
     }
     
     override func configureHierarchy() {
@@ -324,5 +512,18 @@ final class ProfileViewController: BaseViewController {
                 editAndFollowButton.tintColor = Constant.Color.Button.titleColor
             }
         }
+    }
+    
+    private func updateLabelCount(count: Int, uilabel: UILabel, text: String) {
+        let attributedText = NSMutableAttributedString(string: "\(count)\n", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14)])
+        attributedText.append(NSAttributedString(string: text, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor.lightGray]))
+        uilabel.attributedText = attributedText
+    }
+    
+    private func showMenuButtonTapAlert(title: String, message: String, buttonTitle: String, buttonStyle: UIAlertAction.Style, action: @escaping ((UIAlertAction) -> Void)) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        alert.addAction(UIAlertAction(title: buttonTitle, style: buttonStyle, handler: action))
+        present(alert, animated: true)
     }
 }
