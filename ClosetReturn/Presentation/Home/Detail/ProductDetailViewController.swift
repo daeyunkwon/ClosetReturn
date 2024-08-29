@@ -6,7 +6,9 @@
 //
 
 import UIKit
+import WebKit
 
+import iamport_ios
 import RxSwift
 import RxCocoa
 import SnapKit
@@ -35,6 +37,12 @@ final class ProductDetailViewController: BaseViewController {
     }
     
     //MARK: - UI Components
+    
+    private lazy var wkWebView: WKWebView = {
+        var view = WKWebView()
+        view.backgroundColor = UIColor.clear
+        return view
+    }()
     
     private let scrollView = UIScrollView()
     
@@ -252,8 +260,8 @@ final class ProductDetailViewController: BaseViewController {
     override func bind() {
         if let viewModel = viewModel as? ProductDetailViewModel {
             
-            
             let deleteAlertButtonTapped = PublishRelay<Void>()
+            let executePayment = PublishRelay<String>()
             
             let input = ProductDetailViewModel.Input(
                 fetchData: fetch,
@@ -262,7 +270,9 @@ final class ProductDetailViewController: BaseViewController {
                 editMenuButtonTapped: editMenuTapped,
                 deleteMenuButtonTapped: deleteMenuTapped, 
                 deleteAlertButtonTapped: deleteAlertButtonTapped,
-                commentButtonTapped: commentButton.rx.tap
+                commentButtonTapped: commentButton.rx.tap,
+                buyButtonTapped: buyButton.rx.tap,
+                executePayment: executePayment
             )
             let output = viewModel.transform(input: input)
             
@@ -306,6 +316,12 @@ final class ProductDetailViewController: BaseViewController {
             
             output.content
                 .bind(to: contentTextView.rx.text)
+                .disposed(by: disposeBag)
+            
+            output.soldStatus
+                .bind(with: self) { owner, value in
+                    owner.updateBuyButtonAppearance(isNotSold: value)
+                }
                 .disposed(by: disposeBag)
             
             output.productImageDatas
@@ -394,6 +410,29 @@ final class ProductDetailViewController: BaseViewController {
                     }
                     let vc = CommentViewController(viewModel: vm)
                     owner.pushViewController(vc)
+                }
+                .disposed(by: disposeBag)
+            
+            output.buyButtonTapped
+                .bind(with: self) { owner, value in
+                    if let naviController = owner.navigationController {
+                        
+                        Iamport.shared.payment(navController: naviController, userCode: APIKey.userCode, payment: value) { iamportResponse in
+                            
+                            if let success = iamportResponse?.success, success {
+                                if let impUID = iamportResponse?.imp_uid {
+                                    executePayment.accept(impUID)
+                                }
+                            }
+                        }
+                    }
+                }
+                .disposed(by: disposeBag)
+            
+            output.succeedPayment
+                .bind(with: self) { owner, _ in
+                    owner.showPaymentCompletedAlert()
+                    owner.updateBuyButtonAppearance(isNotSold: false)
                 }
                 .disposed(by: disposeBag)
         }
@@ -595,5 +634,23 @@ final class ProductDetailViewController: BaseViewController {
         alert.addAction(UIAlertAction(title: "삭제하기", style: .destructive, handler: okAction))
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         self.present(alert, animated: true)
+    }
+    
+    private func showPaymentCompletedAlert() {
+        let alert = UIAlertController(title: "구매 완료", message: "결제가 완료되었습니다🎉", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default))
+        self.present(alert, animated: true)
+    }
+    
+    private func updateBuyButtonAppearance(isNotSold: Bool) {
+        if isNotSold {
+            buyButton.setTitle("구매하기", for: .normal)
+            buyButton.backgroundColor = Constant.Color.brandColor
+            buyButton.isEnabled = true
+        } else {
+            buyButton.isEnabled = false
+            buyButton.setTitle("판매완료", for: .normal)
+            buyButton.backgroundColor = Constant.Color.Button.buttonDisabled
+        }
     }
 }

@@ -29,6 +29,7 @@ enum Router {
     case likeFetch(next: String, limit: String)
     case like2Fetch(next: String, limit: String)
     case targetUserProfile(userID: String)
+    case paymentsValid(imp_uid: String, post_id: String)
 }
 
 enum RouterType {
@@ -51,6 +52,7 @@ enum RouterType {
     case likeFetch
     case like2Fetch
     case targetUserProfile
+    case paymentsValid
 }
 
 extension Router: URLRequestConvertible {
@@ -60,7 +62,7 @@ extension Router: URLRequestConvertible {
     
     var method: HTTPMethod {
         switch self {
-        case .emailValidation, .joinUser, .loginUser, .like, .imageUpload, .postUpload, .commentUpload, .like2:
+        case .emailValidation, .joinUser, .loginUser, .like, .imageUpload, .postUpload, .commentUpload, .like2, .paymentsValid:
             return .post
             
         case .posts, .imageFetch, .refresh, .postDetail, .likeFetch, .like2Fetch, .targetUserProfile:
@@ -95,6 +97,7 @@ extension Router: URLRequestConvertible {
         case .likeFetch(_, _): return APIURL.likeFetchURL
         case .like2Fetch(_, _): return APIURL.like2FetchURL
         case .targetUserProfile(let userID): return APIURL.targetUserProfileFetchURL(userID: userID)
+        case .paymentsValid: return APIURL.payments
         }
     }
     
@@ -119,7 +122,7 @@ extension Router: URLRequestConvertible {
                 HeaderKey.refresh.rawValue: UserDefaultsManager.shared.refreshToken
             ]
             
-        case .like, .postDetail, .postUpload, .postModify, .commentUpload, .commentModify, .like2:
+        case .like, .postDetail, .postUpload, .postModify, .commentUpload, .commentModify, .like2, .paymentsValid:
             return [
                 HeaderKey.authorization.rawValue: UserDefaultsManager.shared.accessToken,
                 HeaderKey.contentType.rawValue: HeaderKey.json.rawValue,
@@ -180,6 +183,12 @@ extension Router: URLRequestConvertible {
         case .commentModify(_, _, let comment):
             return try? JSONEncoder().encode([
                 BodyKey.content.rawValue: comment
+            ])
+            
+        case .paymentsValid(let imp_uid, let post_id):
+            return try? JSONEncoder().encode([
+                BodyKey.imp_uid.rawValue: imp_uid,
+                BodyKey.post_id.rawValue: post_id
             ])
             
         default:

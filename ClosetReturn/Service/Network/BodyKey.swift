@@ -15,4 +15,6 @@ enum BodyKey: String {
     case birthDay
     case like_status
     case content
+    case imp_uid
+    case post_id
 }

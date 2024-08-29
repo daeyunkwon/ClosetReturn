@@ -29,6 +29,7 @@ struct ProductPost: Decodable {
     var likes2: [String]
     var comments: [Comment]
     var price: Int?
+    var buyers: [String]
     
     var createDateString: String {
         let dateFormatter = DateFormatter()

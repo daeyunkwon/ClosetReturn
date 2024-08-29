@@ -68,6 +68,7 @@
 		44B222C22C7F2C22009BC14C /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B222C12C7F2C22009BC14C /* Profile.swift */; };
 		44B222C42C7F3CE3009BC14C /* CommonPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B222C32C7F3CE3009BC14C /* CommonPost.swift */; };
 		44B222D22C806EFA009BC14C /* iamport-ios in Frameworks */ = {isa = PBXBuildFile; productRef = 44B222D12C806EFA009BC14C /* iamport-ios */; };
+		44B222D42C8096B4009BC14C /* Payments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B222D32C8096B4009BC14C /* Payments.swift */; };
 		44C0BAB12C738CA900136643 /* RefreshModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C0BAB02C738CA900136643 /* RefreshModel.swift */; };
 		44C0BAB32C7493DC00136643 /* JoinUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C0BAB22C7493DC00136643 /* JoinUser.swift */; };
 		44C0BAD22C75E2EA00136643 /* ProductDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C0BAD12C75E2EA00136643 /* ProductDetailViewController.swift */; };
@@ -144,6 +145,7 @@
 		44B222BF2C7F0B4C009BC14C /* ProductBuyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductBuyTableViewCell.swift; sourceTree = "<group>"; };
 		44B222C12C7F2C22009BC14C /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		44B222C32C7F3CE3009BC14C /* CommonPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonPost.swift; sourceTree = "<group>"; };
+		44B222D32C8096B4009BC14C /* Payments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payments.swift; sourceTree = "<group>"; };
 		44C0BAB02C738CA900136643 /* RefreshModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshModel.swift; sourceTree = "<group>"; };
 		44C0BAB22C7493DC00136643 /* JoinUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinUser.swift; sourceTree = "<group>"; };
 		44C0BAD12C75E2EA00136643 /* ProductDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailViewController.swift; sourceTree = "<group>"; };
@@ -311,6 +313,7 @@
 				44E546F32C7B560700C27AAE /* FeedPost.swift */,
 				44B222C12C7F2C22009BC14C /* Profile.swift */,
 				44B222C32C7F3CE3009BC14C /* CommonPost.swift */,
+				44B222D32C8096B4009BC14C /* Payments.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -611,6 +614,7 @@
 				4486AD8F2C778AAC00A8BA9C /* ProductPostEditViewModel.swift in Sources */,
 				449AD0832C6E0ED600B0ED37 /* UIViewController+Extension.swift in Sources */,
 				4486AD992C7898FE00A8BA9C /* PhotoButton.swift in Sources */,
+				44B222D42C8096B4009BC14C /* Payments.swift in Sources */,
 				44B222C42C7F3CE3009BC14C /* CommonPost.swift in Sources */,
 				449AD07B2C6DFEF700B0ED37 /* Router.swift in Sources */,
 				449AD0932C6F693A00B0ED37 /* SignUpViewModel.swift in Sources */,

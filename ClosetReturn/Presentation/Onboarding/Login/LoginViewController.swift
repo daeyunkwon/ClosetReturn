@@ -10,6 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import SnapKit
+import Toast
 
 final class LoginViewController: BaseViewController {
     
@@ -87,6 +88,7 @@ final class LoginViewController: BaseViewController {
         
         output.succeedToLogin
             .bind(with: self) { owner, value in
+                owner.view.hideToastActivity()
                 print("DEBUG: 로그인 성공 & 유저 정보 => \(value.nick), \(value.user_id), \(value.email)")
                 owner.setRootViewController(TabBarController())
             }
@@ -108,6 +110,7 @@ final class LoginViewController: BaseViewController {
         output.loginButtonTapped
             .bind(with: self) { owner, _ in
                 owner.performHapticFeedback()
+                owner.view.makeToastActivity(.center)
             }
             .disposed(by: disposeBag)
     }

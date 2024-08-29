@@ -7,6 +7,7 @@
 
 import Foundation
 
+import iamport_ios
 import RxSwift
 import RxCocoa
 
@@ -23,6 +24,19 @@ final class ProductDetailViewModel: BaseViewModel {
     
     var postDeleteSucceed: () -> Void = { }
     
+    private var payment: IamportPayment?
+
+    //        let pm = IamportPayment(
+//            pg: PG.html5_inicis.makePgRawName(pgId: "INIpayTest"),
+//            merchant_uid: "ios_\(APIKey.sesacKey)_\(Int(Date().timeIntervalSince1970))",
+//            amount: "11"
+//        )
+//        pm.pay_method = PayMethod.card.rawValue
+//        pm.name = "나의상품"
+//        pm.buyer_name = "권대윤"
+//        pm.app_scheme = "closetreturn"
+//        return pm
+    
     //MARK: - Inputs
     
     struct Input {
@@ -33,6 +47,8 @@ final class ProductDetailViewModel: BaseViewModel {
         let deleteMenuButtonTapped: PublishRelay<Void>
         let deleteAlertButtonTapped: PublishRelay<Void>
         let commentButtonTapped: ControlEvent<Void>
+        let buyButtonTapped: ControlEvent<Void>
+        let executePayment: PublishRelay<String>
     }
     
     //MARK: - Outputs
@@ -48,6 +64,7 @@ final class ProductDetailViewModel: BaseViewModel {
         let size: PublishRelay<String>
         let category: PublishRelay<String>
         let content: PublishRelay<String>
+        let soldStatus: PublishRelay<Bool>
         let productImageDatas: PublishRelay<[Data]>
         let backButtonTapped: ControlEvent<Void>
         let likeStatus: PublishRelay<Bool>
@@ -56,6 +73,8 @@ final class ProductDetailViewModel: BaseViewModel {
         let deleteMenuButtonTapped: PublishRelay<Void>
         let succeedDelete: PublishRelay<Void>
         let commentButtonTapped: PublishRelay<ProductPost>
+        let buyButtonTapped: PublishRelay<IamportPayment>
+        let succeedPayment: PublishRelay<Payments>
 
         let networkError: PublishRelay<(NetworkError, RouterType)>
     }
@@ -76,12 +95,15 @@ final class ProductDetailViewModel: BaseViewModel {
         let size = PublishRelay<String>()
         let category = PublishRelay<String>()
         let content = PublishRelay<String>()
+        let soldStatus = PublishRelay<Bool>()
         let productImageDatas = PublishRelay<[Data]>()
         let likeStatus = PublishRelay<Bool>()
         let editMenuButtonTapped = PublishRelay<ProductPost>()
         let hideMenuButton = PublishRelay<Bool>()
         let succeedDelete = PublishRelay<Void>()
         let commentButtonTapped = PublishRelay<ProductPost>()
+        let buyButtonTapped = PublishRelay<IamportPayment>()
+        let succeedPayment = PublishRelay<Payments>()
         
         let networkError = PublishRelay<(NetworkError, RouterType)>()
         
@@ -224,6 +246,11 @@ final class ProductDetailViewModel: BaseViewModel {
             .bind(to: category)
             .disposed(by: disposeBag)
         
+        product
+            .map { $0.buyers.isEmpty }
+            .bind(to: soldStatus)
+            .disposed(by: disposeBag)
+        
         input.likeButtonTapped
             .bind(with: self) {owner, _ in
                 
@@ -289,6 +316,39 @@ final class ProductDetailViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
+        input.buyButtonTapped
+            .bind(with: self) { owner, _ in
+                
+                guard let productPost = owner.productPost else { return }
+                guard let price = productPost.price else { return }
+                
+                let payment = IamportPayment(pg: PG.html5_inicis.makePgRawName(pgId: "INIpayTest"), merchant_uid: "ios_\(APIKey.sesacKey)_\(Int(Date().timeIntervalSince1970))", amount: "\(price)")
+                
+                payment.pay_method = PayMethod.card.rawValue
+                payment.name = productPost.title
+                payment.buyer_name = "권대윤"
+                payment.app_scheme = "closetreturn"
+                
+                buyButtonTapped.accept(payment)
+            }
+            .disposed(by: disposeBag)
+        
+        input.executePayment
+            .bind(with: self) { owner, impUID in
+                NetworkManager.shared.performRequest(api: .paymentsValid(imp_uid: impUID, post_id: owner.postID), model: Payments.self)
+                    .asObservable()
+                    .bind(with: self) { owner, result in
+                        switch result {
+                        case .success(let data):
+                            succeedPayment.accept(data)
+                        case .failure(let error):
+                            networkError.accept((error, RouterType.paymentsValid))
+                        }
+                    }
+                    .disposed(by: owner.disposeBag)
+            }
+            .disposed(by: disposeBag)
+        
         
         return Output(
             profileImageData: profileImageData,
@@ -301,6 +361,7 @@ final class ProductDetailViewModel: BaseViewModel {
             size: size,
             category: category,
             content: content,
+            soldStatus: soldStatus,
             productImageDatas: productImageDatas,
             backButtonTapped: input.backButtonTapped,
             likeStatus: likeStatus,
@@ -309,6 +370,8 @@ final class ProductDetailViewModel: BaseViewModel {
             deleteMenuButtonTapped: input.deleteMenuButtonTapped,
             succeedDelete: succeedDelete,
             commentButtonTapped: commentButtonTapped,
+            buyButtonTapped: buyButtonTapped,
+            succeedPayment: succeedPayment,
             networkError: networkError
         )
     }
