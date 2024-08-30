@@ -379,14 +379,14 @@ final class ProfileViewController: BaseViewController {
         
         output.executeLogout
             .bind(with: self) { owner, _ in
-                owner.setRootViewController(LoginViewController())
+                owner.setRootViewController(UINavigationController(rootViewController: LoginViewController()))
             }
             .disposed(by: disposeBag)
         
         output.withdrawalMenuTapped
             .bind(with: self) { owner, _ in
                 //탈퇴 얼럿
-                print("탭탭")
+                owner.showToast(message: "탈퇴는 관리자에게 문의 바랍니다", position: .center)
             }
             .disposed(by: disposeBag)
             

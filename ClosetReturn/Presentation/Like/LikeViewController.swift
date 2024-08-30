@@ -43,6 +43,12 @@ final class LikeViewController: BaseViewController {
         return view
     }()
     
+    private let grayLineView: UIView = {
+       let view = UIView()
+        view.backgroundColor = .systemGray6
+        return view
+    }()
+    
     private let productRefreshControl = UIRefreshControl()
     private let feedRefreshControl = UIRefreshControl()
     
@@ -188,10 +194,6 @@ final class LikeViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
-        
-        
-        
-        
         output.feedList
             .bind(to: feedCollectionView.rx.items(cellIdentifier: FeedCollectionViewCell.identifier, cellType: FeedCollectionViewCell.self)) { row, element, cell in
                 if let path = element.files.first {
@@ -227,10 +229,6 @@ final class LikeViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
-        
-        
-        
-        
         output.networkError
             .bind(with: self) { owner, value in
                 owner.showNetworkRequestFailAlert(errorType: value.0, routerType: value.1)
@@ -250,6 +248,7 @@ final class LikeViewController: BaseViewController {
         view.addSubviews(
             segmentControl,
             underLineView,
+            grayLineView,
             productTableView,
             feedCollectionView
         )
@@ -269,13 +268,19 @@ final class LikeViewController: BaseViewController {
             make.height.equalTo(2)
         }
         
-        productTableView.snp.makeConstraints { make in
+        grayLineView.snp.makeConstraints { make in
             make.top.equalTo(underLineView.snp.bottom)
+            make.width.equalToSuperview()
+            make.height.equalTo(10)
+        }
+        
+        productTableView.snp.makeConstraints { make in
+            make.top.equalTo(grayLineView.snp.bottom)
             make.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide)
         }
         
         feedCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(underLineView.snp.bottom)
+            make.top.equalTo(grayLineView.snp.bottom)
             make.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
