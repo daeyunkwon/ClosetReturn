@@ -75,13 +75,13 @@ final class ProfileViewController: BaseViewController {
         return label
     }()
     
-    private let birthdayButton: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.setImage(UIImage(systemName: "birthday.cake")?.applyingSymbolConfiguration(.init(font: .systemFont(ofSize: 13, weight: .bold))), for: .normal)
-        btn.tintColor = Constant.Color.Button.buttonDisabled
-        btn.isUserInteractionEnabled = false
-        return btn
-    }()
+//    private let birthdayButton: UIButton = {
+//        let btn = UIButton(type: .system)
+//        btn.setImage(UIImage(systemName: "birthday.cake")?.applyingSymbolConfiguration(.init(font: .systemFont(ofSize: 13, weight: .bold))), for: .normal)
+//        btn.tintColor = Constant.Color.Button.buttonDisabled
+//        btn.isUserInteractionEnabled = false
+//        return btn
+//    }()
     
     private let feedsLabel: UILabel = {
         let label = UILabel()
@@ -438,7 +438,6 @@ final class ProfileViewController: BaseViewController {
         topBackView.addSubviews(
             profileImageView,
             nicknameLabel,
-            birthdayButton,
             countInfoStackView,
             editAndFollowButton
         )
@@ -475,13 +474,8 @@ final class ProfileViewController: BaseViewController {
             make.centerX.equalToSuperview()
         }
         
-        birthdayButton.snp.makeConstraints { make in
-            make.top.equalTo(nicknameLabel.snp.bottom).offset(5)
-            make.centerX.equalToSuperview()
-        }
-        
         countInfoStackView.snp.makeConstraints { make in
-            make.top.equalTo(birthdayButton.snp.bottom).offset(10)
+            make.top.equalTo(nicknameLabel.snp.bottom).offset(10)
             make.centerX.equalToSuperview()
             make.height.equalTo(60)
         }

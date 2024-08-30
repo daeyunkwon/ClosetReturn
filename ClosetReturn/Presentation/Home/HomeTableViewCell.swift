@@ -58,7 +58,7 @@ final class HomeTableViewCell: BaseTableViewCell {
     private let brandLabel: UILabel = {
         let label = UILabel()
         label.font = Constant.Font.bodyFont
-        label.textColor = Constant.Color.Text.bodyColor
+        label.textColor = Constant.Color.Text.brandTitleColor
         label.textAlignment = .left
         return label
     }()

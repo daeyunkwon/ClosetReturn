@@ -22,14 +22,15 @@ final class ProductBuyTableViewCell: BaseTableViewCell {
     private let infoLabel: UILabel = {
         let label = UILabel()
         label.text = "구매확정"
-        label.font = .systemFont(ofSize: 15, weight: .bold)
+        label.font = .systemFont(ofSize: 13, weight: .bold)
         label.textColor = .gray
         return label
     }()
     
     private let buyDateLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 15, weight: .bold)
+        label.font = .systemFont(ofSize: 10)
+        label.textColor = .gray
         return label
     }()
     
@@ -47,7 +48,7 @@ final class ProductBuyTableViewCell: BaseTableViewCell {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 16, weight: .heavy)
+        label.font = .systemFont(ofSize: 14, weight: .regular)
         label.textColor = Constant.Color.Text.titleColor
         label.textAlignment = .left
         return label
@@ -56,7 +57,7 @@ final class ProductBuyTableViewCell: BaseTableViewCell {
     private let brandLabel: UILabel = {
         let label = UILabel()
         label.font = Constant.Font.bodyFont
-        label.textColor = Constant.Color.Text.bodyColor
+        label.textColor = Constant.Color.Text.brandTitleColor
         label.textAlignment = .left
         return label
     }()
@@ -64,17 +65,23 @@ final class ProductBuyTableViewCell: BaseTableViewCell {
     private let categoryLabel: UILabel = {
         let label = UILabel()
         label.font = Constant.Font.secondaryFont
-        label.textColor = Constant.Color.Text.brandTitleColor
+        label.textColor = Constant.Color.Text.secondaryColor
         label.textAlignment = .left
         return label
     }()
     
     private let priceLabel: UILabel = {
         let label = UILabel()
-        label.font = Constant.Font.priceFont
+        label.font = .boldSystemFont(ofSize: 15)
         label.textColor = Constant.Color.Text.bodyColor
         label.textAlignment = .left
         return label
+    }()
+    
+    private let separatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemGray3
+        return view
     }()
     
     //MARK: - Life Cycle
@@ -94,7 +101,8 @@ final class ProductBuyTableViewCell: BaseTableViewCell {
             brandLabel,
             categoryLabel,
             priceLabel,
-            buyDateLabel
+            buyDateLabel,
+            separatorView
         )
     }
     
@@ -117,7 +125,7 @@ final class ProductBuyTableViewCell: BaseTableViewCell {
         }
         
         brandLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(2)
+            make.top.equalTo(titleLabel.snp.bottom).offset(2.5)
             make.leading.equalTo(productImageView.snp.trailing).offset(3)
             make.trailing.equalToSuperview().inset(10)
         }
@@ -135,9 +143,15 @@ final class ProductBuyTableViewCell: BaseTableViewCell {
         }
         
         buyDateLabel.snp.makeConstraints { make in
-            make.top.equalTo(priceLabel.snp.bottom)
+            make.bottom.equalTo(productImageView).offset(-5)
             make.leading.equalTo(productImageView.snp.trailing).offset(3)
             make.trailing.equalToSuperview().inset(10)
+        }
+        
+        separatorView.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().inset(5)
+            make.height.equalTo(0.2)
+            make.horizontalEdges.equalToSuperview().inset(15)
         }
     }
     
