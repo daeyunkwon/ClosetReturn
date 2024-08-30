@@ -89,12 +89,12 @@ final class ProductBuyTableViewCell: BaseTableViewCell {
     override func configureHierarchy() {
         contentView.addSubviews(
             infoLabel,
-            buyDateLabel,
             productImageView,
             titleLabel,
             brandLabel,
             categoryLabel,
-            priceLabel
+            priceLabel,
+            buyDateLabel
         )
     }
     
@@ -103,13 +103,9 @@ final class ProductBuyTableViewCell: BaseTableViewCell {
             make.top.leading.equalToSuperview().inset(15)
         }
         
-        buyDateLabel.snp.makeConstraints { make in
-            make.top.equalTo(infoLabel)
-            make.leading.equalTo(infoLabel.snp.trailing).offset(3)
-        }
-        
         productImageView.snp.makeConstraints { make in
             make.top.equalTo(infoLabel.snp.bottom).offset(5)
+            make.leading.equalToSuperview().inset(15)
             make.size.equalTo(100)
             make.bottom.equalToSuperview().offset(-15)
         }
@@ -134,6 +130,12 @@ final class ProductBuyTableViewCell: BaseTableViewCell {
         
         priceLabel.snp.makeConstraints { make in
             make.top.equalTo(categoryLabel.snp.bottom).offset(2)
+            make.leading.equalTo(productImageView.snp.trailing).offset(3)
+            make.trailing.equalToSuperview().inset(10)
+        }
+        
+        buyDateLabel.snp.makeConstraints { make in
+            make.top.equalTo(priceLabel.snp.bottom)
             make.leading.equalTo(productImageView.snp.trailing).offset(3)
             make.trailing.equalToSuperview().inset(10)
         }

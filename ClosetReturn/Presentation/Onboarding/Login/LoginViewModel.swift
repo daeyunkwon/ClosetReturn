@@ -82,6 +82,9 @@ final class LoginViewModel: BaseViewModel {
                             print(value.refreshToken)
                             print(UserDefaultsManager.shared.refreshToken)
                             
+                            let userID = value.user_id
+                            UserDefaultsManager.shared.userID = userID
+                            print(UserDefaultsManager.shared.userID)
                             
                             
                         case .failure(let error):

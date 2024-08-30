@@ -41,6 +41,7 @@ final class ProfileViewModel: BaseViewModel {
         let fetchUserProfile: PublishRelay<Void>
         let segmentControlIndexChange: ControlEvent<()>
         let fetchFeedCellImage: PublishRelay<(Int, String)>
+        let fetchBuyCellImage: PublishRelay<(Int, String)>
         let logoutMenuTapped: PublishRelay<Void>
         let withdrawalMenuTapped: PublishRelay<Void>
     }
@@ -59,6 +60,7 @@ final class ProfileViewModel: BaseViewModel {
         let buyProducts: PublishRelay<[ProductPost]>
         let segmentControlIndexChange: ControlEvent<()>
         let fetchFeedCellImage: PublishRelay<(Int, Data)>
+        let fetchBuyCellImage: PublishRelay<(Int, Data)>
         let logoutMenuTapped: PublishRelay<Void>
         let withdrawalMenuTapped: PublishRelay<Void>
     }
@@ -76,11 +78,21 @@ final class ProfileViewModel: BaseViewModel {
         let feedPosts = PublishRelay<[CommonPost]>()
         let buyProducts = PublishRelay<[ProductPost]>()
         let fetchFeedCellImage = PublishRelay<(Int, Data)>()
+        let fetchBuyCellImage = PublishRelay<(Int, Data)>()
         
         
         input.fetchUserProfile
             .bind(with: self) { owner, _ in
-                NetworkManager.shared.performRequest(api: .targetUserProfile(userID: owner.userID), model: Profile.self)
+                var userID: String
+                switch owner.viewType {
+                case .loginUser:
+                    userID = UserDefaultsManager.shared.userID
+                    owner.userID = userID
+                case .notLoginUser:
+                    userID = owner.userID
+                }
+                
+                NetworkManager.shared.performRequest(api: .targetUserProfile(userID: userID), model: Profile.self)
                     .asObservable()
                     .bind(with: self) { owner, result in
                         switch result {
@@ -117,17 +129,20 @@ final class ProfileViewModel: BaseViewModel {
                                         case .success(let post):
                                             if post.product_id == APIKey.productID {
                                                 owner.productPosts.append(post)
+                                                group.leave()
                                             } else {
                                                 owner.feedPosts.append(post)
+                                                group.leave()
                                             }
-                                            group.leave()
                                         case .failure(let error):
                                             print("Error: fetch postDetial failed :: ", error)
+                                            group.leave()
                                         }
                                     }
                                     .disposed(by: owner.disposeBag)
                             }
                             
+                            group.enter()
                             NetworkManager.shared.performRequest(api: .paymentMe, model: PaymentMe.self)
                                 .asObservable()
                                 .bind(with: self) { owner, result in
@@ -149,13 +164,16 @@ final class ProfileViewModel: BaseViewModel {
                                                             group.leave()
                                                         case .failure(let error):
                                                             print(error)
+                                                            group.leave()
                                                         }
                                                     }
                                                     .disposed(by: owner.disposeBag)
                                             }
                                         }
+                                        group.leave()
                                     case .failure(let error):
                                         print("ERROR: paymentMe fetch failed == ", error)
+                                        group.leave()
                                     }
                                 }
                                 .disposed(by: owner.disposeBag)
@@ -187,7 +205,18 @@ final class ProfileViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
-        
+        input.fetchBuyCellImage
+            .bind(with: self) { owner, value in
+                NetworkManager.shared.fetchImageData(imagePath: value.1) { result in
+                    switch result {
+                    case .success(let data):
+                        fetchBuyCellImage.accept((value.0, data))
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            }
+            .disposed(by: disposeBag)        
         
         
         
@@ -208,6 +237,7 @@ final class ProfileViewModel: BaseViewModel {
             buyProducts: buyProducts,
             segmentControlIndexChange: input.segmentControlIndexChange,
             fetchFeedCellImage: fetchFeedCellImage,
+            fetchBuyCellImage: fetchBuyCellImage,
             logoutMenuTapped: input.logoutMenuTapped,
             withdrawalMenuTapped: input.withdrawalMenuTapped
         )

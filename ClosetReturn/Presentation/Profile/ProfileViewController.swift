@@ -200,7 +200,7 @@ final class ProfileViewController: BaseViewController {
         let tv = UITableView()
         tv.separatorStyle = .none
         tv.register(ProductBuyTableViewCell.self, forCellReuseIdentifier: ProductBuyTableViewCell.identifier)
-        tv.rowHeight = 180
+        tv.rowHeight = 150
         tv.refreshControl = productForBuyRefreshControl
         tv.isHidden = true
         tv.isScrollEnabled = false
@@ -226,12 +226,14 @@ final class ProfileViewController: BaseViewController {
     override func bind() {
         
         let fetchFeedCellImage = PublishRelay<(Int, String)>()
+        let fetchBuyCellImage = PublishRelay<(Int, String)>()
         
         
         let input = ProfileViewModel.Input(
             fetchUserProfile: self.fetchUserProfile,
             segmentControlIndexChange: segmentControl.rx.controlEvent(.valueChanged),
             fetchFeedCellImage: fetchFeedCellImage,
+            fetchBuyCellImage: fetchBuyCellImage,
             logoutMenuTapped: logoutMenuTapped,
             withdrawalMenuTapped: withdrawalMenuTapped
         )
@@ -300,19 +302,19 @@ final class ProfileViewController: BaseViewController {
             .bind(to: productForBuyTableView.rx.items(cellIdentifier: ProductBuyTableViewCell.identifier, cellType: ProductBuyTableViewCell.self)) { row, element, cell in
                 cell.cellConfig(data: element)
                 
-//                if let firstImagePath = element.files.first {
-//                    fetchFeedCellImage.accept((row, firstImagePath))
-//                }
+                if let firstImagePath = element.files.first {
+                    fetchBuyCellImage.accept((row, firstImagePath))
+                }
             }
             .disposed(by: disposeBag)
         
-//        output.fetchFeedCellImage
-//            .bind(with: self) { owner, value in
-//                if let cell = owner.productForBuyTableView.cellForRow(at: IndexPath(row: value.0, section: 0)) as?  ProductBuyTableViewCell {
-//                    cell.productImageView.image = UIImage(data: value.1)
-//                }
-//            }
-//            .disposed(by: disposeBag)
+        output.fetchBuyCellImage
+            .bind(with: self) { owner, value in
+                if let cell = owner.productForBuyTableView.cellForRow(at: IndexPath(row: value.0, section: 0)) as?  ProductBuyTableViewCell {
+                    cell.productImageView.image = UIImage(data: value.1)
+                }
+            }
+            .disposed(by: disposeBag)
         
         output.segmentControlIndexChange
             .bind(with: self) { owner, _ in

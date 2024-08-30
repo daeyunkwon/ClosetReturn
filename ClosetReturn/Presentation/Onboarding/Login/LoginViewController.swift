@@ -165,7 +165,7 @@ final class LoginViewController: BaseViewController {
     override func configureUI() {
         super.configureUI()
         
-        emailInputView.inputTextField.text = "t1@naver.com"
+        emailInputView.inputTextField.text = "t2@naver.com"
         passwordInputView.inputTextField.text = "password123!"
     }
 }

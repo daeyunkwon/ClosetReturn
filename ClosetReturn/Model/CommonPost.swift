@@ -12,7 +12,7 @@ struct CommonPost: Decodable {
     let product_id: String
     let title: String?
     let price: Int?
-    let content: String
+    let content: String?
     let content1: String?
     let content2: String?
     let content3: String?
