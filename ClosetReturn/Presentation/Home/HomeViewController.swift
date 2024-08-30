@@ -28,7 +28,7 @@ final class HomeViewController: BaseViewController {
         let tv = UITableView()
         tv.separatorStyle = .none
         tv.register(HomeTableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.identifier)
-        tv.rowHeight = 210
+        tv.rowHeight = 150
         tv.refreshControl = refreshControl
         return tv
     }()

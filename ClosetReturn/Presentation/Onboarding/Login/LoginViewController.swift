@@ -25,7 +25,7 @@ final class LoginViewController: BaseViewController {
     private let logoLabel: UILabel = {
         let label = UILabel()
         label.text = "옷장리턴"
-        label.font = Constant.Font.brandFont
+        label.font = UIFont(name: "Partial-Sans-KR", size: 30)
         label.textColor = Constant.Color.Text.titleColor
         return label
     }()

@@ -68,7 +68,7 @@ final class LikeViewController: BaseViewController {
         layout.itemSize = CGSize(width: view.frame.size.width / 3 - 2, height: view.frame.size.width / 3)
         layout.minimumLineSpacing = 1
         layout.minimumInteritemSpacing = 1
-        layout.sectionInset = .init(top: 15, left: 0, bottom: 0, right: 0)
+        layout.sectionInset = .init(top: 0, left: 0, bottom: 0, right: 0)
         
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.register(FeedCollectionViewCell.self, forCellWithReuseIdentifier: FeedCollectionViewCell.identifier)

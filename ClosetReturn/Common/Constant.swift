@@ -20,8 +20,9 @@ enum Constant {
         enum Text {
             static let titleColor: UIColor = .label
             static let bodyColor: UIColor = .label
-            static let secondaryColor: UIColor = UIColor(red: 0.64, green: 0.67, blue: 0.74, alpha: 1.00)
+            static let secondaryColor: UIColor = .gray
             static let brandTitleColor: UIColor = .darkGray
+            
         }
         
         enum Icon {
@@ -38,16 +39,16 @@ enum Constant {
     }
     
     enum Font {
-        static let brandFont = UIFont(name: "Partial-Sans-KR", size: 30)
-        static let titleFont: UIFont = .systemFont(ofSize: 20, weight: .heavy)
-        static let priceFont: UIFont = .systemFont(ofSize: 18, weight: .heavy)
-        static let secondaryTitleFont: UIFont = .systemFont(ofSize: 16, weight: .semibold)
-        static let bodyFont: UIFont = .systemFont(ofSize: 15)
-        static let bodyBoldFont: UIFont = .boldSystemFont(ofSize: 15)
-        static let secondaryFont: UIFont = .systemFont(ofSize: 14)
-        static let secondaryBoldFont: UIFont = .boldSystemFont(ofSize: 14)
-        static let buttonTitleFont: UIFont = .boldSystemFont(ofSize: 15)
-        static let buttonLargeTitleFont: UIFont = .boldSystemFont(ofSize: 18)
+        static let brandFont = UIFont(name: "Partial-Sans-KR", size: 25)
+        static let titleFont: UIFont = .systemFont(ofSize: 17, weight: .heavy)
+        static let priceFont: UIFont = .systemFont(ofSize: 16, weight: .heavy)
+        static let secondaryTitleFont: UIFont = .systemFont(ofSize: 14, weight: .semibold)
+        static let bodyFont: UIFont = .systemFont(ofSize: 12)
+        static let bodyBoldFont: UIFont = .boldSystemFont(ofSize: 13)
+        static let secondaryFont: UIFont = .systemFont(ofSize: 12)
+        static let secondaryBoldFont: UIFont = .boldSystemFont(ofSize: 12)
+        static let buttonTitleFont: UIFont = .boldSystemFont(ofSize: 14)
+        static let buttonLargeTitleFont: UIFont = .boldSystemFont(ofSize: 16)
         static let infoFont: UIFont = .systemFont(ofSize: 12, weight: .medium)
     }
 }

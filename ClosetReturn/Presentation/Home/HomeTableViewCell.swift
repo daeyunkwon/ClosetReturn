@@ -49,7 +49,7 @@ final class HomeTableViewCell: BaseTableViewCell {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 16, weight: .heavy)
+        label.font = .systemFont(ofSize: 14, weight: .semibold)
         label.textColor = Constant.Color.Text.titleColor
         label.textAlignment = .left
         return label
@@ -65,8 +65,8 @@ final class HomeTableViewCell: BaseTableViewCell {
     
     private let categoryLabel: UILabel = {
         let label = UILabel()
-        label.font = Constant.Font.secondaryFont
-        label.textColor = Constant.Color.Text.brandTitleColor
+        label.font = Constant.Font.bodyFont
+        label.textColor = Constant.Color.Text.secondaryColor
         label.textAlignment = .left
         return label
     }()
@@ -102,31 +102,32 @@ final class HomeTableViewCell: BaseTableViewCell {
     
     override func configureLayout() {
         containerView.snp.makeConstraints { make in
-            make.top.bottom.trailing.equalToSuperview().inset(20)
+            make.top.equalToSuperview().inset(5)
+            make.bottom.trailing.equalToSuperview().inset(20)
             make.leading.equalToSuperview().inset(35)
         }
         
         productImageView.snp.makeConstraints { make in
             make.top.equalTo(containerView).offset(-5)
             make.leading.equalTo(containerView).offset(-15)
-            make.width.equalTo(130)
-            make.height.equalTo(150)
+            make.width.equalTo(contentView.frame.size.width / 2.9)
+            make.bottom.equalToSuperview().inset(30)
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(20)
+            make.top.equalToSuperview().inset(10)
             make.leading.equalTo(productImageView.snp.trailing).offset(10)
             make.trailing.equalToSuperview().inset(10)
         }
         
         brandLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(10)
+            make.top.equalTo(titleLabel.snp.bottom).offset(3)
             make.leading.equalTo(titleLabel)
             make.trailing.equalTo(titleLabel)
         }
         
         categoryLabel.snp.makeConstraints { make in
-            make.top.equalTo(brandLabel.snp.bottom).offset(10)
+            make.top.equalTo(brandLabel.snp.bottom).offset(3)
             make.leading.equalTo(titleLabel)
             make.trailing.equalTo(titleLabel)
         }
@@ -138,7 +139,7 @@ final class HomeTableViewCell: BaseTableViewCell {
         }
         
         priceLabel.snp.makeConstraints { make in
-            make.top.equalTo(likeButton)
+            make.top.equalTo(categoryLabel.snp.bottom).offset(5)
             make.leading.equalTo(titleLabel)
             make.trailing.equalTo(likeButton.snp.leading).offset(-10)
         }

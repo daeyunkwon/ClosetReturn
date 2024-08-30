@@ -187,7 +187,7 @@ final class ProfileViewController: BaseViewController {
         let tv = UITableView()
         tv.separatorStyle = .none
         tv.register(HomeTableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.identifier)
-        tv.rowHeight = 200
+        tv.rowHeight = 150
         tv.refreshControl = productForSaleRefreshControl
         tv.isHidden = true
         tv.isScrollEnabled = false
