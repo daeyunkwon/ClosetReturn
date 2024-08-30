@@ -44,6 +44,7 @@ final class ProfileViewModel: BaseViewModel {
         let fetchBuyCellImage: PublishRelay<(Int, String)>
         let logoutMenuTapped: PublishRelay<Void>
         let withdrawalMenuTapped: PublishRelay<Void>
+        let logoutAlertButtonTapped: PublishRelay<Void>
     }
     
     //MARK: - Outputs
@@ -63,6 +64,7 @@ final class ProfileViewModel: BaseViewModel {
         let fetchBuyCellImage: PublishRelay<(Int, Data)>
         let logoutMenuTapped: PublishRelay<Void>
         let withdrawalMenuTapped: PublishRelay<Void>
+        let executeLogout: PublishRelay<Void>
     }
     //MARK: - Methods
     
@@ -79,6 +81,7 @@ final class ProfileViewModel: BaseViewModel {
         let buyProducts = PublishRelay<[ProductPost]>()
         let fetchFeedCellImage = PublishRelay<(Int, Data)>()
         let fetchBuyCellImage = PublishRelay<(Int, Data)>()
+        let executeLogout = PublishRelay<Void>()
         
         
         input.fetchUserProfile
@@ -218,7 +221,13 @@ final class ProfileViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)        
         
-        
+        input.logoutAlertButtonTapped
+            .bind(with: self) { owner, _ in
+                UserDefaultsManager.shared.removeAll {
+                    executeLogout.accept(())
+                }
+            }
+            .disposed(by: disposeBag)
         
         
         
@@ -239,7 +248,8 @@ final class ProfileViewModel: BaseViewModel {
             fetchFeedCellImage: fetchFeedCellImage,
             fetchBuyCellImage: fetchBuyCellImage,
             logoutMenuTapped: input.logoutMenuTapped,
-            withdrawalMenuTapped: input.withdrawalMenuTapped
+            withdrawalMenuTapped: input.withdrawalMenuTapped,
+            executeLogout: executeLogout
         )
     }
 }

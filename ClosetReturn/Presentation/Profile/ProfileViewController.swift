@@ -219,6 +219,7 @@ final class ProfileViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupMenuButton()
     }
     
     //MARK: - Configurations
@@ -227,6 +228,7 @@ final class ProfileViewController: BaseViewController {
         
         let fetchFeedCellImage = PublishRelay<(Int, String)>()
         let fetchBuyCellImage = PublishRelay<(Int, String)>()
+        let logoutAlertButtonTapped = PublishRelay<Void>()
         
         
         let input = ProfileViewModel.Input(
@@ -235,7 +237,8 @@ final class ProfileViewController: BaseViewController {
             fetchFeedCellImage: fetchFeedCellImage,
             fetchBuyCellImage: fetchBuyCellImage,
             logoutMenuTapped: logoutMenuTapped,
-            withdrawalMenuTapped: withdrawalMenuTapped
+            withdrawalMenuTapped: withdrawalMenuTapped,
+            logoutAlertButtonTapped: logoutAlertButtonTapped
         )
         let output = viewModel.transform(input: input)
         
@@ -368,8 +371,15 @@ final class ProfileViewController: BaseViewController {
         
         output.logoutMenuTapped
             .bind(with: self) { owner, _ in
-                //로그아웃 얼럿
-                print("탭")
+                owner.showMenuButtonTapAlert(title: "로그아웃", message: "로그아웃 하시겠습니까?", buttonTitle: "로그아웃", buttonStyle: .default) { logoutAction in
+                    logoutAlertButtonTapped.accept(())
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        output.executeLogout
+            .bind(with: self) { owner, _ in
+                owner.setRootViewController(LoginViewController())
             }
             .disposed(by: disposeBag)
         
@@ -408,7 +418,7 @@ final class ProfileViewController: BaseViewController {
     }
     
     private func setupMenuButton() {
-        let menu = UIMenu(title: "편집", children: [
+        let menu = UIMenu(title: "메뉴", children: [
             UIAction(title: "로그아웃", image: UIImage(systemName: "power")) { [weak self] _ in
                 self?.logoutMenuTapped.accept(())
             },

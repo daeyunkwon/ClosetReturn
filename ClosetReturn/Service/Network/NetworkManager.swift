@@ -294,7 +294,7 @@ final class NetworkManager {
                 
                 if response.response?.statusCode == 418 { //리프레시 토큰 만료
                     completionHandler(.failure(NetworkError.refreshTokenExpired))
-                    UserDefaultsManager.shared.removeAll()
+                    UserDefaultsManager.shared.removeAll() { }
                     return
                 }
                 

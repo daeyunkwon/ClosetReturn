@@ -65,9 +65,10 @@ final class UserDefaultsManager {
         }
     }
     
-    func removeAll() {
+    func removeAll(completionHandler: @escaping () -> Void) {
         UserDefaultsKey.allCases.forEach { key in
             UserDefaults.standard.removeObject(forKey: key.rawValue)
         }
+        completionHandler()
     }
 }

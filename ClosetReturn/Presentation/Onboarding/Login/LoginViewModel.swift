@@ -89,7 +89,7 @@ final class LoginViewModel: BaseViewModel {
                             
                         case .failure(let error):
                             failedToLogin.onNext((error, RouterType.loginUser))
-                            UserDefaultsManager.shared.removeAll()
+                            UserDefaultsManager.shared.removeAll { }
                         }
                     }
                     .disposed(by: owner.disposeBag)
