@@ -296,6 +296,24 @@ final class ProfileViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
+        output.buyProducts
+            .bind(to: productForBuyTableView.rx.items(cellIdentifier: ProductBuyTableViewCell.identifier, cellType: ProductBuyTableViewCell.self)) { row, element, cell in
+                cell.cellConfig(data: element)
+                
+//                if let firstImagePath = element.files.first {
+//                    fetchFeedCellImage.accept((row, firstImagePath))
+//                }
+            }
+            .disposed(by: disposeBag)
+        
+//        output.fetchFeedCellImage
+//            .bind(with: self) { owner, value in
+//                if let cell = owner.productForBuyTableView.cellForRow(at: IndexPath(row: value.0, section: 0)) as?  ProductBuyTableViewCell {
+//                    cell.productImageView.image = UIImage(data: value.1)
+//                }
+//            }
+//            .disposed(by: disposeBag)
+        
         output.segmentControlIndexChange
             .bind(with: self) { owner, _ in
                 if owner.segmentControl.selectedSegmentIndex == 0 {

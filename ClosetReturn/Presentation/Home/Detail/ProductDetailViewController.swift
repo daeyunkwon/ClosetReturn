@@ -391,6 +391,12 @@ final class ProductDetailViewController: BaseViewController {
                 }
                 .disposed(by: disposeBag)
             
+            output.rejectionEdit
+                .bind(with: self) { owner, value in
+                    owner.showToast(message: "판매된 상품의 게시물은 \(value)할 수 없습니다", position: .center)
+                }
+                .disposed(by: disposeBag)
+            
             output.succeedDelete
                 .bind(with: self) { owner, _ in
                     viewModel.postDeleteSucceed()

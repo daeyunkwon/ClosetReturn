@@ -25,17 +25,6 @@ final class ProductDetailViewModel: BaseViewModel {
     var postDeleteSucceed: () -> Void = { }
     
     private var payment: IamportPayment?
-
-    //        let pm = IamportPayment(
-//            pg: PG.html5_inicis.makePgRawName(pgId: "INIpayTest"),
-//            merchant_uid: "ios_\(APIKey.sesacKey)_\(Int(Date().timeIntervalSince1970))",
-//            amount: "11"
-//        )
-//        pm.pay_method = PayMethod.card.rawValue
-//        pm.name = "나의상품"
-//        pm.buyer_name = "권대윤"
-//        pm.app_scheme = "closetreturn"
-//        return pm
     
     //MARK: - Inputs
     
@@ -75,6 +64,7 @@ final class ProductDetailViewModel: BaseViewModel {
         let commentButtonTapped: PublishRelay<ProductPost>
         let buyButtonTapped: PublishRelay<IamportPayment>
         let succeedPayment: PublishRelay<Payments>
+        let rejectionEdit: PublishRelay<String>
 
         let networkError: PublishRelay<(NetworkError, RouterType)>
     }
@@ -104,6 +94,7 @@ final class ProductDetailViewModel: BaseViewModel {
         let commentButtonTapped = PublishRelay<ProductPost>()
         let buyButtonTapped = PublishRelay<IamportPayment>()
         let succeedPayment = PublishRelay<Payments>()
+        let rejectionEdit = PublishRelay<String>()
         
         let networkError = PublishRelay<(NetworkError, RouterType)>()
         
@@ -286,7 +277,12 @@ final class ProductDetailViewModel: BaseViewModel {
         input.editMenuButtonTapped
             .bind(with: self) { owner, _ in
                 if let data = owner.productPost {
-                    editMenuButtonTapped.accept(data)
+                    
+                    if data.buyers.isEmpty {
+                        editMenuButtonTapped.accept(data)
+                    } else {
+                        rejectionEdit.accept("수정")
+                    }
                 }
             }
             .disposed(by: disposeBag)
@@ -294,17 +290,23 @@ final class ProductDetailViewModel: BaseViewModel {
         input.deleteAlertButtonTapped
             .bind(with: self) { owner, _ in
                 
-                NetworkManager.shared.performDeleteReuqest(api: .postDelete(postID: owner.postID))
-                    .asObservable()
-                    .bind(onNext: { result in
-                        switch result {
-                        case .success(_):
-                            succeedDelete.accept(())
-                        case .failure(let error):
-                            networkError.accept((error, RouterType.postDelete))
-                        }
-                    })
-                    .disposed(by: owner.disposeBag)
+                if let data = owner.productPost {
+                    if data.buyers.isEmpty {
+                        NetworkManager.shared.performDeleteReuqest(api: .postDelete(postID: owner.postID))
+                            .asObservable()
+                            .bind(onNext: { result in
+                                switch result {
+                                case .success(_):
+                                    succeedDelete.accept(())
+                                case .failure(let error):
+                                    networkError.accept((error, RouterType.postDelete))
+                                }
+                            })
+                            .disposed(by: owner.disposeBag)
+                    } else {
+                        rejectionEdit.accept("삭제")
+                    }
+                }
             }
             .disposed(by: disposeBag)
         
@@ -372,6 +374,7 @@ final class ProductDetailViewModel: BaseViewModel {
             commentButtonTapped: commentButtonTapped,
             buyButtonTapped: buyButtonTapped,
             succeedPayment: succeedPayment,
+            rejectionEdit: rejectionEdit,
             networkError: networkError
         )
     }

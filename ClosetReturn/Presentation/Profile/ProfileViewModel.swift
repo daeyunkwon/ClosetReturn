@@ -26,9 +26,7 @@ final class ProfileViewModel: BaseViewModel {
     private var followerCount: Int = 0
     private var productPosts: [CommonPost] = []
     private var feedPosts: [CommonPost] = []
-    
-    
-    
+    private var buyProducts: [ProductPost] = []
     
     //MARK: - Init
     
@@ -58,6 +56,7 @@ final class ProfileViewModel: BaseViewModel {
         let profileImageData: PublishRelay<Data>
         let productPosts: PublishRelay<[CommonPost]>
         let feedPosts: PublishRelay<[CommonPost]>
+        let buyProducts: PublishRelay<[ProductPost]>
         let segmentControlIndexChange: ControlEvent<()>
         let fetchFeedCellImage: PublishRelay<(Int, Data)>
         let logoutMenuTapped: PublishRelay<Void>
@@ -75,6 +74,7 @@ final class ProfileViewModel: BaseViewModel {
         let profileImageData = PublishRelay<Data>()
         let productPosts = PublishRelay<[CommonPost]>()
         let feedPosts = PublishRelay<[CommonPost]>()
+        let buyProducts = PublishRelay<[ProductPost]>()
         let fetchFeedCellImage = PublishRelay<(Int, Data)>()
         
         
@@ -106,6 +106,7 @@ final class ProfileViewModel: BaseViewModel {
                             let group = DispatchGroup()
                             owner.productPosts = []
                             owner.feedPosts = []
+                            owner.buyProducts = []
                             
                             for postID in data.posts {
                                 group.enter()
@@ -121,15 +122,48 @@ final class ProfileViewModel: BaseViewModel {
                                             }
                                             group.leave()
                                         case .failure(let error):
-                                            print(error)
+                                            print("Error: fetch postDetial failed :: ", error)
                                         }
                                     }
                                     .disposed(by: owner.disposeBag)
                             }
                             
+                            NetworkManager.shared.performRequest(api: .paymentMe, model: PaymentMe.self)
+                                .asObservable()
+                                .bind(with: self) { owner, result in
+                                    switch result {
+                                    case .success(let paymentMe):
+                                        
+                                        for payment in paymentMe.data {
+                                            
+                                            if let postID = payment.post_id {
+                                                group.enter()
+                                                NetworkManager.shared.performRequest(api: .postDetail(postID: postID), model: ProductPost.self)
+                                                    .asObservable()
+                                                    .bind(with: self) { owner, result in
+                                                        switch result {
+                                                        case .success(let productPost):
+                                                            var newProductPostData = productPost
+                                                            newProductPostData.setupPaidAt(data: payment.paidAt ?? "NONE")
+                                                            owner.buyProducts.append(newProductPostData)
+                                                            group.leave()
+                                                        case .failure(let error):
+                                                            print(error)
+                                                        }
+                                                    }
+                                                    .disposed(by: owner.disposeBag)
+                                            }
+                                        }
+                                    case .failure(let error):
+                                        print("ERROR: paymentMe fetch failed == ", error)
+                                    }
+                                }
+                                .disposed(by: owner.disposeBag)
+                            
                             group.notify(queue: .main) {
                                 productPosts.accept(owner.productPosts)
                                 feedPosts.accept(owner.feedPosts)
+                                buyProducts.accept(owner.buyProducts)
                             }
                             
                         case .failure(let error):
@@ -171,6 +205,7 @@ final class ProfileViewModel: BaseViewModel {
             profileImageData: profileImageData,
             productPosts: productPosts,
             feedPosts: feedPosts,
+            buyProducts: buyProducts,
             segmentControlIndexChange: input.segmentControlIndexChange,
             fetchFeedCellImage: fetchFeedCellImage,
             logoutMenuTapped: input.logoutMenuTapped,

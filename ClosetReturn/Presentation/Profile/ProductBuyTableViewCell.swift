@@ -33,7 +33,7 @@ final class ProductBuyTableViewCell: BaseTableViewCell {
         return label
     }()
     
-    private let productImageView: UIImageView = {
+    let productImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
@@ -145,5 +145,11 @@ final class ProductBuyTableViewCell: BaseTableViewCell {
     
     //MARK: - Methods
     
-
+    func cellConfig(data: ProductPost) {
+        self.buyDateLabel.text = "구매일시 \(data.createPaidAtDateString)"
+        self.titleLabel.text = data.title
+        self.brandLabel.text = data.content3
+        self.categoryLabel.text = data.content2
+        self.priceLabel.text = (data.price?.formatted() ?? "") + "원"
+    }
 }
