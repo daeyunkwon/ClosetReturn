@@ -64,6 +64,7 @@ extension UIViewController {
                 case .commnetUpload: message = "해당 게시물이 삭제되어 댓글 작성이 실패되었습니다."
                 case .commentModify: message = "해당 댓글이 삭제되어 댓글 수정이 실패되었습니다."
                 case .commnetDelete: message = "삭제할 댓글을 찾을 수 없습니다."
+                case .paymentsValid: message = "판매자가 해당 게시물을 삭제하였습니다."
                 default: break
                 }
                 

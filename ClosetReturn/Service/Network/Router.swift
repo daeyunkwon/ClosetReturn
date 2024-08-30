@@ -30,6 +30,7 @@ enum Router {
     case like2Fetch(next: String, limit: String)
     case targetUserProfile(userID: String)
     case paymentsValid(imp_uid: String, post_id: String)
+    case paymentMe
 }
 
 enum RouterType {
@@ -53,6 +54,7 @@ enum RouterType {
     case like2Fetch
     case targetUserProfile
     case paymentsValid
+    case paymentMe
 }
 
 extension Router: URLRequestConvertible {
@@ -65,7 +67,7 @@ extension Router: URLRequestConvertible {
         case .emailValidation, .joinUser, .loginUser, .like, .imageUpload, .postUpload, .commentUpload, .like2, .paymentsValid:
             return .post
             
-        case .posts, .imageFetch, .refresh, .postDetail, .likeFetch, .like2Fetch, .targetUserProfile:
+        case .posts, .imageFetch, .refresh, .postDetail, .likeFetch, .like2Fetch, .targetUserProfile, .paymentMe:
             return .get
             
         case .postModify, .commentModify:
@@ -98,6 +100,7 @@ extension Router: URLRequestConvertible {
         case .like2Fetch(_, _): return APIURL.like2FetchURL
         case .targetUserProfile(let userID): return APIURL.targetUserProfileFetchURL(userID: userID)
         case .paymentsValid: return APIURL.payments
+        case .paymentMe: return APIURL.paymentMe
         }
     }
     
