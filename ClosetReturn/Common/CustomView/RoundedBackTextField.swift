@@ -19,6 +19,7 @@ final class RoundedBackTextField: UITextField {
     }
     
     func configure(placeholder: String) {
+        self.font = .systemFont(ofSize: 14)
         self.placeholder = placeholder
         self.autocorrectionType = .no
         self.autocapitalizationType = .none

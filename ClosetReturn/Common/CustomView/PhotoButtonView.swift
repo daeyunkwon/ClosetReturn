@@ -26,6 +26,7 @@ final class PhotoButtonView: BaseView {
         label.text = "0/5"
         label.textColor = Constant.Color.brandColor
         label.textAlignment = .center
+        label.font = .systemFont(ofSize: 14)
         return label
     }()
     
@@ -40,7 +41,7 @@ final class PhotoButtonView: BaseView {
         iconImageView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalToSuperview().offset(10)
-            make.width.height.equalTo(40)
+            make.width.height.equalTo(30)
         }
         
         titleLabel.snp.makeConstraints { make in

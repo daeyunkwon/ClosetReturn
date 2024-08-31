@@ -71,7 +71,7 @@ final class InputTextFieldView: UIView {
     let inputTextField: UITextField = {
         let tf = UITextField()
         tf.textColor = Constant.Color.Text.bodyColor
-        tf.font = Constant.Font.bodyFont
+        tf.font = Constant.Font.loginInputText
         tf.autocapitalizationType = .none
         tf.autocorrectionType = .no
         tf.borderStyle = .none

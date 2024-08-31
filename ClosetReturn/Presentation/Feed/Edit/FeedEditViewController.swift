@@ -224,7 +224,7 @@ final class FeedEditViewController: BaseViewController {
         photoSelectButton.snp.makeConstraints { make in
             make.top.equalTo(photoBackView.titleLabel.snp.bottom).offset(10)
             make.leading.equalToSuperview().inset(10)
-            make.width.equalTo(100)
+            make.width.equalTo(77)
         }
         
         collectionView.snp.makeConstraints { make in

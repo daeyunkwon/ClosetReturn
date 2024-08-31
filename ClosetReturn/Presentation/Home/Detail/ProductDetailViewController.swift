@@ -138,7 +138,7 @@ final class ProductDetailViewController: BaseViewController {
     private let sizeLabel: UILabel = {
         let label = UILabel()
         label.textColor = Constant.Color.Text.titleColor
-        label.font = Constant.Font.secondaryBoldFont
+        label.font = Constant.Font.secondaryTitleFont
         return label
     }()
     
@@ -153,7 +153,7 @@ final class ProductDetailViewController: BaseViewController {
     private let categoryLabel: UILabel = {
         let label = UILabel()
         label.textColor = Constant.Color.Text.titleColor
-        label.font = Constant.Font.secondaryBoldFont
+        label.font = Constant.Font.secondaryTitleFont
         return label
     }()
     

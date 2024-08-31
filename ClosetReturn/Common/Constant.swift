@@ -40,9 +40,10 @@ enum Constant {
     
     enum Font {
         static let brandFont = UIFont(name: "Partial-Sans-KR", size: 25)
-        static let titleFont: UIFont = .systemFont(ofSize: 17, weight: .heavy)
+        static let titleFont: UIFont = .systemFont(ofSize: 15, weight: .heavy)
         static let priceFont: UIFont = .systemFont(ofSize: 16, weight: .heavy)
         static let secondaryTitleFont: UIFont = .systemFont(ofSize: 14, weight: .semibold)
+        static let loginInputText: UIFont = .systemFont(ofSize: 14)
         static let bodyFont: UIFont = .systemFont(ofSize: 12)
         static let bodyBoldFont: UIFont = .boldSystemFont(ofSize: 13)
         static let secondaryFont: UIFont = .systemFont(ofSize: 12)

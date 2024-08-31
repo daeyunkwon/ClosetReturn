@@ -368,7 +368,7 @@ final class ProductPostEditViewController: BaseViewController {
         photoSelectButton.snp.makeConstraints { make in
             make.top.equalTo(photoBackView.titleLabel.snp.bottom).offset(10)
             make.leading.equalToSuperview().inset(10)
-            make.width.equalTo(100)
+            make.width.equalTo(77)
         }
         
         collectionView.snp.makeConstraints { make in
@@ -386,7 +386,7 @@ final class ProductPostEditViewController: BaseViewController {
         titleTextField.snp.makeConstraints { make in
             make.top.equalTo(titleBackView.titleLabel.snp.bottom).offset(10)
             make.horizontalEdges.equalToSuperview().inset(10)
-            make.height.equalTo(50)
+            make.height.equalTo(38)
             make.bottom.equalToSuperview().inset(10)
         }
         
@@ -398,7 +398,7 @@ final class ProductPostEditViewController: BaseViewController {
         priceTextField.snp.makeConstraints { make in
             make.top.equalTo(priceBackView.titleLabel.snp.bottom).offset(10)
             make.horizontalEdges.equalToSuperview().inset(10)
-            make.height.equalTo(50)
+            make.height.equalTo(38)
             make.bottom.equalToSuperview().inset(10)
         }
         
@@ -410,7 +410,7 @@ final class ProductPostEditViewController: BaseViewController {
         brandTextField.snp.makeConstraints { make in
             make.top.equalTo(brandBackView.titleLabel.snp.bottom).offset(10)
             make.horizontalEdges.equalToSuperview().inset(10)
-            make.height.equalTo(50)
+            make.height.equalTo(38)
             make.bottom.equalToSuperview().inset(10)
         }
         
@@ -422,7 +422,7 @@ final class ProductPostEditViewController: BaseViewController {
         sizeTextField.snp.makeConstraints { make in
             make.top.equalTo(sizeBackView.titleLabel.snp.bottom).offset(10)
             make.horizontalEdges.equalToSuperview().inset(10)
-            make.height.equalTo(50)
+            make.height.equalTo(38)
             make.bottom.equalToSuperview().inset(10)
         }
         
@@ -434,7 +434,7 @@ final class ProductPostEditViewController: BaseViewController {
         categoryTextField.snp.makeConstraints { make in
             make.top.equalTo(categoryBackView.titleLabel.snp.bottom).offset(10)
             make.horizontalEdges.equalToSuperview().inset(10)
-            make.height.equalTo(50)
+            make.height.equalTo(38)
             make.bottom.equalToSuperview().inset(10)
         }
         
