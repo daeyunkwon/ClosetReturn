@@ -149,7 +149,7 @@ final class ProductBuyTableViewCell: BaseTableViewCell {
         }
         
         separatorView.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().inset(5)
+            make.bottom.equalToSuperview()
             make.height.equalTo(0.2)
             make.horizontalEdges.equalToSuperview().inset(15)
         }

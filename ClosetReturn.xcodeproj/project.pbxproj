@@ -57,7 +57,6 @@
 		44A39D5C2C73391D009BCC44 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A39D5B2C73391D009BCC44 /* HomeViewModel.swift */; };
 		44A39D5E2C733F87009BCC44 /* HomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A39D5D2C733F87009BCC44 /* HomeTableViewCell.swift */; };
 		44A39D602C7347AF009BCC44 /* ProductPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A39D5F2C7347AF009BCC44 /* ProductPost.swift */; };
-		44A39D652C735642009BCC44 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 44A39D642C735642009BCC44 /* Kingfisher */; };
 		44B222982C7B91A4009BC14C /* FeedDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B222972C7B91A4009BC14C /* FeedDetailViewModel.swift */; };
 		44B2229A2C7B91AD009BC14C /* FeedDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B222992C7B91AD009BC14C /* FeedDetailViewController.swift */; };
 		44B222A22C7CBAFD009BC14C /* LikeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B222A12C7CBAFD009BC14C /* LikeViewModel.swift */; };
@@ -177,7 +176,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				44A39D652C735642009BCC44 /* Kingfisher in Frameworks */,
 				449AD0982C6F6BC000B0ED37 /* IQKeyboardManagerSwift in Frameworks */,
 				449AD0882C6F260A00B0ED37 /* RxCocoa in Frameworks */,
 				449AD0532C6CA23300B0ED37 /* SnapKit in Frameworks */,
@@ -528,7 +526,6 @@
 				449AD0872C6F260A00B0ED37 /* RxCocoa */,
 				449AD0892C6F260A00B0ED37 /* RxSwift */,
 				449AD0972C6F6BC000B0ED37 /* IQKeyboardManagerSwift */,
-				44A39D642C735642009BCC44 /* Kingfisher */,
 				4486AD9D2C7905F900A8BA9C /* Toast */,
 				44B222D12C806EFA009BC14C /* iamport-ios */,
 			);
@@ -565,7 +562,6 @@
 				449AD0772C6DE9ED00B0ED37 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				449AD0862C6F260A00B0ED37 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				449AD0962C6F6BC000B0ED37 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
-				44A39D632C735642009BCC44 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				4486AD9C2C7905F900A8BA9C /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 				44B222D02C806EF9009BC14C /* XCRemoteSwiftPackageReference "iamport-ios" */,
 			);
@@ -932,14 +928,6 @@
 				minimumVersion = 7.1.1;
 			};
 		};
-		44A39D632C735642009BCC44 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/onevcat/Kingfisher";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 7.12.0;
-			};
-		};
 		44B222D02C806EF9009BC14C /* XCRemoteSwiftPackageReference "iamport-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/iamport/iamport-ios";
@@ -980,11 +968,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 449AD0962C6F6BC000B0ED37 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
 			productName = IQKeyboardManagerSwift;
-		};
-		44A39D642C735642009BCC44 /* Kingfisher */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 44A39D632C735642009BCC44 /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
 		};
 		44B222D12C806EFA009BC14C /* iamport-ios */ = {
 			isa = XCSwiftPackageProductDependency;

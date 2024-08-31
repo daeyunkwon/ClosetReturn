@@ -97,7 +97,7 @@ final class ProductPostEditViewModel: BaseViewModel {
         let photoSelectButtonTapped: ControlEvent<Void>
         let selectedImageList: BehaviorRelay<[Data]>
         let invalidInfo: PublishRelay<InvalidType>
-        let priceString: PublishRelay<String>
+        let priceString: BehaviorRelay<String>
         let doneButtonTapped: ControlEvent<Void>
         let selectedConditionButton: PublishRelay<String>
         let contentPlaceholder: PublishRelay<Bool>
@@ -119,7 +119,7 @@ final class ProductPostEditViewModel: BaseViewModel {
         
         let selectedImageList = BehaviorRelay<[Data]>(value: self.images)
         let invalidInfo = PublishRelay<InvalidType>()
-        let priceString = PublishRelay<String>()
+        let priceString = BehaviorRelay<String>(value: "₩0")
         let selectedConditionButton = PublishRelay<String>()
         let contentPlaceholder = PublishRelay<Bool>()
         let networkError = PublishRelay<(NetworkError, RouterType)>()
@@ -288,7 +288,6 @@ final class ProductPostEditViewModel: BaseViewModel {
             .disposed(by: disposeBag)
         
         input.price
-            .skip(1)
             .map { $0.replacingOccurrences(of: ",", with: "").replacingOccurrences(of: "₩", with: "") }
             .bind(with: self) { owner, value in
                 
@@ -357,7 +356,6 @@ final class ProductPostEditViewModel: BaseViewModel {
             .map { "C" }
         
         Observable.merge(conditionS, conditionA, conditionB, conditionC)
-            .skip(1)
             .subscribe(with: self) { owner, value in
                 owner.condition = value
                 
