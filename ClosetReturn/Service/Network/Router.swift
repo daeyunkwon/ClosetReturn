@@ -32,6 +32,8 @@ enum Router {
     case paymentsValid(imp_uid: String, post_id: String)
     case paymentMe
     case editProfile
+    case follow(userID: String)
+    case followCancel(userID: String)
 }
 
 enum RouterType {
@@ -57,6 +59,8 @@ enum RouterType {
     case paymentsValid
     case paymentMe
     case editProfile
+    case follow
+    case followCancel
 }
 
 extension Router: URLRequestConvertible {
@@ -66,7 +70,7 @@ extension Router: URLRequestConvertible {
     
     var method: HTTPMethod {
         switch self {
-        case .emailValidation, .joinUser, .loginUser, .like, .imageUpload, .postUpload, .commentUpload, .like2, .paymentsValid:
+        case .emailValidation, .joinUser, .loginUser, .like, .imageUpload, .postUpload, .commentUpload, .like2, .paymentsValid, .follow:
             return .post
             
         case .posts, .imageFetch, .refresh, .postDetail, .likeFetch, .like2Fetch, .targetUserProfile, .paymentMe:
@@ -75,7 +79,7 @@ extension Router: URLRequestConvertible {
         case .postModify, .commentModify, .editProfile:
             return .put
             
-        case .postDelete, .commentDelete:
+        case .postDelete, .commentDelete, .followCancel:
             return .delete
         }
     }
@@ -104,6 +108,7 @@ extension Router: URLRequestConvertible {
         case .paymentsValid: return APIURL.payments
         case .paymentMe: return APIURL.paymentMe
         case .editProfile: return APIURL.profileEdit
+        case .follow(let userID), .followCancel(let userID): return APIURL.followURL(userID: userID)
         }
     }
     
@@ -115,7 +120,7 @@ extension Router: URLRequestConvertible {
                 HeaderKey.sesacKey.rawValue: APIKey.sesacKey
             ]
         
-        case .posts, .imageFetch, .postDelete, .commentDelete, .likeFetch, .like2Fetch, .targetUserProfile, .paymentMe:
+        case .posts, .imageFetch, .postDelete, .commentDelete, .likeFetch, .like2Fetch, .targetUserProfile, .paymentMe, .follow, .followCancel:
             return [
                 HeaderKey.authorization.rawValue: UserDefaultsManager.shared.accessToken,
                 HeaderKey.sesacKey.rawValue: APIKey.sesacKey,
