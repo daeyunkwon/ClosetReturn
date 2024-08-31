@@ -89,6 +89,7 @@
 		44E546F72C7B6ADC00C27AAE /* FeedEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E546F62C7B6ADC00C27AAE /* FeedEditViewController.swift */; };
 		44E546F92C7B6AE500C27AAE /* FeedEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E546F82C7B6AE500C27AAE /* FeedEditViewModel.swift */; };
 		44E546FB2C7B846C00C27AAE /* UploadFeedRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E546FA2C7B846C00C27AAE /* UploadFeedRequestModel.swift */; };
+		44ED39A52C837EE900E3E9CF /* Follow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ED39A42C837EE900E3E9CF /* Follow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -169,6 +170,7 @@
 		44E546F62C7B6ADC00C27AAE /* FeedEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEditViewController.swift; sourceTree = "<group>"; };
 		44E546F82C7B6AE500C27AAE /* FeedEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEditViewModel.swift; sourceTree = "<group>"; };
 		44E546FA2C7B846C00C27AAE /* UploadFeedRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadFeedRequestModel.swift; sourceTree = "<group>"; };
+		44ED39A42C837EE900E3E9CF /* Follow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Follow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -319,6 +321,7 @@
 				44B222C32C7F3CE3009BC14C /* CommonPost.swift */,
 				44B222D32C8096B4009BC14C /* Payments.swift */,
 				44B222D52C81B201009BC14C /* PaymentMe.swift */,
+				44ED39A42C837EE900E3E9CF /* Follow.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -659,6 +662,7 @@
 				449AD0952C6F694500B0ED37 /* SignUpViewController.swift in Sources */,
 				44E546F02C7B2A1A00C27AAE /* NavigationTitleLabel.swift in Sources */,
 				44E546E02C7A42A500C27AAE /* CommentViewController.swift in Sources */,
+				44ED39A52C837EE900E3E9CF /* Follow.swift in Sources */,
 				449AD0762C6DE9D000B0ED37 /* NetworkManager.swift in Sources */,
 				449AD0692C6DC5B300B0ED37 /* BaseViewController.swift in Sources */,
 				449AD0812C6E0E3800B0ED37 /* NetworkError.swift in Sources */,

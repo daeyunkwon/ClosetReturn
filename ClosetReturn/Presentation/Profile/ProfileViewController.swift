@@ -377,12 +377,28 @@ final class ProfileViewController: BaseViewController {
             
         output.viewType
             .bind(with: self) { owner, value in
-                switch value {
+                switch value.0 {
                 case .loginUser:
-                    owner.updateEditFollowButtonAppearance(isCurrentLoginUser: true, isFollow: false)
+                    if value.1 {
+                        owner.updateEditFollowButtonAppearance(isCurrentLoginUser: true, isFollow: false)
+                    } else {
+                        owner.updateEditFollowButtonAppearance(isCurrentLoginUser: true, isFollow: false)
+                        owner.navigationItem.title = "프로필 정보"
+                        owner.navigationItem.leftBarButtonItem = nil
+                        owner.navigationItem.rightBarButtonItem = nil
+                    }
+                    
                 case .notLoginUser:
-                    owner.updateEditFollowButtonAppearance(isCurrentLoginUser: false, isFollow: false)
+                    owner.navigationItem.title = "프로필 정보"
+                    owner.navigationItem.leftBarButtonItem = nil
+                    owner.navigationItem.rightBarButtonItem = nil
                 }
+            }
+            .disposed(by: disposeBag)
+        
+        output.follow
+            .bind(with: self) { owner, value in
+                owner.updateEditFollowButtonAppearance(isCurrentLoginUser: false, isFollow: value)
             }
             .disposed(by: disposeBag)
         
@@ -492,7 +508,7 @@ final class ProfileViewController: BaseViewController {
         }
         
         bottomBackView.snp.makeConstraints { make in
-            make.top.equalTo(topBackView.snp.bottom).offset(10)
+            make.top.equalTo(topBackView.snp.bottom).offset(15)
             make.width.equalTo(view.frame.size.width)
             make.bottom.equalToSuperview()
         }

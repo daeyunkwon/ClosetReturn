@@ -66,19 +66,25 @@ final class ProductDetailViewController: BaseViewController {
         return cv
     }()
     
-    private let profileImageView: UIImageView = {
+    private let profileTapGesture = UITapGestureRecognizer()
+    
+    private lazy var profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.layer.cornerRadius = 22
         iv.backgroundColor = .lightGray
+        iv.addGestureRecognizer(profileTapGesture)
+        iv.isUserInteractionEnabled = true
         return iv
     }()
     
-    private let nicknameLabel: UILabel = {
+    private lazy var nicknameLabel: UILabel = {
         let label = UILabel()
         label.font = Constant.Font.secondaryTitleFont
         label.textColor = Constant.Color.Text.titleColor
+        label.addGestureRecognizer(profileTapGesture)
+        label.isUserInteractionEnabled = true
         return label
     }()
     
@@ -273,6 +279,7 @@ final class ProductDetailViewController: BaseViewController {
             
             let deleteAlertButtonTapped = PublishRelay<Void>()
             let executePayment = PublishRelay<String>()
+            let profileTapped = PublishRelay<Void>()
             
             let input = ProductDetailViewModel.Input(
                 fetchData: fetch,
@@ -283,7 +290,8 @@ final class ProductDetailViewController: BaseViewController {
                 deleteAlertButtonTapped: deleteAlertButtonTapped,
                 commentButtonTapped: commentButton.rx.tap,
                 buyButtonTapped: buyButton.rx.tap,
-                executePayment: executePayment
+                executePayment: executePayment,
+                profileTapped: profileTapped
             )
             let output = viewModel.transform(input: input)
             
@@ -454,6 +462,27 @@ final class ProductDetailViewController: BaseViewController {
                 .disposed(by: disposeBag)
             
             collectionView.rx.setDelegate(self)
+                .disposed(by: disposeBag)
+            
+            profileTapGesture.rx.event
+                .bind { _ in
+                    profileTapped.accept(())
+                }
+                .disposed(by: disposeBag)
+            
+            output.goToProfileDetail
+                .bind(with: self) { owner, value in
+                    var vm: ProfileViewModel
+                    
+                    if value == UserDefaultsManager.shared.userID {
+                        vm = ProfileViewModel(viewType: .loginUser, userID: value, isTapBarView: false)
+                    } else {
+                        vm = ProfileViewModel(viewType: .notLoginUser, userID: value, isTapBarView: false)
+                    }
+                    
+                    let vc = ProfileViewController(viewModel: vm)
+                    owner.pushViewController(vc)
+                }
                 .disposed(by: disposeBag)
         }
     }

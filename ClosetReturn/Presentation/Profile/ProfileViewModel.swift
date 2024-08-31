@@ -22,17 +22,20 @@ final class ProfileViewModel: BaseViewModel {
     }
     private var viewType: ViewType
     private var userID: String
+    private var isTapBarView: Bool
     
     private var followerCount: Int = 0
     private var productPosts: [CommonPost] = []
     private var feedPosts: [CommonPost] = []
     private var buyProducts: [ProductPost] = []
+    private var isFollowed: Bool = false
     
     //MARK: - Init
     
-    init(viewType: ViewType, userID: String) {
+    init(viewType: ViewType, userID: String, isTapBarView: Bool) {
         self.viewType = viewType
         self.userID = userID
+        self.isTapBarView = isTapBarView
     }
     
     //MARK: - Inputs
@@ -53,7 +56,7 @@ final class ProfileViewModel: BaseViewModel {
     
     struct Output {
         let networkError: PublishRelay<(NetworkError, RouterType)>
-        let viewType: BehaviorRelay<(ViewType)>
+        let viewType: BehaviorRelay<(ViewType, Bool)>
         let nickname: PublishRelay<String>
         let followerCount: PublishRelay<Int>
         let followingCount: PublishRelay<Int>
@@ -69,13 +72,14 @@ final class ProfileViewModel: BaseViewModel {
         let executeLogout: PublishRelay<Void>
         let executeEdit: PublishRelay<Void>
         let completedRefresh: PublishRelay<Void>
+        let follow: PublishRelay<Bool>
     }
     //MARK: - Methods
     
     func transform(input: Input) -> Output {
         
         let networkError = PublishRelay<(NetworkError, RouterType)>()
-        let viewType = BehaviorRelay<(ViewType)>(value: self.viewType)
+        let viewType = BehaviorRelay<(ViewType, Bool)>(value: (self.viewType, self.isTapBarView))
         let nickname = PublishRelay<String>()
         let followerCount = PublishRelay<Int>()
         let followingCount = PublishRelay<Int>()
@@ -88,6 +92,7 @@ final class ProfileViewModel: BaseViewModel {
         let executeLogout = PublishRelay<Void>()
         let executeEdit = PublishRelay<Void>()
         let completedRefresh = PublishRelay<Void>()
+        let follow = PublishRelay<Bool>()
         
         
         input.fetchUserProfile
@@ -119,6 +124,19 @@ final class ProfileViewModel: BaseViewModel {
                             }
                             
                             nickname.accept(data.nick)
+                            
+                            if owner.viewType == ViewType.notLoginUser {
+                                let followed = data.followers.contains { followUser in
+                                    followUser.user_id == UserDefaultsManager.shared.userID
+                                }
+                                if followed {
+                                    owner.isFollowed = true
+                                } else {
+                                    owner.isFollowed = false
+                                }
+                                follow.accept(owner.isFollowed)
+                            }
+                            
                             owner.followerCount = data.followers.count
                             followerCount.accept(data.followers.count)
                             followingCount.accept(data.following.count)
@@ -242,8 +260,41 @@ final class ProfileViewModel: BaseViewModel {
                 switch owner.viewType {
                 case .loginUser:
                     executeEdit.accept(())
+                
                 case .notLoginUser:
-                    break
+                    if owner.isFollowed {
+                        //팔로우 취소
+                        NetworkManager.shared.performRequest(api: .followCancel(userID: owner.userID), model: Follow.self)
+                            .asObservable()
+                            .bind(with: self) { owner, result in
+                                switch result {
+                                case .success(let data):
+                                    owner.isFollowed = data.following_status
+                                    follow.accept(owner.isFollowed)
+                                    input.fetchUserProfile.accept(())
+                                
+                                case .failure(let error):
+                                    networkError.accept((error, RouterType.follow))
+                                }
+                            }
+                            .disposed(by: owner.disposeBag)
+                    } else {
+                        //팔로우
+                        NetworkManager.shared.performRequest(api: .follow(userID: owner.userID), model: Follow.self)
+                            .asObservable()
+                            .bind(with: self) { owner, result in
+                                switch result {
+                                case .success(let data):
+                                    owner.isFollowed = data.following_status
+                                    follow.accept(owner.isFollowed)
+                                    input.fetchUserProfile.accept(())
+                                
+                                case .failure(let error):
+                                    networkError.accept((error, RouterType.follow))
+                                }
+                            }
+                            .disposed(by: owner.disposeBag)
+                    }
                 }
             }
             .disposed(by: disposeBag)
@@ -273,7 +324,8 @@ final class ProfileViewModel: BaseViewModel {
             withdrawalMenuTapped: input.withdrawalMenuTapped,
             executeLogout: executeLogout,
             executeEdit: executeEdit,
-            completedRefresh: completedRefresh
+            completedRefresh: completedRefresh,
+            follow: follow
         )
     }
 }

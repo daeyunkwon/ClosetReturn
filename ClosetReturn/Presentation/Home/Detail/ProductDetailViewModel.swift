@@ -38,6 +38,7 @@ final class ProductDetailViewModel: BaseViewModel {
         let commentButtonTapped: ControlEvent<Void>
         let buyButtonTapped: ControlEvent<Void>
         let executePayment: PublishRelay<String>
+        let profileTapped: PublishRelay<Void>
     }
     
     //MARK: - Outputs
@@ -65,6 +66,7 @@ final class ProductDetailViewModel: BaseViewModel {
         let buyButtonTapped: PublishRelay<IamportPayment>
         let succeedPayment: PublishRelay<Payments>
         let rejectionEdit: PublishRelay<String>
+        let goToProfileDetail: PublishRelay<String>
 
         let networkError: PublishRelay<(NetworkError, RouterType)>
     }
@@ -95,6 +97,7 @@ final class ProductDetailViewModel: BaseViewModel {
         let buyButtonTapped = PublishRelay<IamportPayment>()
         let succeedPayment = PublishRelay<Payments>()
         let rejectionEdit = PublishRelay<String>()
+        let profileImageTapped = PublishRelay<String>()
         
         let networkError = PublishRelay<(NetworkError, RouterType)>()
         
@@ -351,6 +354,14 @@ final class ProductDetailViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
+        input.profileTapped
+            .bind(with: self) { owner, _ in
+                if let userID = owner.productPost?.creator.user_id {
+                    profileImageTapped.accept(userID)
+                }
+            }
+            .disposed(by: disposeBag)
+        
         
         return Output(
             profileImageData: profileImageData,
@@ -375,11 +386,8 @@ final class ProductDetailViewModel: BaseViewModel {
             buyButtonTapped: buyButtonTapped,
             succeedPayment: succeedPayment,
             rejectionEdit: rejectionEdit,
+            goToProfileDetail: profileImageTapped,
             networkError: networkError
         )
     }
-}
-
-struct Test: Decodable {
-    
 }
