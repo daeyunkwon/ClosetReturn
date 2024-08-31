@@ -9,6 +9,9 @@ import Foundation
 
 struct Profile: Decodable {
     let user_id: String
+    let email: String?
+    let phoneNum: String?
+    let birthDay: String?
     let nick: String
     let profileImage: String?
     let followers: [FollowUser]

@@ -31,6 +31,7 @@ enum Router {
     case targetUserProfile(userID: String)
     case paymentsValid(imp_uid: String, post_id: String)
     case paymentMe
+    case editProfile
 }
 
 enum RouterType {
@@ -55,6 +56,7 @@ enum RouterType {
     case targetUserProfile
     case paymentsValid
     case paymentMe
+    case editProfile
 }
 
 extension Router: URLRequestConvertible {
@@ -70,7 +72,7 @@ extension Router: URLRequestConvertible {
         case .posts, .imageFetch, .refresh, .postDetail, .likeFetch, .like2Fetch, .targetUserProfile, .paymentMe:
             return .get
             
-        case .postModify, .commentModify:
+        case .postModify, .commentModify, .editProfile:
             return .put
             
         case .postDelete, .commentDelete:
@@ -101,6 +103,7 @@ extension Router: URLRequestConvertible {
         case .targetUserProfile(let userID): return APIURL.targetUserProfileFetchURL(userID: userID)
         case .paymentsValid: return APIURL.payments
         case .paymentMe: return APIURL.paymentMe
+        case .editProfile: return APIURL.profileEdit
         }
     }
     
