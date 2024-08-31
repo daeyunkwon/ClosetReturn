@@ -215,7 +215,7 @@ final class FeedDetailViewModel: BaseViewModel {
                         switch result {
                         case .success(let data):
                             if let changedValue = data.first?.value {
-                                var count = owner.feedPost?.likes2.count ?? 0
+                                let count = owner.feedPost?.likes2.count ?? 0
                                 
                                 if changedValue {
                                     UserDefaultsManager.shared.likeFeed[owner.postID] = true

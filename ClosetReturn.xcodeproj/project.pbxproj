@@ -70,6 +70,8 @@
 		44B222D22C806EFA009BC14C /* iamport-ios in Frameworks */ = {isa = PBXBuildFile; productRef = 44B222D12C806EFA009BC14C /* iamport-ios */; };
 		44B222D42C8096B4009BC14C /* Payments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B222D32C8096B4009BC14C /* Payments.swift */; };
 		44B222D62C81B201009BC14C /* PaymentMe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B222D52C81B201009BC14C /* PaymentMe.swift */; };
+		44B222D92C830EC6009BC14C /* ProfileEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B222D82C830EC6009BC14C /* ProfileEditViewModel.swift */; };
+		44B222DB2C830ED2009BC14C /* ProfileEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B222DA2C830ED2009BC14C /* ProfileEditViewController.swift */; };
 		44C0BAB12C738CA900136643 /* RefreshModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C0BAB02C738CA900136643 /* RefreshModel.swift */; };
 		44C0BAB32C7493DC00136643 /* JoinUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C0BAB22C7493DC00136643 /* JoinUser.swift */; };
 		44C0BAD22C75E2EA00136643 /* ProductDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C0BAD12C75E2EA00136643 /* ProductDetailViewController.swift */; };
@@ -148,6 +150,8 @@
 		44B222C32C7F3CE3009BC14C /* CommonPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonPost.swift; sourceTree = "<group>"; };
 		44B222D32C8096B4009BC14C /* Payments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payments.swift; sourceTree = "<group>"; };
 		44B222D52C81B201009BC14C /* PaymentMe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMe.swift; sourceTree = "<group>"; };
+		44B222D82C830EC6009BC14C /* ProfileEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditViewModel.swift; sourceTree = "<group>"; };
+		44B222DA2C830ED2009BC14C /* ProfileEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditViewController.swift; sourceTree = "<group>"; };
 		44C0BAB02C738CA900136643 /* RefreshModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshModel.swift; sourceTree = "<group>"; };
 		44C0BAB22C7493DC00136643 /* JoinUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinUser.swift; sourceTree = "<group>"; };
 		44C0BAD12C75E2EA00136643 /* ProductDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailViewController.swift; sourceTree = "<group>"; };
@@ -437,8 +441,18 @@
 				44B222B22C7E2F5E009BC14C /* ProfileViewModel.swift */,
 				44B222B42C7E2F6C009BC14C /* ProfileViewController.swift */,
 				44B222BF2C7F0B4C009BC14C /* ProductBuyTableViewCell.swift */,
+				44B222D72C830EB7009BC14C /* Edit */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		44B222D72C830EB7009BC14C /* Edit */ = {
+			isa = PBXGroup;
+			children = (
+				44B222D82C830EC6009BC14C /* ProfileEditViewModel.swift */,
+				44B222DA2C830ED2009BC14C /* ProfileEditViewController.swift */,
+			);
+			path = Edit;
 			sourceTree = "<group>";
 		};
 		44C0BAD02C75E2D800136643 /* Detail */ = {
@@ -593,6 +607,7 @@
 				44B222B52C7E2F6C009BC14C /* ProfileViewController.swift in Sources */,
 				4486AD912C78776000A8BA9C /* RoundedBackTitleContainerView.swift in Sources */,
 				4486AD972C7896C000A8BA9C /* PhotoButtonView.swift in Sources */,
+				44B222D92C830EC6009BC14C /* ProfileEditViewModel.swift in Sources */,
 				44A39D4B2C723843009BCC44 /* SignUpCompleteViewController.swift in Sources */,
 				44C0BAD42C75E68E00136643 /* ProductDetailViewModel.swift in Sources */,
 				44E546F72C7B6ADC00C27AAE /* FeedEditViewController.swift in Sources */,
@@ -607,6 +622,7 @@
 				443A2F0A2C79DA910010FB19 /* UploadPostRequestModel.swift in Sources */,
 				449AD0392C6CA0B200B0ED37 /* AppDelegate.swift in Sources */,
 				44C0BAD62C76064F00136643 /* DetailCollectionViewCell.swift in Sources */,
+				44B222DB2C830ED2009BC14C /* ProfileEditViewController.swift in Sources */,
 				44B2229A2C7B91AD009BC14C /* FeedDetailViewController.swift in Sources */,
 				449AD05E2C6D787400B0ED37 /* Constant.swift in Sources */,
 				449AD0722C6DC67A00B0ED37 /* BaseViewModel.swift in Sources */,

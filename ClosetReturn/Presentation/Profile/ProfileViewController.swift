@@ -155,8 +155,6 @@ final class ProfileViewController: BaseViewController {
         return sc
     }()
     
-    private let feedRefreshControl = UIRefreshControl()
-    
     private lazy var feedCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -167,33 +165,26 @@ final class ProfileViewController: BaseViewController {
         
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.register(FeedCollectionViewCell.self, forCellWithReuseIdentifier: FeedCollectionViewCell.identifier)
-        cv.refreshControl = feedRefreshControl
         cv.isHidden = false
         cv.isScrollEnabled = false
         return cv
     }()
-    
-    private let productForSaleRefreshControl = UIRefreshControl()
     
     private lazy var productForSaleTableView: UITableView = {
         let tv = UITableView()
         tv.separatorStyle = .none
         tv.register(HomeTableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.identifier)
         tv.rowHeight = 150
-        tv.refreshControl = productForSaleRefreshControl
         tv.isHidden = true
         tv.isScrollEnabled = false
         return tv
     }()
-    
-    private let productForBuyRefreshControl = UIRefreshControl()
     
     private lazy var productForBuyTableView: UITableView = {
         let tv = UITableView()
         tv.separatorStyle = .none
         tv.register(ProductBuyTableViewCell.self, forCellReuseIdentifier: ProductBuyTableViewCell.identifier)
         tv.rowHeight = 150
-        tv.refreshControl = productForBuyRefreshControl
         tv.isHidden = true
         tv.isScrollEnabled = false
         return tv
@@ -230,7 +221,8 @@ final class ProfileViewController: BaseViewController {
             fetchBuyCellImage: fetchBuyCellImage,
             logoutMenuTapped: logoutMenuTapped,
             withdrawalMenuTapped: withdrawalMenuTapped,
-            logoutAlertButtonTapped: logoutAlertButtonTapped
+            logoutAlertButtonTapped: logoutAlertButtonTapped,
+            editAndFollowButtonTapped: editAndFollowButton.rx.tap
         )
         let output = viewModel.transform(input: input)
         
@@ -296,6 +288,7 @@ final class ProfileViewController: BaseViewController {
         output.buyProducts
             .bind(to: productForBuyTableView.rx.items(cellIdentifier: ProductBuyTableViewCell.identifier, cellType: ProductBuyTableViewCell.self)) { row, element, cell in
                 cell.cellConfig(data: element)
+                cell.selectionStyle = .none
                 
                 if let firstImagePath = element.files.first {
                     fetchBuyCellImage.accept((row, firstImagePath))
@@ -355,12 +348,6 @@ final class ProfileViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
-        
-        
-        
-        
-        
-        
         output.logoutMenuTapped
             .bind(with: self) { owner, _ in
                 owner.showMenuButtonTapAlert(title: "로그아웃", message: "로그아웃 하시겠습니까?", buttonTitle: "로그아웃", buttonStyle: .default) { logoutAction in
@@ -377,7 +364,6 @@ final class ProfileViewController: BaseViewController {
         
         output.withdrawalMenuTapped
             .bind(with: self) { owner, _ in
-                //탈퇴 얼럿
                 owner.showToast(message: "탈퇴는 관리자에게 문의 바랍니다", position: .center)
             }
             .disposed(by: disposeBag)
@@ -390,6 +376,16 @@ final class ProfileViewController: BaseViewController {
                 case .notLoginUser:
                     owner.updateEditFollowButtonAppearance(isCurrentLoginUser: false, isFollow: false)
                 }
+            }
+            .disposed(by: disposeBag)
+        
+        output.executeEdit
+            .bind(with: self) { owner, _ in
+                let vm = ProfileEditViewModel()
+                let vc = ProfileEditViewController(viewModel: vm)
+                let navi = UINavigationController(rootViewController: vc)
+                navi.modalPresentationStyle = .fullScreen
+                owner.present(navi, animated: true)
             }
             .disposed(by: disposeBag)
         
