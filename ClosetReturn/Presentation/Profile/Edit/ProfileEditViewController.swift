@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import PhotosUI
 
 import RxSwift
 import RxCocoa
@@ -17,6 +18,9 @@ final class ProfileEditViewController: BaseViewController {
     
     private let disposeBag = DisposeBag()
     private let viewModel: ProfileEditViewModel
+    
+    private let selectedImage = PublishRelay<Data>()
+    
     
     //MARK: - Init
     
@@ -31,14 +35,17 @@ final class ProfileEditViewController: BaseViewController {
     
     //MARK: - UI Components
     
-    private let profileImageView: UIImageView = {
+    private let profileImageViewTapGesture = UITapGestureRecognizer()
+    
+    private lazy var profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
         iv.backgroundColor = .lightGray
         iv.clipsToBounds = true
         iv.layer.borderColor = UIColor.systemGray5.cgColor
-        iv.layer.borderWidth = 6
+        iv.layer.borderWidth = 3
         iv.isUserInteractionEnabled = true
+        iv.addGestureRecognizer(self.profileImageViewTapGesture)
         return iv
     }()
     
@@ -121,6 +128,81 @@ final class ProfileEditViewController: BaseViewController {
     
     //MARK: - Configurations
     
+    override func bind() {
+        let cancelAlertButtonTapped = PublishRelay<Void>()
+
+        let input = ProfileEditViewModel.Input(
+            cancelButtonTapped: cancelButton.rx.tap,
+            cancelAlertButtonTapped: cancelAlertButtonTapped,
+            selectedImageData: selectedImage,
+            inputNickname: nicknameInputView.inputTextField.rx.text.orEmpty,
+            inputPhoneNumber: phoneNumberInputView.inputTextField.rx.text.orEmpty,
+            inputBirthday: birthdayPicker.rx.date,
+            doneButtonTapped: doneButton.rx.tap
+        )
+        let output = viewModel.transform(input: input)
+        
+        output.cancelButtonTapped
+            .bind(with: self) { owner, _ in
+                owner.showAlert(title: "프로필 수정", message: "프로필 수정을 취소하시겠습니까?", buttonTitle: "확인", buttonStyle: .default) { okAction in
+                    cancelAlertButtonTapped.accept(())
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        output.executeCancel
+            .bind(with: self) { owner, _ in
+                owner.dismiss(animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        profileImageViewTapGesture.rx.event
+            .bind(with: self) { owner, _ in
+                owner.openPHPicker()
+            }
+            .disposed(by: disposeBag)
+        
+        output.selectedImageData
+            .map { UIImage(data: $0) }
+            .bind(to: profileImageView.rx.image)
+            .disposed(by: disposeBag)
+        
+        output.nicknameValue
+            .bind(to: nicknameInputView.inputTextField.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.phoneNumberValue
+            .bind(to: phoneNumberInputView.inputTextField.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.birthdayValue
+            .bind(to: birthdayInputView.inputTextField.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.failedEdit
+            .bind(with: self) { owner, value in
+                switch value {
+                case .invalidProfile:
+                    owner.showToast(message: "프로필 사진을 선택해 주세요", position: .center)
+                case .invalidNickname:
+                    owner.showToast(message: "닉네임을 공백없이 입력해 주세요", position: .center)
+                case .invalidPhoneNumber:
+                    owner.showToast(message: "숫자만 포함해서 전화번호를 입력해 주세요", position: .center)
+                case .invalidBirthday:
+                    owner.showToast(message: "생일을 입력해 주세요", position: .center)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        output.succeedEdit
+            .bind(with: self) { owner, _ in
+                owner.dismiss(animated: true)
+            }
+            .disposed(by: disposeBag)
+            
+        
+    }
+    
     override func setupNavi() {
         navigationItem.title = "프로필 수정"
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: cancelButton)
@@ -142,7 +224,7 @@ final class ProfileEditViewController: BaseViewController {
         profileImageView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(50)
             make.centerX.equalToSuperview()
-            make.size.equalTo(110)
+            make.size.equalTo(120)
         }
         
         backViewForIcon.snp.makeConstraints { make in
@@ -158,23 +240,50 @@ final class ProfileEditViewController: BaseViewController {
         nicknameInputView.snp.makeConstraints { make in
             make.top.equalTo(profileImageView.snp.bottom).offset(35)
             make.horizontalEdges.equalToSuperview().inset(20)
-            make.height.equalTo(50)
         }
         
         phoneNumberInputView.snp.makeConstraints { make in
             make.top.equalTo(nicknameInputView.snp.bottom).offset(35)
             make.horizontalEdges.equalToSuperview().inset(20)
-            make.height.equalTo(50)
         }
         
         birthdayInputView.snp.makeConstraints { make in
             make.top.equalTo(phoneNumberInputView.snp.bottom).offset(35)
             make.horizontalEdges.equalToSuperview().inset(20)
-            make.height.equalTo(50)
         }
     }
     
     override func configureUI() {
         super.configureUI()
+    }
+}
+
+// MARK: - PHPickerViewControllerDelegate
+
+extension ProfileEditViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        dismiss(animated: true)
+        
+        for (index, result) in results.enumerated() {
+            guard index < 1 else { break }
+            
+            result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] (object, error) in
+                if let image = object as? UIImage {
+                    if let data = image.jpegData(compressionQuality: 0.6) {
+                        self?.selectedImage.accept(data)
+                    }
+                }
+            }
+        }
+    }
+    
+    func openPHPicker() {
+        var configuration = PHPickerConfiguration()
+        configuration.selectionLimit = 1
+        configuration.filter = .images
+        
+        let picker = PHPickerViewController(configuration: configuration)
+        picker.delegate = self
+        present(picker, animated: true)
     }
 }

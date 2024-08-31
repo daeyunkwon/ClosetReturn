@@ -50,11 +50,18 @@ extension UIViewController {
                     errorType = .invalidToken
                 }
                 
+            case 402:
+                switch routerType {
+                case .editProfile:
+                    message = "공백이 포함된 닉네임은 사용할 수 없습니다."
+                default: break
+                }
+                
             case 409:
                 switch routerType {
                 case .emailValidation:
                     message = "사용이 불가한 이메일입니다."
-                case .joinUser:
+                case .joinUser, .editProfile:
                     message = "입력하신 닉네임이 이미 사용중인 닉네임으로 사용할 수 없습니다."
                 default: break
                 }                
@@ -139,5 +146,12 @@ extension UIViewController {
     func performHapticFeedback() {
         let generator = UIImpactFeedbackGenerator(style: .medium)
         generator.impactOccurred()
+    }
+    
+    func showAlert(title: String, message: String, buttonTitle: String, buttonStyle: UIAlertAction.Style, action: @escaping ((UIAlertAction) -> Void)) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        alert.addAction(UIAlertAction(title: buttonTitle, style: buttonStyle, handler: action))
+        present(alert, animated: true)
     }
 }

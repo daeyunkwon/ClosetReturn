@@ -35,7 +35,13 @@ final class ProfileViewController: BaseViewController {
     
     //MARK: - UI Components
     
-    private let scrollView = UIScrollView()
+    private let refreshControl = UIRefreshControl()
+    
+    private lazy var scrollView: UIScrollView = {
+        let sv = UIScrollView()
+        sv.refreshControl = refreshControl
+        return sv
+    }()
     private let containerView = UIView()
     private let topBackView: UIView = {
         let view = UIView()
@@ -64,7 +70,7 @@ final class ProfileViewController: BaseViewController {
         iv.backgroundColor = .lightGray
         iv.clipsToBounds = true
         iv.layer.borderColor = UIColor.systemGray5.cgColor
-        iv.layer.borderWidth = 6
+        iv.layer.borderWidth = 3
         return iv
     }()
     
@@ -222,7 +228,8 @@ final class ProfileViewController: BaseViewController {
             logoutMenuTapped: logoutMenuTapped,
             withdrawalMenuTapped: withdrawalMenuTapped,
             logoutAlertButtonTapped: logoutAlertButtonTapped,
-            editAndFollowButtonTapped: editAndFollowButton.rx.tap
+            editAndFollowButtonTapped: editAndFollowButton.rx.tap,
+            refresh: refreshControl.rx.controlEvent(.valueChanged)
         )
         let output = viewModel.transform(input: input)
         
@@ -350,7 +357,7 @@ final class ProfileViewController: BaseViewController {
         
         output.logoutMenuTapped
             .bind(with: self) { owner, _ in
-                owner.showMenuButtonTapAlert(title: "로그아웃", message: "로그아웃 하시겠습니까?", buttonTitle: "로그아웃", buttonStyle: .default) { logoutAction in
+                owner.showAlert(title: "로그아웃", message: "로그아웃 하시겠습니까?", buttonTitle: "로그아웃", buttonStyle: .default) { logoutAction in
                     logoutAlertButtonTapped.accept(())
                 }
             }
@@ -386,6 +393,14 @@ final class ProfileViewController: BaseViewController {
                 let navi = UINavigationController(rootViewController: vc)
                 navi.modalPresentationStyle = .fullScreen
                 owner.present(navi, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        output.completedRefresh
+            .bind(with: self) { owner, _ in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    owner.refreshControl.endRefreshing()
+                }
             }
             .disposed(by: disposeBag)
         
@@ -530,12 +545,5 @@ final class ProfileViewController: BaseViewController {
         let attributedText = NSMutableAttributedString(string: "\(count)\n", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14)])
         attributedText.append(NSAttributedString(string: text, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor.lightGray]))
         uilabel.attributedText = attributedText
-    }
-    
-    private func showMenuButtonTapAlert(title: String, message: String, buttonTitle: String, buttonStyle: UIAlertAction.Style, action: @escaping ((UIAlertAction) -> Void)) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
-        alert.addAction(UIAlertAction(title: buttonTitle, style: buttonStyle, handler: action))
-        present(alert, animated: true)
     }
 }

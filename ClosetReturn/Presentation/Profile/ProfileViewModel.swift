@@ -46,6 +46,7 @@ final class ProfileViewModel: BaseViewModel {
         let withdrawalMenuTapped: PublishRelay<Void>
         let logoutAlertButtonTapped: PublishRelay<Void>
         let editAndFollowButtonTapped: ControlEvent<Void>
+        let refresh: ControlEvent<()>
     }
     
     //MARK: - Outputs
@@ -67,6 +68,7 @@ final class ProfileViewModel: BaseViewModel {
         let withdrawalMenuTapped: PublishRelay<Void>
         let executeLogout: PublishRelay<Void>
         let executeEdit: PublishRelay<Void>
+        let completedRefresh: PublishRelay<Void>
     }
     //MARK: - Methods
     
@@ -85,6 +87,7 @@ final class ProfileViewModel: BaseViewModel {
         let fetchBuyCellImage = PublishRelay<(Int, Data)>()
         let executeLogout = PublishRelay<Void>()
         let executeEdit = PublishRelay<Void>()
+        let completedRefresh = PublishRelay<Void>()
         
         
         input.fetchUserProfile
@@ -188,10 +191,12 @@ final class ProfileViewModel: BaseViewModel {
                                 productPosts.accept(owner.productPosts)
                                 feedPosts.accept(owner.feedPosts)
                                 buyProducts.accept(owner.buyProducts)
+                                completedRefresh.accept(())
                             }
                             
                         case .failure(let error):
                             networkError.accept((error, RouterType.targetUserProfile))
+                            completedRefresh.accept(())
                         }
                     }
                     .disposed(by: owner.disposeBag)
@@ -243,6 +248,11 @@ final class ProfileViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
+        input.refresh
+            .bind(with: self) { owner, _ in
+                input.fetchUserProfile.accept(())
+            }
+            .disposed(by: disposeBag)
         
         
         
@@ -262,7 +272,8 @@ final class ProfileViewModel: BaseViewModel {
             logoutMenuTapped: input.logoutMenuTapped,
             withdrawalMenuTapped: input.withdrawalMenuTapped,
             executeLogout: executeLogout,
-            executeEdit: executeEdit
+            executeEdit: executeEdit,
+            completedRefresh: completedRefresh
         )
     }
 }
