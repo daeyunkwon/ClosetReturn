@@ -53,7 +53,6 @@ final class ProductDetailViewController: BaseViewController {
     private lazy var collectionView: UICollectionView =  {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: view.frame.size.width, height: 550)
         layout.sectionInset = .init(top: 0, left: 0, bottom: 0, right: 0)
         layout.minimumLineSpacing = 0
         
@@ -233,6 +232,18 @@ final class ProductDetailViewController: BaseViewController {
         btn.layer.shadowOffset = .init(width: 0, height: 1)
         btn.showsMenuAsPrimaryAction = true
         return btn
+    }()
+    
+    private let profileBottomSeparatorLine: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemGray6
+        return view
+    }()
+    
+    private let contentTopSeparatorLine: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemGray6
+        return view
     }()
     
     //MARK: - Life Cycle
@@ -441,6 +452,9 @@ final class ProductDetailViewController: BaseViewController {
                     owner.updateBuyButtonAppearance(isNotSold: false)
                 }
                 .disposed(by: disposeBag)
+            
+            collectionView.rx.setDelegate(self)
+                .disposed(by: disposeBag)
         }
     }
     
@@ -469,6 +483,7 @@ final class ProductDetailViewController: BaseViewController {
             pageControl,
             profileImageView,
             nicknameLabel,
+            profileBottomSeparatorLine,
             titleLabel,
             brandLabel,
             priceLabel,
@@ -479,6 +494,7 @@ final class ProductDetailViewController: BaseViewController {
             sizeLabel,
             categoryTitleLabel,
             categoryLabel,
+            contentTopSeparatorLine,
             contentTextView
         )
         view.addSubview(bottomContainerView)
@@ -505,7 +521,7 @@ final class ProductDetailViewController: BaseViewController {
         collectionView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(-80)
             make.horizontalEdges.equalToSuperview()
-            make.height.equalTo(550)
+            make.height.equalTo(470)
         }
         
         pageControl.snp.makeConstraints { make in
@@ -525,8 +541,14 @@ final class ProductDetailViewController: BaseViewController {
             make.trailing.equalToSuperview().offset(-20)
         }
         
+        profileBottomSeparatorLine.snp.makeConstraints { make in
+            make.top.equalTo(profileImageView.snp.bottom).offset(8)
+            make.height.equalTo(10)
+            make.horizontalEdges.equalToSuperview()
+        }
+        
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(profileImageView.snp.bottom).offset(20)
+            make.top.equalTo(profileBottomSeparatorLine.snp.bottom).offset(8)
             make.horizontalEdges.equalToSuperview().inset(20)
         }
         
@@ -575,8 +597,14 @@ final class ProductDetailViewController: BaseViewController {
             make.trailing.equalToSuperview().inset(20)
         }
         
+        contentTopSeparatorLine.snp.makeConstraints { make in
+            make.top.equalTo(categoryLabel.snp.bottom).offset(13)
+            make.height.equalTo(10)
+            make.horizontalEdges.equalToSuperview()
+        }
+        
         contentTextView.snp.makeConstraints { make in
-            make.top.equalTo(categoryTitleLabel.snp.bottom).offset(20)
+            make.top.equalTo(contentTopSeparatorLine.snp.bottom).offset(8)
             make.horizontalEdges.equalToSuperview().inset(20)
             make.bottom.equalToSuperview().inset(100)
         }
@@ -658,5 +686,15 @@ final class ProductDetailViewController: BaseViewController {
             buyButton.setTitle("판매완료", for: .normal)
             buyButton.backgroundColor = Constant.Color.Button.buttonDisabled
         }
+    }
+}
+
+//MARK: - UICollectionViewDelegateFlowLayout
+
+extension ProductDetailViewController: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let collectionViewHeight = collectionView.frame.size.height
+        return CGSize(width: view.frame.size.width, height: collectionViewHeight)
     }
 }

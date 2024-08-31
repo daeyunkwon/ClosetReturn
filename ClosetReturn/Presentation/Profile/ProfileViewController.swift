@@ -75,14 +75,6 @@ final class ProfileViewController: BaseViewController {
         return label
     }()
     
-//    private let birthdayButton: UIButton = {
-//        let btn = UIButton(type: .system)
-//        btn.setImage(UIImage(systemName: "birthday.cake")?.applyingSymbolConfiguration(.init(font: .systemFont(ofSize: 13, weight: .bold))), for: .normal)
-//        btn.tintColor = Constant.Color.Button.buttonDisabled
-//        btn.isUserInteractionEnabled = false
-//        return btn
-//    }()
-    
     private let feedsLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
@@ -466,7 +458,7 @@ final class ProfileViewController: BaseViewController {
         profileImageView.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(20)
             make.centerX.equalToSuperview()
-            make.size.equalTo(144)
+            make.size.equalTo(120)
         }
         
         nicknameLabel.snp.makeConstraints { make in
