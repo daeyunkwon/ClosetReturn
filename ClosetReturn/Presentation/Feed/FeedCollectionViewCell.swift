@@ -13,6 +13,13 @@ import SnapKit
 
 final class FeedCollectionViewCell: BaseCollectionViewCell {
     
+    //MARK: - Life Cycle
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = nil
+    }
+    
     //MARK: - UI Components
     
     let imageView: UIImageView = {

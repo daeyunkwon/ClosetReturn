@@ -66,9 +66,7 @@ final class FeedViewController: BaseViewController {
             modelSelected: collectionView.rx.modelSelected(FeedPost.self)
             
         )
-        let output = viewModel.transform(
-            input: input
-        )
+        let output = viewModel.transform(input: input)
         
         fetch.accept(()) //최초 fetch 작업 실행
         
