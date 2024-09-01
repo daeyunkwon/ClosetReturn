@@ -112,6 +112,9 @@ final class FeedEditViewModel: BaseViewModel {
             .bind(with: self) { owner, row in
                 owner.images.remove(at: row)
                 selectedImageList.accept(owner.images)
+                if owner.images.isEmpty {
+                    owner.imageValid = false
+                }
             }
             .disposed(by: disposeBag)
         
