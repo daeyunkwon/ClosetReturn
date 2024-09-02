@@ -67,6 +67,7 @@ final class ProductDetailViewController: BaseViewController {
     }()
     
     private let profileTapGesture = UITapGestureRecognizer()
+    private let nicknameTapGesture = UITapGestureRecognizer()
     
     private lazy var profileImageView: UIImageView = {
         let iv = UIImageView()
@@ -83,7 +84,7 @@ final class ProductDetailViewController: BaseViewController {
         let label = UILabel()
         label.font = Constant.Font.secondaryTitleFont
         label.textColor = Constant.Color.Text.titleColor
-        label.addGestureRecognizer(profileTapGesture)
+        label.addGestureRecognizer(nicknameTapGesture)
         label.isUserInteractionEnabled = true
         return label
     }()
@@ -461,10 +462,16 @@ final class ProductDetailViewController: BaseViewController {
                 }
                 .disposed(by: disposeBag)
             
-            collectionView.rx.setDelegate(self)
+            self.collectionView.rx.setDelegate(self)
                 .disposed(by: disposeBag)
             
-            profileTapGesture.rx.event
+            self.profileTapGesture.rx.event
+                .bind { _ in
+                    profileTapped.accept(())
+                }
+                .disposed(by: disposeBag)
+            
+            self.nicknameTapGesture.rx.event
                 .bind { _ in
                     profileTapped.accept(())
                 }

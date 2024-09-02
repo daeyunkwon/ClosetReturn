@@ -42,8 +42,9 @@ struct ProductPost: Decodable {
             return "NONE"
         }
 
-        dateFormatter.dateFormat = "yyyy년 MM월 dd일 a h:mm:ss"
+        dateFormatter.dateFormat = "yyyy년 MM월 dd일 a h:mm"
         dateFormatter.timeZone = TimeZone.current
+        dateFormatter.locale = Locale.current
         return dateFormatter.string(from: date)
     }
     

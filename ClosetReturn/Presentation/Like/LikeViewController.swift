@@ -291,7 +291,7 @@ final class LikeViewController: BaseViewController {
     
     //MARK: - Methods
     
-    func updateUnderLineXPosition() {
+    private func updateUnderLineXPosition() {
         if segmentControl.selectedSegmentIndex == 0 {
             UIView.animate(withDuration: 0.2) { [weak self] in
                 guard let self else { return }

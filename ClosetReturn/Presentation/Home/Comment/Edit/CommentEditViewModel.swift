@@ -48,6 +48,7 @@ final class CommentEditViewModel: BaseViewModel {
     
     
     //MARK: - Methods
+    
     func transform(input: Input) -> Output {
         
         let comment = BehaviorRelay<String>(value: self.comment)

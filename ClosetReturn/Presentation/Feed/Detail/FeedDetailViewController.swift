@@ -38,18 +38,25 @@ final class FeedDetailViewController: BaseViewController {
     private let scrollView = UIScrollView()
     private let containerView = UIView()
     
-    private let profileImageView: UIImageView = {
+    private let profileTapGesture = UITapGestureRecognizer()
+    private let nicknameTapGesture = UITapGestureRecognizer()
+    
+    private lazy var profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.clipsToBounds = true
         iv.backgroundColor = .lightGray
         iv.contentMode = .scaleAspectFill
+        iv.addGestureRecognizer(profileTapGesture)
+        iv.isUserInteractionEnabled = true
         return iv
     }()
     
-    private let nicknameLabel: UILabel = {
+    private lazy var nicknameLabel: UILabel = {
         let label = UILabel()
         label.font = Constant.Font.secondaryTitleFont
         label.textColor = Constant.Color.Text.titleColor
+        label.addGestureRecognizer(nicknameTapGesture)
+        label.isUserInteractionEnabled = true
         return label
     }()
     
@@ -144,6 +151,7 @@ final class FeedDetailViewController: BaseViewController {
     override func bind() {
         
         let alertDeleteButtonTapped = PublishRelay<Void>()
+        let profileTapped = PublishRelay<Void>()
         
         let input = FeedDetailViewModel.Input(
             fetch: fetch,
@@ -151,7 +159,8 @@ final class FeedDetailViewController: BaseViewController {
             editButtonTapped: editMenuTapped,
             deleteButtonTapped: deleteMenuTapped,
             alertDeleteButtonTapped: alertDeleteButtonTapped,
-            commentButtonTapped: commentButton.rx.tap
+            commentButtonTapped: commentButton.rx.tap,
+            profileTapped: profileTapped
         )
         let output = viewModel.transform(input: input)
         
@@ -264,6 +273,33 @@ final class FeedDetailViewController: BaseViewController {
         output.networkError
             .bind(with: self) { owner, value in
                 owner.showNetworkRequestFailAlert(errorType: value.0, routerType: value.1)
+            }
+            .disposed(by: disposeBag)
+        
+        self.profileTapGesture.rx.event
+            .bind(with: self) { owner, _ in
+                profileTapped.accept(())
+            }
+            .disposed(by: disposeBag)
+        
+        self.nicknameTapGesture.rx.event
+            .bind(with: self) { owner, _ in
+                profileTapped.accept(())
+            }
+            .disposed(by: disposeBag)
+        
+        output.goToProfile
+            .bind(with: self) { owner, value in
+                var vm: ProfileViewModel
+                
+                if value == UserDefaultsManager.shared.userID {
+                    vm = ProfileViewModel(viewType: .loginUser, userID: value, isTapBarView: false)
+                } else {
+                    vm = ProfileViewModel(viewType: .notLoginUser, userID: value, isTapBarView: false)
+                }
+                
+                let vc = ProfileViewController(viewModel: vm)
+                owner.pushViewController(vc)
             }
             .disposed(by: disposeBag)
     }

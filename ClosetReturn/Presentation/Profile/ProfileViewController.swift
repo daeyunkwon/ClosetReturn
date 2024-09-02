@@ -71,6 +71,7 @@ final class ProfileViewController: BaseViewController {
         iv.clipsToBounds = true
         iv.layer.borderColor = UIColor.systemGray5.cgColor
         iv.layer.borderWidth = 3
+        iv.layer.cornerRadius = 60
         return iv
     }()
     
@@ -261,6 +262,7 @@ final class ProfileViewController: BaseViewController {
             .bind(to: productForSaleTableView.rx.items(cellIdentifier: HomeTableViewCell.identifier, cellType: HomeTableViewCell.self)) { row, element, cell in
                 cell.selectionStyle = .none
                 cell.cellConfig(withCommonPost: element)
+                cell.likeButton.isHidden = true
             }
             .disposed(by: disposeBag)
         
@@ -331,7 +333,7 @@ final class ProfileViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
-        feedCollectionView.rx.observe(CGSize.self , "contentSize")
+        self.feedCollectionView.rx.observe(CGSize.self , "contentSize")
             .bind(with: self) { owner, size in
                 owner.feedCollectionView.snp.updateConstraints { make in
                     make.height.equalTo(size?.height ?? 0.0)
@@ -339,7 +341,7 @@ final class ProfileViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
-        productForSaleTableView.rx.observe(CGSize.self, "contentSize")
+        self.productForSaleTableView.rx.observe(CGSize.self, "contentSize")
             .bind(with: self) { owner, size in
                 owner.productForSaleTableView.snp.updateConstraints { make in
                     make.height.equalTo(size?.height ?? 0.0)
@@ -347,7 +349,7 @@ final class ProfileViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
-        productForBuyTableView.rx.observe(CGSize.self, "contentSize")
+        self.productForBuyTableView.rx.observe(CGSize.self, "contentSize")
             .bind(with: self) { owner, size in
                 owner.productForBuyTableView.snp.updateConstraints { make in
                     make.height.equalTo(size?.height ?? 0.0)
@@ -529,11 +531,6 @@ final class ProfileViewController: BaseViewController {
     override func configureUI() {
         super.configureUI()
         containerView.backgroundColor = .systemGray5
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        profileImageView.layer.cornerRadius = profileImageView.frame.size.height / 2
     }
     
     //MARK: - Methods

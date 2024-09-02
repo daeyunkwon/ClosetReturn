@@ -37,6 +37,7 @@ final class FeedDetailViewModel: BaseViewModel {
         let deleteButtonTapped: PublishRelay<Void>
         let alertDeleteButtonTapped: PublishRelay<Void>
         let commentButtonTapped: ControlEvent<Void>
+        let profileTapped: PublishRelay<Void>
     }
     
     //MARK: - Outputs
@@ -56,6 +57,7 @@ final class FeedDetailViewModel: BaseViewModel {
         let deleteButtonTapped: PublishRelay<Void>
         let deleteSucceed: PublishRelay<Void>
         let commentButtonTapped: PublishRelay<(FeedPost)>
+        let goToProfile: PublishRelay<(String)>
     }
     
     //MARK: - Methods
@@ -77,6 +79,7 @@ final class FeedDetailViewModel: BaseViewModel {
         let editButtonTapped = PublishRelay<(String, String, [Data])>()
         let deleteSucceed = PublishRelay<Void>()
         let commentButtonTapped = PublishRelay<(FeedPost)>()
+        let goToProfile = PublishRelay<(String)>()
         
         
         input.fetch
@@ -270,6 +273,14 @@ final class FeedDetailViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
             
+        input.profileTapped
+            .bind(with: self) { owner, _ in
+                if let userID = owner.feedPost?.creator.user_id {
+                    goToProfile.accept(userID)
+                }
+            }
+            .disposed(by: disposeBag)
+        
         
         return Output(
             networkError: networkError,
@@ -285,7 +296,8 @@ final class FeedDetailViewModel: BaseViewModel {
             editButtonTapped: editButtonTapped,
             deleteButtonTapped: input.deleteButtonTapped,
             deleteSucceed: deleteSucceed,
-            commentButtonTapped: commentButtonTapped
+            commentButtonTapped: commentButtonTapped,
+            goToProfile: goToProfile
         )
     }
 }
