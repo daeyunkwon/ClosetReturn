@@ -22,6 +22,8 @@ final class FeedDetailViewModel: BaseViewModel {
     
     var postDeleteSucceed: () -> Void = { }
     
+    private var likeCount: Int = 0
+    
     //MARK: - Init
     
     init(postID: String) {
@@ -100,6 +102,8 @@ final class FeedDetailViewModel: BaseViewModel {
                             } else {
                                 like.accept(false)
                             }
+                            
+                            owner.likeCount = data.likes2.count
                             
                         case .failure(let error):
                             networkError.accept((error, RouterType.postDetail))
@@ -218,21 +222,21 @@ final class FeedDetailViewModel: BaseViewModel {
                         switch result {
                         case .success(let data):
                             if let changedValue = data.first?.value {
-                                let count = owner.feedPost?.likes2.count ?? 0
                                 
                                 if changedValue {
                                     UserDefaultsManager.shared.likeFeed[owner.postID] = true
                                     like.accept(true)
-                                    likeCount.accept(count + 1)
+                                    owner.likeCount += 1
+                                    likeCount.accept(owner.likeCount)
                                 } else {
                                     UserDefaultsManager.shared.likeFeed.removeValue(forKey: owner.postID)
                                     like.accept(false)
-                                    if count == 0 {
-                                        likeCount.accept(count)
+                                    if owner.likeCount == 0 {
+                                        likeCount.accept(owner.likeCount)
                                     } else {
-                                        likeCount.accept(count - 1)
+                                        owner.likeCount -= 1
+                                        likeCount.accept(owner.likeCount)
                                     }
-                                    
                                 }
                             }
                         case .failure(let error):
