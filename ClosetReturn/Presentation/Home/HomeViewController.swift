@@ -75,7 +75,7 @@ final class HomeViewController: BaseViewController {
             
         
         output.cellTapped
-            .bind(with: self) { owner, data in
+            .bind(with: self) { [weak self] owner, data in
                 let vm = ProductDetailViewModel()
                 vm.postDeleteSucceed = { [weak self] in
                     self?.showToast(message: "해당 상품이 삭제되었습니다", position: .bottom)

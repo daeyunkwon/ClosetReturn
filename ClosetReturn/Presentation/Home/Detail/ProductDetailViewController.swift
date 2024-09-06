@@ -386,7 +386,7 @@ final class ProductDetailViewController: BaseViewController {
                 .disposed(by: disposeBag)
             
             output.editMenuButtonTapped
-                .bind(with: self) { owner, value in
+                .bind(with: self) { [weak self] owner, value in
                     let vm = ProductPostEditViewModel(viewType: .modify)
                     vm.productPost = value
                     

@@ -104,7 +104,7 @@ final class CommentViewController: BaseViewController {
                 }
                 
                 cell.editButton.rx.tap
-                    .bind(with: self) { owner, _ in
+                    .bind(with: self) { [weak self] owner, _ in
                         let vm = CommentEditViewModel(comment: cell.commentLabel.text ?? "None", postID: output.comments.value.1, commnetID: element.comment_id)
                         owner.view.endEditing(true)
                         vm.editSucceed = {[weak self] sender in

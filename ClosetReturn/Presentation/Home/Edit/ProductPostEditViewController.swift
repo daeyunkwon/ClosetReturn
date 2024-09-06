@@ -512,6 +512,7 @@ final class ProductPostEditViewController: BaseViewController {
 // MARK: - PHPickerViewControllerDelegate
 
 extension ProductPostEditViewController: PHPickerViewControllerDelegate {
+    
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         dismiss(animated: true)
         

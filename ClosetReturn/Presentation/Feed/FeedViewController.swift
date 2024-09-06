@@ -102,7 +102,7 @@ final class FeedViewController: BaseViewController {
             .disposed(by: disposeBag)
         
         output.newButtonTapped
-            .bind(with: self) { owner, _ in
+            .bind(with: self) { [weak self] owner, _ in
                 let vm = FeedEditViewModel(viewType: .new)
                 vm.postUploadSucceed = { [weak self] in
                     
