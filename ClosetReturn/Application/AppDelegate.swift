@@ -7,6 +7,7 @@
 
 import UIKit
 
+import FirebaseCore
 import IQKeyboardManagerSwift
 import iamport_ios
 
@@ -26,6 +27,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         sleep(2)
+        
+        FirebaseApp.configure()
         
         IQKeyboardManager.shared.enable = true
         IQKeyboardManager.shared.toolbarConfiguration.doneBarButtonConfiguration = .init(title: "완료")

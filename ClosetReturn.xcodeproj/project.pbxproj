@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		440160492CB3D09B004EC740 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 440160482CB3D09B004EC740 /* GoogleService-Info.plist */; };
+		4401604C2CB3D115004EC740 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 4401604B2CB3D115004EC740 /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		4401604E2CB3D115004EC740 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 4401604D2CB3D115004EC740 /* FirebaseCrashlytics */; };
+		440160502CB3D115004EC740 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 4401604F2CB3D115004EC740 /* FirebaseMessaging */; };
 		443A2F082C79CCD60010FB19 /* Files.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443A2F072C79CCD60010FB19 /* Files.swift */; };
 		443A2F0A2C79DA910010FB19 /* UploadPostRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443A2F092C79DA910010FB19 /* UploadPostRequestModel.swift */; };
 		4486AD8D2C7789D900A8BA9C /* ProductPostEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4486AD8C2C7789D900A8BA9C /* ProductPostEditViewController.swift */; };
@@ -94,6 +98,7 @@
 
 /* Begin PBXFileReference section */
 		440160472CB3CED2004EC740 /* ClosetReturn.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ClosetReturn.entitlements; sourceTree = "<group>"; };
+		440160482CB3D09B004EC740 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		443A2F072C79CCD60010FB19 /* Files.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Files.swift; sourceTree = "<group>"; };
 		443A2F092C79DA910010FB19 /* UploadPostRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostRequestModel.swift; sourceTree = "<group>"; };
 		4486AD8C2C7789D900A8BA9C /* ProductPostEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductPostEditViewController.swift; sourceTree = "<group>"; };
@@ -181,11 +186,14 @@
 			files = (
 				449AD0982C6F6BC000B0ED37 /* IQKeyboardManagerSwift in Frameworks */,
 				449AD0882C6F260A00B0ED37 /* RxCocoa in Frameworks */,
+				440160502CB3D115004EC740 /* FirebaseMessaging in Frameworks */,
 				449AD0532C6CA23300B0ED37 /* SnapKit in Frameworks */,
 				449AD08A2C6F260A00B0ED37 /* RxSwift in Frameworks */,
 				4486AD9E2C7905F900A8BA9C /* Toast in Frameworks */,
 				449AD0792C6DE9ED00B0ED37 /* Alamofire in Frameworks */,
+				4401604E2CB3D115004EC740 /* FirebaseCrashlytics in Frameworks */,
 				44B222D22C806EFA009BC14C /* iamport-ios in Frameworks */,
+				4401604C2CB3D115004EC740 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,6 +230,7 @@
 		449AD0372C6CA0B200B0ED37 /* ClosetReturn */ = {
 			isa = PBXGroup;
 			children = (
+				440160482CB3D09B004EC740 /* GoogleService-Info.plist */,
 				440160472CB3CED2004EC740 /* ClosetReturn.entitlements */,
 				449AD04D2C6CA11900B0ED37 /* Application */,
 				449AD0542C6CD78800B0ED37 /* Common */,
@@ -533,6 +542,9 @@
 				449AD0972C6F6BC000B0ED37 /* IQKeyboardManagerSwift */,
 				4486AD9D2C7905F900A8BA9C /* Toast */,
 				44B222D12C806EFA009BC14C /* iamport-ios */,
+				4401604B2CB3D115004EC740 /* FirebaseAnalyticsWithoutAdIdSupport */,
+				4401604D2CB3D115004EC740 /* FirebaseCrashlytics */,
+				4401604F2CB3D115004EC740 /* FirebaseMessaging */,
 			);
 			productName = ClosetReturn;
 			productReference = 449AD0352C6CA0B200B0ED37 /* ClosetReturn.app */;
@@ -569,6 +581,7 @@
 				449AD0962C6F6BC000B0ED37 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 				4486AD9C2C7905F900A8BA9C /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 				44B222D02C806EF9009BC14C /* XCRemoteSwiftPackageReference "iamport-ios" */,
+				4401604A2CB3D115004EC740 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 449AD0362C6CA0B200B0ED37 /* Products */;
 			projectDirPath = "";
@@ -586,6 +599,7 @@
 			files = (
 				449AD0422C6CA0B400B0ED37 /* Assets.xcassets in Resources */,
 				449AD0502C6CA19900B0ED37 /* .gitignore in Resources */,
+				440160492CB3D09B004EC740 /* GoogleService-Info.plist in Resources */,
 				449AD0602C6D892800B0ED37 /* PartialSansKR-Regular.otf in Resources */,
 				449AD0452C6CA0B400B0ED37 /* Base in Resources */,
 			);
@@ -898,6 +912,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		4401604A2CB3D115004EC740 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.3.0;
+			};
+		};
 		4486AD9C2C7905F900A8BA9C /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/scalessec/Toast-Swift";
@@ -949,6 +971,21 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		4401604B2CB3D115004EC740 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4401604A2CB3D115004EC740 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		4401604D2CB3D115004EC740 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4401604A2CB3D115004EC740 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		4401604F2CB3D115004EC740 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4401604A2CB3D115004EC740 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
 		4486AD9D2C7905F900A8BA9C /* Toast */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4486AD9C2C7905F900A8BA9C /* XCRemoteSwiftPackageReference "Toast-Swift" */;
