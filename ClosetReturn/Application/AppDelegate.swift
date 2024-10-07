@@ -8,8 +8,10 @@
 import UIKit
 
 import FirebaseCore
+import FirebaseMessaging
 import IQKeyboardManagerSwift
 import iamport_ios
+
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -29,6 +31,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         sleep(2)
         
         FirebaseApp.configure()
+        
+        UNUserNotificationCenter.current().delegate = self
+
+        let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+        UNUserNotificationCenter.current().requestAuthorization(
+          options: authOptions,
+          completionHandler: { _, _ in }
+        )
+
+        application.registerForRemoteNotifications()
+        
+        Messaging.messaging().delegate = self
+        
+        
         
         IQKeyboardManager.shared.enable = true
         IQKeyboardManager.shared.toolbarConfiguration.doneBarButtonConfiguration = .init(title: "완료")
@@ -55,5 +71,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 
+}
+
+//MARK: - UNUserNotificationCenterDelegate
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    
+    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        Messaging.messaging().apnsToken = deviceToken
+    }
+}
+
+extension AppDelegate: MessagingDelegate {
+    
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+        
+        Messaging.messaging().token { token, error in
+            if let error = error {
+                print("Error fetching FCM registration token: \(error)")
+            } else if let token = token {
+                print("FCM registration token: \(token)")
+            }
+        }
+        
+        let dataDict: [String: String] = ["token": fcmToken ?? ""]
+        NotificationCenter.default.post(
+            name: Notification.Name("FCMToken"),
+            object: nil,
+            userInfo: dataDict
+        )
+    }
 }
 
