@@ -18,8 +18,8 @@
 - 프레임워크: `UIKit`
 - 아키텍처: `MVVM`
 - 그 외 기술:
-  - `CodeBaseUI` `SnapKit`
   - `RxSwift` `RxCocoa`
+  - `CodeBaseUI` `SnapKit`
   - `Alamofire`
   - `UserDefaults`
   - `iamport-ios`
