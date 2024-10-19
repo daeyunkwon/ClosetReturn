@@ -2,7 +2,7 @@
 ![Xcode](https://img.shields.io/badge/Xcode-15.3-blue)
 
 # 옷장리턴  <img width="100" alt="image" src="https://github.com/user-attachments/assets/63a1a750-64c0-4154-937d-84c37416a771" align="left">
-> 중고 의류를 사고팔고, 패션 스타일을 공유할 수 있는 앱이에요 ✨
+> 중고 의류를 구매하거나 판매하고, 패션 스타일을 공유할 수 있는 앱이에요 ✨
 
 <br>
 
