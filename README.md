@@ -22,8 +22,8 @@
   - `CodeBaseUI` `SnapKit`
   - `Alamofire`
   - `UserDefaults`
-  - `iamport-ios`
   - `PhotosUI`
+  - `iamport-ios`
   - `IQKeyboardManager`
   - `Toast`
   - `Firebase`
