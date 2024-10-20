@@ -131,15 +131,16 @@
 
 PHPickerViewController에서 선택한 자산들은 JPEG 이미지 데이터로 변환된 후 배열에 담겨 ViewModel로 전달됩니다. ViewModel은 받은 이미지 데이터를 바탕으로 CollectionView에 이미지 목록을 업데이트하는 흐름을 처리하고 있었습니다. 그러나 `loadObject(ofClass:)` 메서드가 비동기적으로 실행됨에 따라, 해당 메서드의 작업이 완료되기 전에 다음 줄인 배열을 전달하는 코드가 실행되었고, 이로 인해 ViewModel에는 항상 빈 배열이 전달됐기 때문에 발생하였습니다.
 
-<img width="932" alt="스크린샷 2024-09-03 오후 4 16 51" src="https://github.com/user-attachments/assets/a287df66-23f6-4fc2-aa87-4450e5bb9d77">
+<img width="800" alt="스크린샷 2024-09-03 오후 4 16 51" src="https://github.com/user-attachments/assets/a287df66-23f6-4fc2-aa87-4450e5bb9d77">
 
 
 #### 해결 방법
 
 해당 문제는 DispatchGroup을 통해 비동기 작업의 시작과 종료를 체크하고, 모든 작업이 완료되었을 때 실행되는 notify 클로저 내에서 이미지 데이터들을 담고 있는 배열을 전달하는 방법으로 해결하였습니다.
 
-<img width="932" alt="스크린샷 2024-09-03 오후 4 16 51" src="https://github.com/user-attachments/assets/9b35c86b-56ee-4cb3-835c-a9c7e5186c4d">
+<img width="800" alt="스크린샷 2024-09-03 오후 4 16 51" src="https://github.com/user-attachments/assets/9b35c86b-56ee-4cb3-835c-a9c7e5186c4d">
 
+<br><br>
 
 ### 2. 이메일 유효성 검증을 어떻게 할 수 있을지에 대한 고민
 
@@ -157,7 +158,7 @@ PHPickerViewController에서 선택한 자산들은 JPEG 이미지 데이터로 
 
 처음에는 텍스트 필드에 입력한 문자열 값의 중간 부분에 `@` 기호가 포함되어 있으면 유효하지 않을까 생각했습니다. 하지만 `@` 기호뿐만 아니라 도메인 주소와 최상위 도메인 주소 영역도 유효한지 고려해야 한다는 것을 깨달았습니다. 어떻게 하면 모든 고려 사항을 충족하는 유효성 검증 기능을 구현해 낼 수 있을까 검색해 본 결과, 정규식을 사용하면 복잡한 검증 로직을 간결하게 구현해 낼 수 있다는 것을 알게 되었습니다. 그래서 NSPredicate와 정규식을 조합해 간결한 유효성 검증 로직을 구현하여 해결하였습니다.
 
-<img width="932" alt="스크린샷 2024-09-03 오후 4 16 51" src="https://github.com/user-attachments/assets/2251c7cf-667b-46c0-ab5b-09b2b1542918">
+<img width="800" alt="스크린샷 2024-09-03 오후 4 16 51" src="https://github.com/user-attachments/assets/2251c7cf-667b-46c0-ab5b-09b2b1542918">
 
 
 
