@@ -124,7 +124,7 @@
 
 #### 문제 상황
 
-상품 등록 화면에서 사진 첨부 기능을 구현했습니다. 사용자가 앨범에서 선택한 이미지들이 목록에 표시되어, 추가된 이미지를 확인할 수 있어야 했습니다. 그러나 선택한 이미지들이 추가되지 않아 목록에 표시되지 않는 문제가 발생하였습니다.
+상품 등록 화면에서 사진 첨부 기능을 구현했습니다. 사용자가 앨범에서 선택한 이미지들이 목록에 표시되어, 추가된 이미지를 확인할 수 있어야 했습니다. 그러나 선택한 이미지들이 추가되지 않아 목록에 표시되지 않는 문제가 발생했습니다.
 
 <img width="250" alt="image" src="https://github.com/user-attachments/assets/7501ffae-b6c9-4987-9736-396d42255868">
 
@@ -132,14 +132,14 @@
 
 #### 문제 원인
 
-PHPickerViewController에서 선택한 자산들은 JPEG 이미지 데이터로 변환된 후 배열에 담겨 ViewModel로 전달됩니다. ViewModel은 받은 이미지 데이터를 바탕으로 CollectionView에 이미지 목록을 업데이트하는 흐름을 처리하고 있었습니다. 그러나 `loadObject(ofClass:)` 메서드가 비동기적으로 실행됨에 따라, 해당 메서드의 작업이 완료되기 전에 다음 줄인 배열을 전달하는 코드가 실행되었고, 이로 인해 ViewModel에는 항상 빈 배열이 전달됐기 때문에 발생하였습니다.
+PHPickerViewController에서 선택한 자산들은 JPEG 이미지 데이터로 변환된 후 배열에 담겨 ViewModel로 전달됩니다. ViewModel은 받은 이미지 데이터를 바탕으로 CollectionView에 이미지 목록을 업데이트하는 흐름을 처리하고 있었습니다. 그러나 `loadObject(ofClass:)` 메서드가 비동기적으로 실행됨에 따라, 해당 메서드의 작업이 완료되기 전에 다음 줄인 배열을 전달하는 코드가 실행되었고, 이로 인해 ViewModel에는 항상 빈 배열이 전달됐기 때문에 해당 문제 현상이 발생했습니다.
 
 <img width="800" alt="스크린샷 2024-09-03 오후 4 16 51" src="https://github.com/user-attachments/assets/a287df66-23f6-4fc2-aa87-4450e5bb9d77">
 
 
 #### 해결 방법
 
-해당 문제는 DispatchGroup을 통해 비동기 작업의 시작과 종료를 체크하고, 모든 작업이 완료되었을 때 실행되는 notify 클로저 내에서 이미지 데이터들을 담고 있는 배열을 전달하는 방법으로 해결하였습니다.
+해당 문제는 DispatchGroup을 통해 비동기 작업의 시작과 종료를 체크하고, 모든 작업이 완료되었을 때 실행되는 notify 클로저 내에서 이미지 데이터들을 담고 있는 배열을 전달하는 방법으로 해결했습니다.
 
 <img width="800" alt="스크린샷 2024-09-03 오후 4 16 51" src="https://github.com/user-attachments/assets/9b35c86b-56ee-4cb3-835c-a9c7e5186c4d">
 
@@ -164,6 +164,32 @@ PHPickerViewController에서 선택한 자산들은 JPEG 이미지 데이터로 
 <img width="800" alt="스크린샷 2024-09-03 오후 4 16 51" src="https://github.com/user-attachments/assets/2251c7cf-667b-46c0-ab5b-09b2b1542918">
 
 
+<br><br>
+
+### 3. bind(with:) 사용 시 순환 참조 발생 문제
+
+#### 문제 상황
+
+`.bind(with: self)`의 클로저 내부에 ViewModel을 생성하고, 그 내부에서 ViewModel의 클로저를 설정하는 다음과 같은 코드 구조에서 순환 참조로 인해 메모리 누수 문제가 발생했습니다.
+
+<img width="607" alt="image" src="https://github.com/user-attachments/assets/6a9086c7-4b53-4060-8e6d-04186896b45a" />
+
+#### 문제 원인
+
+`.bind(with: self)` 메서드의 클로저 내부에 `vm.postUploadSucceed`의 클로저가 존재하는 중첩 클로저 상태입니다. 이 상황에서 외부 클로저가 `self (ViewController)`를 강하게 참조하고,
+내부 클로저에서 `self`를 약한 참조로 캡처했지만,
+외부 클로저의 강한 참조로 인해 내부 클로저에서도 `self`가 해제되지 못하는 문제가 발생했습니다.
+
+#### 해결 방법
+
+외부 클로저에서 `[weak self]`를 사용하여 `self(ViewController)`를 약한 참조로 캡처하여 순환 참조를 방지했습니다.
+
+<img width="623" alt="image" src="https://github.com/user-attachments/assets/429b1879-2a6f-4c3f-8d47-847446c8f8ba" />
+
+
+또 다른 방법으로는 `.bind(with: self)` 메서드가 제공하는 클로저 매개변수 `owner`를 활용하여, `self` 대신 `owner`를 사용함으로써 순환 참조를 방지해볼 수 있습니다.
+
+<img width="616" alt="image" src="https://github.com/user-attachments/assets/d17f2121-efc5-43c4-bed8-542514dd7f5a" />
 
 
 
