@@ -187,7 +187,7 @@ PHPickerViewController에서 선택한 자산들은 JPEG 이미지 데이터로 
 <img width="623" alt="image" src="https://github.com/user-attachments/assets/429b1879-2a6f-4c3f-8d47-847446c8f8ba" />
 
 
-또 다른 방법으로는 `.bind(with: self)` 메서드가 제공하는 클로저 매개변수 `owner`를 활용하여, `self` 대신 `owner`를 사용함으로써 순환 참조를 방지해볼 수 있습니다.
+또 다른 방법으로는 `.bind(with: self)` 메서드가 제공하는 클로저 매개변수 `owner`를 활용하여, `self` 대신 `owner`를 사용함으로써 순환 참조를 방지해볼 수 있음을 확인했습니다.
 
 <img width="616" alt="image" src="https://github.com/user-attachments/assets/d17f2121-efc5-43c4-bed8-542514dd7f5a" />
 
