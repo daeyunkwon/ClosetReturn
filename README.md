@@ -108,12 +108,12 @@
 - MVVM Pattern을 도입하여 ViewController와 View는 화면을 그리는 역할에만 집중하게 하고, 데이터 관리와 로직 처리는 ViewModel에서 담당하도록 분리했습니다.
 - ViewModel에 Input-Output Pattern을 적용하여 데이터 흐름을 명확하게 했습니다.
 - RxSwift와 RxCocoa를 활용하여 비동기 이벤트 스트림을 관리하고, UI와 데이터 간의 반응형 바인딩을 구현했습니다.
-- Router Pattern을 사용하여 모든 API를 한 곳에서 관리하기 쉽게 했습니다.
+- Router Pattern을 사용하여 모든 서버 API를 한 곳에서 관리하기 쉽게 했습니다.
 - Access Token 만료 시 Refresh Token을 이용해 새로운 토큰을 발급받고, 이를 저장하는 기능을 구현했습니다.
 - 카드 결제를 지원하기 위해 포트원(iamport-ios)을 연동하고, 결제 영수증을 검증하여 구매 완료 처리를 진행할 수 있도록 구현했습니다.
 - Cursor-based Pagination 기능을 구현하여 상품 및 피드 데이터를 페이지 단위로 조회할 수 있도록 했습니다.
 - PHPickerViewController를 사용하여 이미지 선택 화면을 제공하고, 사용자가 선택한 이미지는 JPEG 형식으로 압축한 후에 multipart/form-data 타입으로 서버에 전송하는 기능을 구현했습니다.
-- Firebase Cloud Messaging을 이용해 Push Notification을 수신할 수 있도록 했습니다.
+- Firebase Cloud Messaging을 이용해 Firebase Console에서 전송한 Push Notification을 수신할 수 있도록 했습니다.
 - BaseViewController 클래스를 상속하여, 모든 뷰 컨트롤러에서 공통된 초기화 메서드의 일관성을 유지했습니다.
 
 <br>
