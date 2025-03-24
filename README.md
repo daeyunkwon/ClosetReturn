@@ -115,6 +115,7 @@
 - PHPickerViewController를 사용하여 이미지 선택 화면을 제공하고, 사용자가 선택한 이미지는 JPEG 형식으로 압축한 후에 multipart/form-data 타입으로 서버에 전송하는 기능을 구현했습니다.
 - Firebase Cloud Messaging을 이용해 Firebase Console에서 전송한 Push Notification을 수신할 수 있도록 했습니다.
 - BaseViewController 클래스를 상속하여, 모든 뷰 컨트롤러에서 공통된 초기화 메서드의 일관성을 유지했습니다.
+- REST API를 이용해 게시물 CRUD 기능을 구현했습니다. (GET, POST, PUT, DELETE 적용)
 
 <br>
 
