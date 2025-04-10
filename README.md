@@ -107,7 +107,7 @@
 ## 📡 주요 기술
 - MVVM Pattern을 도입하여 ViewController와 View는 화면을 그리는 역할에만 집중하게 하고, 데이터 관리와 로직 처리는 ViewModel에서 담당하도록 분리했습니다.
 - ViewModel에 Input-Output Pattern을 적용하여 데이터 흐름을 명확하게 했습니다.
-- RxSwift와 RxCocoa를 활용하여 비동기 이벤트 스트림을 관리하고, UI와 데이터 간의 반응형 바인딩을 구현했습니다.
+- RxSwift와 RxCocoa를 활용하여 비동기적 이벤트 스트림을 관리하고, UI와 데이터 간의 반응형 바인딩을 구현했습니다.
 - Router Pattern을 사용하여 모든 서버 API를 한 곳에서 관리하기 쉽게 했습니다.
 - Access Token 만료 시 Refresh Token을 이용해 새로운 토큰을 발급받고, 이를 저장하는 기능을 구현했습니다.
 - 카드 결제를 지원하기 위해 포트원(iamport-ios)을 연동하고, 결제 영수증을 검증하여 구매 완료 처리를 진행할 수 있도록 구현했습니다.
